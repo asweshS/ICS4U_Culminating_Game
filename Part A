@@ -1,0 +1,19 @@
+import random
+validInputPlayerCount = 0
+
+print("hello")
+while not validInputPlayerCount:
+    playerCount = input("How many players will be playing? (2-4): ")
+    try:
+        playerCount = int(playerCount)
+    except:
+        print("Invalid player count, try again!")
+    else:
+        if playerCount >4 or playerCount <2:
+            print("Invalid player count, try again!")
+        else:
+            validInputPlayerCount = True
+
+input("click enter to play")
+while not gameComplete:
+    print("hi")
