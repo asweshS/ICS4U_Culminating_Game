@@ -20,7 +20,7 @@ class Force:
 
         # player 2 dice is higher
         if (dice2 > dice1):
-            p1.units -= 1
+            self.units -= 1
             print("player 2 wins (p1: %s units left, p2: %s units left)" % (self.units, p2.units))
 
 def main_Menu_Header():
