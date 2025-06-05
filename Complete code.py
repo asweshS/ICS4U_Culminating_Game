@@ -1,3 +1,4 @@
+from pynput.keyboard import Key, Controller
 import random
 class Force:
     units = 0
@@ -64,17 +65,13 @@ def main_Menu_Header():
 main_Menu_Header()
 
 def checkWinner (plyrs):
-    for idx in range(len(players)):
+    for idx in range(len(plyrs)):
         if winner:
             return True, player[idx]
     return False, None
 
 #MAIN PGM
 validInputPlayerCount = 0
-main_Menu_Header()
-rulesCheck = input("Input '1' for rules. (anything else to continue): ")
-if rulesCheck =="1"
-print("RULES")
 while not validInputPlayerCount:
     playerCount = input("How many players will be playing? (2-4): ")
     try:
@@ -94,11 +91,12 @@ random.shuffle(player)
 print ("The order of play will be:")
 for idx in range (playerCount):
     print(player[order[idx]])
-          
-input("click enter to play")
-turn = 0
-gameComplete = False
-while not gameComplete:
-    checkWinner(player)
-    playerInUse = player[turn%playerCount]
-    print("It is %s's turn" % playerInUse)
+keyboard = Controller()
+play = input("click enter to play")
+if play == keyboard.press(Key.enter):
+    turn = 0
+    gameComplete = False
+    while not gameComplete:
+        checkWinner(player)
+        playerInUse = player[turn%playerCount]
+        print("It is %s's turn" % playerInUse)
