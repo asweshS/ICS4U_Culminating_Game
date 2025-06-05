@@ -92,7 +92,7 @@ print ("The order of play will be:")
 for idx in range (playerCount):
     print(player[order[idx]])
 keyboard = Controller()
-play = input("click enter to play")
+play = input("click enter to play ")
 if play == keyboard.press(Key.enter):
     turn = 0
     gameComplete = False
@@ -100,3 +100,5 @@ if play == keyboard.press(Key.enter):
         checkWinner(player)
         playerInUse = player[turn%playerCount]
         print("It is %s's turn" % playerInUse)
+else: 
+    print("Try Pressing Enter to Play!")
