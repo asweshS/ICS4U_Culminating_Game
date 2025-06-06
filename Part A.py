@@ -1,6 +1,6 @@
 import random
 class Territories:
-    territoryCord = [[x,x], [x,x], [x,x], [x,x], [x,x], [x,x], [x,x]]
+    territoryCord = [[x,y], [x,y], [x,y], [x,y], [x,y], [x,y], [x,y]]
     def territory_claim(gameMap, x, y, oldChar, newChar):
         mapWidth = len(gameMap)
         mapHeight = len(gameMap[0])
