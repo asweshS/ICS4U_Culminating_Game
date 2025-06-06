@@ -1,4 +1,4 @@
-import pygame
+import pygame # INSTALL PYGAME BY DOING "pip install pygame" in terminal
 import sys
 
 # Map settings
