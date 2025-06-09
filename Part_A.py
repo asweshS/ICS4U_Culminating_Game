@@ -63,7 +63,7 @@ while not validInputPlayerCount:
         else:
             validInputPlayerCount = True
 
-
+TERRITORYAMOUNT = 10
 player = [None] * playerCount
 order = list(range(0, playerCount))
 playerAssignments = "ABCD"
@@ -77,11 +77,21 @@ for idx in range (playerCount):
 input("click enter to play")
 turn = 0
 gameComplete = False
+for pickTerritory in range (playerCount * 2):
+    pcikIsValid = False
+    while not pickIsValid:
+        territoryChosen = input("which territory would ",  player[pickTerritory], "like to choose (input in format # ex '1')?: ")
+        try: territoryChosen = int(territoryChosen)
+        except: print("invalid Input")
+        else:
+            if territoryChosen>0 and territoryChosen<=TERRITORYAMOUNT:
+                pickIsValid = True
+            else: print("invalid Input")
+    territory_claim(WorldMap, territoryCord[territoryChosen-1][0], territoryCord[territoryChosen-1][1], None, playerAssignments[personsTurn]) 
 while not gameComplete:
     personsTurn = turn%playerCount
     playerInUse = player[personsTurn]
     print(playerInUse)
-    turn+=1
-    
-territory_claim(WorldMap, territoryCord[PICKED][0], territoryCord[PICKED][1], None, playerAssignments[personsTurn])    
+    turn+=1   
+
 
