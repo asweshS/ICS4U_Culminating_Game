@@ -6,6 +6,7 @@ def main_Menu():
             sys.stdout.write(char)
             sys.stdout.flush()
             time.sleep(0.05)
+            
     TITLE = "Conquest: A Territory Strategy Game"
 
     load_game = "\nLaunching Game...\n"
@@ -67,6 +68,7 @@ def main_Menu():
                     break
                 else: 
                     print("Enter a valid input.")
+
             # Handle EOFerror 
             except (KeyboardInterrupt, EOFError):
                 print("\nInput interrupted. Exiting program.")
@@ -78,21 +80,26 @@ def main_Menu():
             try:
                 # Prompt the user to start the game or exit
                 start_choice = input("Type 'start' to begin the game or 'exit' to quit: ").strip().lower()
+
                 # If they choose start, return True and print the starting message
                 if start_choice == "start":
-                    print("\nStarting the game...\n")
+                    start_msg = "\nStarting the game...\n"
+                    typewriter_txt(start_msg)
                     time.sleep(2)
                     return True
+                
                 # If they choose exit, print the exit message and return False
                 elif start_choice == "exit":
-                    print("\nExiting the game. Goodbye!\n")
+                    exit_msg = "\nExiting the game. Goodbye!\n"
+                    typewriter_txt(exit_msg)
                     return False
                 else:
-                    print("Enter a valid input.")
+                    typewriter_txt("Enter a valid input.\n")
             # Handle EOFerror again - ts pmo
             except (KeyboardInterrupt, EOFError):
                 print("\nInput interrupted. Exiting program.")
                 return False
+            
     # Call the print_header function to display the header
     print_header()
     main_Menu_logic()
