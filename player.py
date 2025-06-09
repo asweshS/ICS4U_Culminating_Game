@@ -9,9 +9,10 @@
 
 # ALGORITHM
 #   1. Create a Player class with attributes for name, money, resources, territories, forces, and factory count.
-#   2. Implement a method to create a factory that costs money and increases daily income.
+#   2. Implement a method to assign daily income.
 # HISTORY
 #   2025.06.02- created player class with attributes and methods for a basic resources game
+#   2025.06.09- created basic save mechanics
 
 
 class Player:
@@ -19,7 +20,7 @@ class Player:
 
     def __init__(self, name):
         self.name = name
-        self.military = 100
+        self.troops = 100
         self.territories = 5
         self.money = 0
 
@@ -31,27 +32,40 @@ class Player:
             self.daily_income += 1000
         self.money += self.daily_income
 
-    def buy_military(self):
-        self.military += 10
-        self.money -= 100000
+    def buy_troops(self, amountOfTroops):
+        self.troops += amountOfTroops
+        self.money -= 10 * amountOfTroops
 
 
 
     def __str__(self):  
-        return f"Player {self.name} has {self.money} money, {self.military} soldiers, and controls {self.territories} territories with {self.factory_count} factories."
+        return f"Player {self.name} has {self.money} money, {self.troops} soldiers, and controls {self.territories} territories with {self.factory_count} factories."
     
 john = Player("John")
 
 
 try:
-    saveOne = open("One.txt", "r")
+    saveOneRead = open("One.txt", "r")
 except:
     print("File not found.")
 else:
-    j = saveOne.readline(10)
-    #saveOne.write(str(john.name) + "\n")
-    #saveOne.write(str(john.money) + "\n")
-    #saveOne.write(str(john.factory_count) + "\n")
-    #saveOne.write(str(john.military) + "\n")
-    #print("DONE")
-    saveOne.close()
+    lines = saveOneRead.readlines()
+    playerCount = 0
+    for line in lines:
+        print(line)
+        if (line == "1"):
+            playerCount+=1
+    print(playerCount)
+    saveOneRead.close()
+
+try:
+    saveOneWrite = open("One.txt", "w")
+except:
+    print("File not found.")
+else:
+    saveOneWrite.write("1")
+    saveOneWrite.write("\n" + str(john.name) + "\n")
+    saveOneWrite.write(str(john.money) + "\n")
+    saveOneWrite.write(str(john.troops) + "\n")
+
+    saveOneWrite.close()
