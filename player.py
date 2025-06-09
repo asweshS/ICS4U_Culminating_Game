@@ -19,19 +19,23 @@ class Player:
 
     def __init__(self, name):
         self.name = name
-        self.factory_count = 0
         self.military = 100
-        self.daily_income = 100000
         self.territories = 5
         self.money = 0
 
+    def income(self,invest):
+        self.daily_income = 1000 + (self.territories * 100)
+        if invest == 1:
+            self.daily_income += 500
+        elif invest == 2:
+            self.daily_income += 1000
+        self.money += self.daily_income
 
     def buy_military(self):
         self.military += 10
         self.money -= 100000
 
-    def income(self):
-        self.money += self.daily_income
+
 
     def __str__(self):  
         return f"Player {self.name} has {self.money} money, {self.military} soldiers, and controls {self.territories} territories with {self.factory_count} factories."
@@ -40,14 +44,11 @@ john = Player("John")
 
 
 try:
-    saveOne = open("galapogos.txt", "r")
+    saveOne = open("One.txt", "r")
 except:
     print("File not found.")
 else:
-    #print("beorn")
     j = saveOne.readline(10)
-    print(j)
-    #saveOne.write("does it work")
     #saveOne.write(str(john.name) + "\n")
     #saveOne.write(str(john.money) + "\n")
     #saveOne.write(str(john.factory_count) + "\n")
