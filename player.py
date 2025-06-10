@@ -18,11 +18,12 @@
 class Player:
     daysGoneBy = 0
 
-    def __init__(self, name):
+    def __init__(self, name,troops = 100, money =0,territories = 5):
         self.name = name
-        self.troops = 100
+        self.troops = troops
         self.territories = 5
-        self.money = 0
+        self.money = money
+
 
     def income(self,invest):
         self.daily_income = 1000 + (self.territories * 100)
@@ -39,9 +40,9 @@ class Player:
 
 
     def __str__(self):  
-        return f"Player {self.name} has {self.money} money, {self.troops} soldiers, and controls {self.territories} territories with {self.factory_count} factories."
+        return f"Player {self.name} has {self.money} money, {self.troops} soldiers, and controls {self.territories} territories"
     
-john = Player("John")
+
 
 
 try:
@@ -49,23 +50,55 @@ try:
 except:
     print("File not found.")
 else:
+
+    #READING FROM FILE/ LOADING SAVE
     lines = saveOneRead.readlines()
-    playerCount = 0
+    players =[]
+    playerObj = []
+    
     for line in lines:
-        print(line)
-        if (line == "1"):
-            playerCount+=1
-    print(playerCount)
+        players.append(line)
+
+    if (len(players) == 0):
+        firstSave = True
+    else:
+        firstSave = False
+        for i in range(len(players)):
+            players[i] = players[i].split()
+    #       for index in range(len(players[i])):
+            nameForThisPlayer = players[i][0]
+            troopsForThisPlayer = players[i][1]
+            moneyForThisPlayer = players[i][2]
+                         
+            playerObj.append( Player(nameForThisPlayer,troopsForThisPlayer,\
+                                  moneyForThisPlayer))
+            
+            print(playerObj[i])
+        
     saveOneRead.close()
 
+
+#WRITNG TO FILE/ NEW SAVE
 try:
     saveOneWrite = open("One.txt", "w")
 except:
     print("File not found.")
 else:
-    saveOneWrite.write("1")
-    saveOneWrite.write("\n" + str(john.name) + "\n")
-    saveOneWrite.write(str(john.money) + "\n")
-    saveOneWrite.write(str(john.troops) + "\n")
+    numberOfPlayers = 4
+    if firstSave == True:
+        for i in range(numberOfPlayers):
+            playerName = str(input("WHAT IS YOUR BOMBOCLAT NAME: "))
+            saveOneWrite.write(playerName+" ")
+            saveOneWrite.write("100 ")
+            saveOneWrite.write("0 ")
+            saveOneWrite.write("5\n")
 
+    else:
+        for i in range(len(playerObj)):        
+            saveOneWrite.write(str(playerObj[i].name)+" ")
+            saveOneWrite.write(str(playerObj[i].troops)+" ")
+            saveOneWrite.write(str(playerObj[i].money)+" ")
+            saveOneWrite.write(str(playerObj[i].territories)+"\n")
+        
+    
     saveOneWrite.close()
