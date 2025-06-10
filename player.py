@@ -44,61 +44,58 @@ class Player:
     
 
 
-
-try:
-    saveOneRead = open("One.txt", "r")
-except:
-    print("File not found.")
-else:
-
-    #READING FROM FILE/ LOADING SAVE
-    lines = saveOneRead.readlines()
-    players =[]
-    playerObj = []
-    
-    for line in lines:
-        players.append(line)
-
-    if (len(players) == 0):
-        firstSave = True
+def saveOneReadFunct(numberOfPlayers):
+    try:
+        saveOneRead = open("One.txt", "r")
+    except:
+        print("File not found.")
     else:
-        firstSave = False
-        for i in range(len(players)):
-            players[i] = players[i].split()
-    #       for index in range(len(players[i])):
-            nameForThisPlayer = players[i][0]
-            troopsForThisPlayer = players[i][1]
-            moneyForThisPlayer = players[i][2]
-                         
-            playerObj.append( Player(nameForThisPlayer,troopsForThisPlayer,\
-                                  moneyForThisPlayer))
-            
-            print(playerObj[i])
+
+        #READING FROM FILE/ LOADING SAVE
+        lines = saveOneRead.readlines()
+        players =[]
+        playerObjRead = []
         
-    saveOneRead.close()
+        for line in lines:
+            players.append(line)
+
+        if (len(players) == 0 or len(players) == 1):#first save
+            for i in range(numberOfPlayers):
+                playerName = str(input("WHAT IS YOUR NAME: "))
+                playerObjRead.append(Player(playerName))
+            
+        else:#loading save
+            print(len(players))
+            for i in range(len(players)):
+                players[i] = players[i].split()
+                nameForThisPlayer = players[i][0]
+                troopsForThisPlayer = players[i][1]
+                moneyForThisPlayer = players[i][2]
+                             
+                playerObjRead.append( Player(nameForThisPlayer,troopsForThisPlayer,\
+                                      moneyForThisPlayer))
+                
+                print(playerObjRead[i])
+            
+        saveOneRead.close()
+    return (playerObjRead)
 
 
-#WRITNG TO FILE/ NEW SAVE
-try:
-    saveOneWrite = open("One.txt", "w")
-except:
-    print("File not found.")
-else:
-    numberOfPlayers = 4
-    if firstSave == True:
-        for i in range(numberOfPlayers):
-            playerName = str(input("WHAT IS YOUR BOMBOCLAT NAME: "))
-            saveOneWrite.write(playerName+" ")
-            saveOneWrite.write("100 ")
-            saveOneWrite.write("0 ")
-            saveOneWrite.write("5\n")
-
+#WRITNG TO FILE 
+def savingFile(playerObjWrite):
+    try:
+        saveOneWrite = open("One.txt", "w")
+    except:
+        print("File not found.")
     else:
         for i in range(len(playerObj)):        
-            saveOneWrite.write(str(playerObj[i].name)+" ")
-            saveOneWrite.write(str(playerObj[i].troops)+" ")
-            saveOneWrite.write(str(playerObj[i].money)+" ")
-            saveOneWrite.write(str(playerObj[i].territories)+"\n")
+            saveOneWrite.write(str(playerObjWrite[i].name)+" ")
+            saveOneWrite.write(str(playerObjWrite[i].troops)+" ")
+            saveOneWrite.write(str(playerObjWrite[i].money)+" ")
+            saveOneWrite.write(str(playerObjWrite[i].territories)+"\n")
+            
         
-    
-    saveOneWrite.close()
+        saveOneWrite.close()
+
+playerObj = saveOneReadFunct(4)
+savingFile(playerObj)
