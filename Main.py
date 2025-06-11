@@ -4,12 +4,14 @@
 # Desc: This is the main project file that
 # will integrate all of the files into one
 # main program.
+# History:
+# 2025-06-10: Created file
+# 2025-06-11: added opening save file
 #######################
 
-#import Map
 import Force
+#import MainMenu
 #import PartA
-import main_menu
 import player
 
 class masterPlayer:
@@ -17,36 +19,49 @@ class masterPlayer:
     playerClass = ""
     #force = Force.Force
 
-    def __init__(self, order):
+    def __init__(self, order, saveName):
         self.ord = order
-        self.playerClass = self.askName()
+        #self.playerClass = self.askName()
+        self.checkSave(saveName)
 
-    def askName(self):
-        print("Whats is player %s name? " % self.ord, end="")
-        return player.Player(input())
+    # check if a save has been loaded
+    def checkSave(self, saveName):
+        # might not be finsished yet
+        try:
+            save1 = open("saveName",'x')
+        except FileExistsError:
+            return True
+        return False
 
     def __str__(self):
         return self.playerClass
 
+def openSave():
+    print("Do you want to open a save file (y or n): ", end="")
+    des = input()
+    if (des == 'y'):
+        print("loadSave")
 
-def askPlayers():
-    print("How many players between 2 and 4: ", end="")
-    playerAmt = int(input())
+        try: 
+            fileNum = int(input("Which save do you want to open (1-3): "))
+        except ValueError:
+            print("Invalid save number, try again")
+            return openSave()
+        else: 
+            if (0 < fileNum < 4):
+                fileName = "save" + fileNum
+                return fileName
+            else:
+                print("Number is out of range, try again")
+                return openSave()
+        
+    elif (des == "n"):
+        print("Make new game")
+        return
+    else:
+        print("invalid input, try again")
+        return openSave()
 
-    # if theres more than 4 players or less than 2, try again
-    if (playerAmt > 4 or playerAmt < 2):
-        print("Invalid amount of players, try again")
-        return askPlayers()
-    return playerAmt
-    
-# put players in a master class and then an array to make organizing easier
-playerArr = []
-for idx in range(askPlayers()):
-    playerArr.append(masterPlayer(idx + 1))
 
-
-def Turn():
-    for idx in range(len(playerArr)):
-        print("%s's turn: " % playerArr[idx].playerClass.name)
-    
-Turn()
+openSave()
+player = masterPlayer(1)
