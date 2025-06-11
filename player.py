@@ -53,10 +53,10 @@ soldiers and controls territories:")
             
         return printOutStatement
     
-
+#One
 def makingFirstSaveOnOne(numberOfPlayers,namesOfPlayers,moneyOfPlayers,troopsOfPlayers,territoriesOfPlayers):
     try:
-        saveOneWrite = open("One.txt", "w")
+        saveOneWrite = open("savedGameOne.txt", "w")
     except:
         print("File not found.")
     else:
@@ -73,7 +73,7 @@ def makingFirstSaveOnOne(numberOfPlayers,namesOfPlayers,moneyOfPlayers,troopsOfP
                     
 def saveOneReadFunct():
     try:
-        saveOneRead = open("One.txt", "r")
+        saveOneRead = open("savedGameOne.txt", "r")
     except:
         print("File not found.")
     else:
@@ -116,7 +116,7 @@ def saveOneReadFunct():
 #WRITNG TO FILE 
 def savingFileOne(playerObjWrite):
     try:
-        saveOneWrite = open("One.txt", "w")
+        saveOneWrite = open("savedGameOne.txt", "w")
     except:
         print("File not found.")
     else:
@@ -130,6 +130,169 @@ def savingFileOne(playerObjWrite):
         
         saveOneWrite.close()
 
+
+
+
+#two
+def makingFirstSaveOnTwo(numberOfPlayers,namesOfPlayers,moneyOfPlayers,troopsOfPlayers,territoriesOfPlayers):
+    try:
+        saveTwoWrite = open("savedGameTwo.txt", "w")
+    except:
+        print("File not found.")
+    else:
+        for i in range(numberOfPlayers):        
+            saveTwoWrite.write(str(namesOfPlayers[i])+" ")
+            saveTwoWrite.write(str(troopsOfPlayers[i].troops)+" ")
+            saveTwoWrite.write(str(moneyOfPlayers[i].money)+" ")
+            saveTwoWrite.write(str(territoriesOfPlayers[i].territories)+"\n")
+            
+        
+        saveTwoWrite.close()
+
+
+                    
+def saveTwoReadFunct():
+    try:
+        saveTwoRead = open("savedGameTwo.txt", "r")
+    except:
+        print("File not found.")
+    else:
+
+        #READING FROM FILE/ LOADING SAVE
+        lines = saveTwoRead.readlines()
+        players =[]
+        playerObjRead = []
+
+        for line in lines:
+            players.append(line)
+            
+        print("there are " +str(len(players)) + " players")#number of players
+        
+        for i in range(len(players)):
+            players[i] = players[i].split()
+            nameForThisPlayer = players[i][0]
+            
+            troopsForThisPlayer = players[i][1]
+            
+            moneyForThisPlayer = players[i][2]
+            
+            teritoriesForThisPlayer = []
+            
+            for index in range(len(players[i])-3):
+                teritoriesForThisPlayer.append(players[i][index+3])
+                                    
+
+                             
+            playerObjRead.append( Player(nameForThisPlayer,troopsForThisPlayer,\
+                                moneyForThisPlayer,teritoriesForThisPlayer))
+                
+            print(playerObjRead[i])
+            
+        saveTwoRead.close()
+        
+    return (playerObjRead)
+
+
+#WRITNG TO FILE 
+def savingFileTwo(playerObjWrite):
+    try:
+        saveTwoWrite = open("savedGameTwo.txt", "w")
+    except:
+        print("File not found.")
+    else:
+        for i in range(len(playerObj)):        
+            saveTwoWrite.write(str(playerObjWrite[i].name)+" ")
+            saveTwoWrite.write(str(playerObjWrite[i].troops)+" ")
+            saveTwoWrite.write(str(playerObjWrite[i].money)+" ")
+            for index in range(len(playerObjWrite[i].territories)):
+                saveTwoWrite.write(str(playerObjWrite[i].territories[index])+ " ")
+            saveTwoWrite.write("\n")
+        
+        saveTwoWrite.close()
+
+
+
+
+#three
+def makingFirstSaveOnThree(numberOfPlayers,namesOfPlayers,moneyOfPlayers,troopsOfPlayers,territoriesOfPlayers):
+    try:
+        saveThreeWrite = open("savedGameThree.txt", "w")
+    except:
+        print("File not found.")
+    else:
+        for i in range(numberOfPlayers):        
+            saveThreeWrite.write(str(namesOfPlayers[i])+" ")
+            saveThreeWrite.write(str(troopsOfPlayers[i].troops)+" ")
+            saveThreeWrite.write(str(moneyOfPlayers[i].money)+" ")
+            saveThreeWrite.write(str(territoriesOfPlayers[i].territories)+"\n")
+            
+        
+        saveThreeWrite.close()
+
+
+                    
+def saveThreeReadFunct():
+    try:
+        saveThreeRead = open("savedGameThree.txt", "r")
+    except:
+        print("File not found.")
+    else:
+
+        #READING FROM FILE/ LOADING SAVE
+        lines = saveThreeRead.readlines()
+        players =[]
+        playerObjRead = []
+
+        for line in lines:
+            players.append(line)
+            
+        print("there are " +str(len(players)) + " players")#number of players
+        
+        for i in range(len(players)):
+            players[i] = players[i].split()
+            nameForThisPlayer = players[i][0]
+            
+            troopsForThisPlayer = players[i][1]
+            
+            moneyForThisPlayer = players[i][2]
+            
+            teritoriesForThisPlayer = []
+            
+            for index in range(len(players[i])-3):
+                teritoriesForThisPlayer.append(players[i][index+3])
+                                    
+
+                             
+            playerObjRead.append( Player(nameForThisPlayer,troopsForThisPlayer,\
+                                moneyForThisPlayer,teritoriesForThisPlayer))
+                
+            print(playerObjRead[i])
+            
+        saveThreeRead.close()
+        
+    return (playerObjRead)
+
+
+#WRITNG TO FILE 
+def savingFileThree(playerObjWrite):
+    try:
+        saveThreeWrite = open("savedGameThree.txt", "w")
+    except:
+        print("File not found.")
+    else:
+        for i in range(len(playerObj)):        
+            saveThreeWrite.write(str(playerObjWrite[i].name)+" ")
+            saveThreeWrite.write(str(playerObjWrite[i].troops)+" ")
+            saveThreeWrite.write(str(playerObjWrite[i].money)+" ")
+            for index in range(len(playerObjWrite[i].territories)):
+                saveThreeWrite.write(str(playerObjWrite[i].territories[index])+ " ")
+            saveThreeWrite.write("\n")
+        
+        saveThreeWrite.close()
+
+
+
+#MAIN 
 playerObj = saveOneReadFunct()
 playerObj[0].invest()
 playerObj[0].income()
