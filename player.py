@@ -16,35 +16,62 @@
 
 
 class Player:
-    daysGoneBy = 0
+    investment = 0
 
-    def __init__(self, name,troops = 100, money =0,territories = 5):
+    def __init__(self, name,troops = 100, money =0,territories=[]):
+        
         self.name = name
-        self.troops = troops
-        self.territories = 5
-        self.money = money
+        self.troops = int(troops)
+        self.money = int(money)
+        self.territories = []
+        for i in range(len(territories)):
+            self.territories.append(territories[i])
+            
+        self.daily_income = 1000 + (len(self.territories) * 100)
 
-
-    def income(self,invest):
-        self.daily_income = 1000 + (self.territories * 100)
-        if invest == 1:
-            self.daily_income += 500
-        elif invest == 2:
-            self.daily_income += 1000
+    def income(self):
+        self.daily_income = 1000 + (len(self.territories) * 100)+self.investment
         self.money += self.daily_income
+
+    def invest(self):
+        self.investment += 500
 
     def buy_troops(self, amountOfTroops):
         self.troops += amountOfTroops
-        self.money -= 10 * amountOfTroops
+        self.money -= 100 * amountOfTroops
 
 
 
-    def __str__(self):  
-        return f"Player {self.name} has {self.money} money, {self.troops} soldiers, and controls {self.territories} territories"
+    def __str__(self):
+        printOutStatement = []
+        printOutStatement.append(f"Player {self.name} has {self.money} money, {self.troops} \
+soldiers and controls territories:")
+        
+        for i in range(len(self.territories)):
+            printOutStatement.append(str(self.territories[i])+ " ")
+        printOutStatement = "".join(printOutStatement)
+            
+        return printOutStatement
     
 
+def makingFirstSaveOnOne(numberOfPlayers,namesOfPlayers,moneyOfPlayers,troopsOfPlayers,territoriesOfPlayers):
+    try:
+        saveOneWrite = open("One.txt", "w")
+    except:
+        print("File not found.")
+    else:
+        for i in range(numberOfPlayers):        
+            saveOneWrite.write(str(namesOfPlayers[i])+" ")
+            saveOneWrite.write(str(troopsOfPlayers[i].troops)+" ")
+            saveOneWrite.write(str(moneyOfPlayers[i].money)+" ")
+            saveOneWrite.write(str(territoriesOfPlayers[i].territories)+"\n")
+            
+        
+        saveOneWrite.close()
 
-def saveOneReadFunct(numberOfPlayers):
+
+                    
+def saveOneReadFunct():
     try:
         saveOneRead = open("One.txt", "r")
     except:
@@ -55,34 +82,39 @@ def saveOneReadFunct(numberOfPlayers):
         lines = saveOneRead.readlines()
         players =[]
         playerObjRead = []
-        
+
         for line in lines:
             players.append(line)
-
-        if (len(players) == 0 or len(players) == 1):#first save
-            for i in range(numberOfPlayers):
-                playerName = str(input("WHAT IS YOUR NAME: "))
-                playerObjRead.append(Player(playerName))
             
-        else:#loading save
-            print(len(players))
-            for i in range(len(players)):
-                players[i] = players[i].split()
-                nameForThisPlayer = players[i][0]
-                troopsForThisPlayer = players[i][1]
-                moneyForThisPlayer = players[i][2]
+        print("there are " +str(len(players)) + " players")#number of players
+        
+        for i in range(len(players)):
+            players[i] = players[i].split()
+            nameForThisPlayer = players[i][0]
+            
+            troopsForThisPlayer = players[i][1]
+            
+            moneyForThisPlayer = players[i][2]
+            
+            teritoriesForThisPlayer = []
+            
+            for index in range(len(players[i])-3):
+                teritoriesForThisPlayer.append(players[i][index+3])
+                                    
+
                              
-                playerObjRead.append( Player(nameForThisPlayer,troopsForThisPlayer,\
-                                      moneyForThisPlayer))
+            playerObjRead.append( Player(nameForThisPlayer,troopsForThisPlayer,\
+                                moneyForThisPlayer,teritoriesForThisPlayer))
                 
-                print(playerObjRead[i])
+            print(playerObjRead[i])
             
         saveOneRead.close()
+        
     return (playerObjRead)
 
 
 #WRITNG TO FILE 
-def savingFile(playerObjWrite):
+def savingFileOne(playerObjWrite):
     try:
         saveOneWrite = open("One.txt", "w")
     except:
@@ -92,10 +124,13 @@ def savingFile(playerObjWrite):
             saveOneWrite.write(str(playerObjWrite[i].name)+" ")
             saveOneWrite.write(str(playerObjWrite[i].troops)+" ")
             saveOneWrite.write(str(playerObjWrite[i].money)+" ")
-            saveOneWrite.write(str(playerObjWrite[i].territories)+"\n")
-            
+            for index in range(len(playerObjWrite[i].territories)):
+                saveOneWrite.write(str(playerObjWrite[i].territories[index])+ " ")
+            saveOneWrite.write("\n")
         
         saveOneWrite.close()
 
-playerObj = saveOneReadFunct(4)
-savingFile(playerObj)
+playerObj = saveOneReadFunct()
+playerObj[0].invest()
+playerObj[0].income()
+savingFileOne(playerObj)
