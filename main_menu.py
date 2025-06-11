@@ -14,6 +14,7 @@
 import os
 import time, sys
 
+# I'm ngl I think I cooked with this one, straight fire
 class intro: # using a class because it just makes it easier (imo) when everyone else is using a class
     def main_Menu():
         def typewriter_txt(msg):
@@ -29,8 +30,9 @@ class intro: # using a class because it just makes it easier (imo) when everyone
         loaded_game = f"Successfully Loaded '{TITLE}'\n"
         typewriter_txt(loaded_game)
 
+        # print the header 
         def print_header():
-            os.system('cls') # I FINALLY FIGURED OUT HOW TO CLEAR THE SCREEN LETS GO
+            os.system('cls') # I FINALLY FIGURED OUT HOW TO CLEAR THE SCREEN LET'S GO
             header_width = 80
             print("\n" + "=" * header_width)
             print(f"Welcome To {TITLE}!".center(header_width))
@@ -38,7 +40,7 @@ class intro: # using a class because it just makes it easier (imo) when everyone
             print("=" * header_width + "\n")
 
         def show_instructions():
-            os.system('cls')
+            os.system('cls') # Basically, what this does is, before showing the instructions page, it will just clear everything before it and then create a new clean terminal and then display whatever is after that  
             header_width = 80
             print("-" * header_width)
             print("Instructions on How to Play Conquest!".center(header_width))
