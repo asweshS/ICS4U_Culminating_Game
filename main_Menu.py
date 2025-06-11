@@ -17,7 +17,7 @@ class intro: # using a class because it just makes it easier (imo) when everyone
         typewriter_txt(loaded_game)
 
         def print_header():
-            os.system('cls')
+            os.system('cls') # I FINALLY FIGURED OUT HOW TO CLEAR THE SCREEN LETS GO
             header_width = 80
             print("\n" + "=" * header_width)
             print(f"Welcome To {TITLE}!".center(header_width))
