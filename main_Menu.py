@@ -1,106 +1,66 @@
+import os
 import time, sys
-def main_Menu():
 
-    def typewriter_txt(msg):
-        for char in msg:
-            sys.stdout.write(char)
-            sys.stdout.flush()
-            time.sleep(0.05)
-            
-    TITLE = "Conquest: A Territory Strategy Game"
+class intro: # using a class because it just makes it easier (imo) when everyone else is using a class
+    def main_Menu():
+        def typewriter_txt(msg):
+            for char in msg:
+                sys.stdout.write(char)
+                sys.stdout.flush()
+                time.sleep(0.02)
 
-    load_game = "\nLaunching Game...\n"
-    typewriter_txt(load_game)
+        TITLE = "Conquest: A Territory Strategy Game"
+        load_game = "\nLaunching Game...\n"
+        typewriter_txt(load_game)
+        time.sleep(1)
+        loaded_game = f"Successfully Loaded '{TITLE}'\n"
+        typewriter_txt(loaded_game)
 
-    time.sleep(5)
+        def print_header():
+            os.system('cls')
+            header_width = 80
+            print("\n" + "=" * header_width)
+            print(f"Welcome To {TITLE}!".center(header_width))
+            print("Version 1.0".center(header_width))
+            print("=" * header_width + "\n")
 
-    loaded_game = f"Successfully Loaded '{TITLE}'\n"
-    typewriter_txt(loaded_game)
+        def show_instructions():
+            os.system('cls')
+            header_width = 80
+            print("-" * header_width)
+            print("Instructions on How to Play Conquest!".center(header_width))
+            print("-" * header_width)
+            print()
+            instructions = ["1. -", "2. -", "3. -"] # Place holder for actual instructions
+            for line in instructions:
+                print(line)
+            print()
+            input("Press Enter to return to the main menu...")
 
-    def print_header():
-        # Prints the header of the game with the name and version.
-        program_name = f"Welcome To {TITLE}!"
-        version = "1.0"
-        header_text = f"{program_name} - Version {version}"
-        header_width = 80
-        print("\n" + "=" * header_width)
-        print(header_text.center(header_width))
-        print("=" * header_width + "\n")
-
-    def show_instructions():
-        # Displays the instructions on how to play the game.
-        instruction_title = "Instructions on How to Play Conquest!"
-        header_text = f"{instruction_title}"
-        header_width = 80
-        print()
-        print("-" * header_width)
-        print(header_text.center(header_width)) # Centering the title
-        print("-" * header_width)
-        print()
-        instructions = ["1. Rule 1", "2. Rule 2", "3. Rule 3"] # Placeholder for actual instructions
-        print("Instructions:")
-        for line in instructions:
-            print(line)
-        print()
-
-    def main_Menu_logic():
-        # Handles the logic of the main menu, including showing instructions and starting/exiting the game.
-        while True:
-            # Try and except to handle user input and anything else that might go wrong (which is so kevin)
-            try:
-                # Prompt the user to see the instructions
-                choice = input("Would you like to see the instructions? (yes/no): ").strip().lower()
-                # If they choose yes, show the instructions
-                if choice == "yes" or choice == "y":
-                    load_msg = "\nLoading...\n"
-                    typewriter_txt(load_msg)
-                    time.sleep(2)
+        def main_Menu_logic():
+            while True:
+                print_header()
+                print("MAIN MENU".center(80, "-"))
+                print("1. See Instructions")
+                print("2. Start Game")
+                print("3. Exit")
+                choice = input("\nEnter your choice (1-3): ").strip()
+                if choice == "1":
                     show_instructions()
-                    time.sleep(15) # Enter a realistic number in seconds that a user can read the instructions then return back to menu to start playing
-                    return_msg = "Returning back to main menu...\n"
-                    typewriter_txt(return_msg)
-                    break
-                # if they choose no,then skip the instructions
-                elif choice == "no" or choice == "n":
-                    skip_msg = "\nSkipping instructions...\n"
-                    typewriter_txt(skip_msg)
-                    time.sleep(2)
-                    break
-                else: 
-                    print("Enter a valid input.")
-
-            # Handle EOFerror 
-            except (KeyboardInterrupt, EOFError):
-                print("\nInput interrupted. Exiting program.")
-                return
-        
-        # After showing instructions or skipping, ask if they want to start the game
-        while True:
-            print_header()
-            try:
-                # Prompt the user to start the game or exit
-                start_choice = input("Type 'start' to begin the game or 'exit' to quit: ").strip().lower()
-
-                # If they choose start, return True and print the starting message
-                if start_choice == "start":
-                    start_msg = "\nStarting the game...\n"
-                    typewriter_txt(start_msg)
-                    time.sleep(2)
+                elif choice == "2":
+                    print("\nStarting the game...\n")
+                    time.sleep(1)
                     return True
-                
-                # If they choose exit, print the exit message and return False
-                elif start_choice == "exit":
-                    exit_msg = "\nExiting the game. Goodbye!\n"
-                    typewriter_txt(exit_msg)
-                    return False
+                elif choice == "3":
+                    print("\nExiting the game. Goodbye!\n")
+                    sys.exit()
                 else:
-                    typewriter_txt("Enter a valid input.\n")
-            # Handle EOFerror again - ts pmo
-            except (KeyboardInterrupt, EOFError):
-                print("\nInput interrupted. Exiting program.")
-                return False
-            
-    # Call the print_header function to display the header
-    print_header()
-    main_Menu_logic()
-main_Menu()
+                    print("Enter a valid input (1-3).")
+                    time.sleep(1)
+
+        main_Menu_logic()
+
+def clear_screen():
+    os.system('cls')
+
+intro.main_Menu()
