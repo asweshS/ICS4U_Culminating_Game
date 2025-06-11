@@ -1,6 +1,6 @@
 #######################
 # File: Main.py
-# Authors: Ryan MacLeod
+# Authors: Ryan MacLeod, Aswesh Sritharakumar, Devan Lucas, Andrew Urquhat
 # Desc: This is the main project file that
 # will integrate all of the files into one
 # main program.
@@ -9,7 +9,7 @@
 #import Map
 import Force
 #import PartA
-#import MainMenu
+import main_menu
 import player
 
 class masterPlayer:
