@@ -1,6 +1,6 @@
 #######################
 # File: Main.py
-# Authors: Ryan MacLeod, Aswesh Sritharakumar, Devan Lucas, Andrew Urquhat
+# Authors: Ryan MacLeod, Aswesh Sritharakumar, Devan Lucas, Andrew Urquhart
 # Desc: This is the main project file that
 # will integrate all of the files into one
 # main program.
