@@ -109,11 +109,7 @@ class intro:
             print("Instructions on How to Play Conquest!".center(header_width))
             print("-" * header_width)
             print()
-            instructions = [
-                "1. Each player takes turns to conquer territories.",
-                "2. Attack adjacent territories to expand your control.",
-                "3. The last player remaining wins the game."
-            ]
+            instructions = ["1. -", "2. -", "3. -"] # Place holder for actual instructions
             for line in instructions:
                 print(line)
             print()
