@@ -1,5 +1,7 @@
 import random
 import time, sys
+import os 
+
 class Force:
     units = 0
 
@@ -79,122 +81,89 @@ class Territories:
 
 class intro:
     def main_Menu():
-
         def typewriter_txt(msg):
             for char in msg:
                 sys.stdout.write(char)
                 sys.stdout.flush()
-                time.sleep(0.05)
-        TITLE = "Conquest: A Territory Strategy Game"
+                time.sleep(0.02)
 
+        TITLE = "Conquest: A Territory Strategy Game"
         load_game = "\nLaunching Game...\n"
         typewriter_txt(load_game)
-
-        time.sleep(5)
-
+        time.sleep(1)
         loaded_game = f"Successfully Loaded '{TITLE}'\n"
         typewriter_txt(loaded_game)
 
         def print_header():
-            # Prints the header of the game with the name and version.
-            program_name = f"Welcome To {TITLE}!"
-            version = "1.0"
-            header_text = f"{program_name} - Version {version}"
+            os.system('cls')
             header_width = 80
             print("\n" + "=" * header_width)
-            print(header_text.center(header_width))
+            print(f"Welcome To {TITLE}!".center(header_width))
+            print("Version 1.0".center(header_width))
             print("=" * header_width + "\n")
 
         def show_instructions():
-            # Displays the instructions on how to play the game.
-            instruction_title = "Instructions on How to Play Conquest!"
-            header_text = f"{instruction_title}"
+            os.system('cls')
             header_width = 80
-            print()
             print("-" * header_width)
-            print(header_text.center(header_width)) # Centering the title
+            print("Instructions on How to Play Conquest!".center(header_width))
             print("-" * header_width)
             print()
-            instructions = ["1. Rule 1", "2. Rule 2", "3. Rule 3"] # Placeholder for actual instructions
-            print("Instructions:")
+            instructions = [
+                "1. Each player takes turns to conquer territories.",
+                "2. Attack adjacent territories to expand your control.",
+                "3. The last player remaining wins the game."
+            ]
             for line in instructions:
                 print(line)
             print()
+            input("Press Enter to return to the main menu...")
 
         def main_Menu_logic():
-            # Handles the logic of the main menu, including showing instructions and starting/exiting the game.
-            while True:
-                # Try and except to handle user input and anything else that might go wrong (which is so kevin)
-                try:
-                    # Prompt the user to see the instructions
-                    choice = input("Would you like to see the instructions? (yes/no): ").strip().lower()
-                    # If they choose yes, show the instructions
-                    if choice == "yes" or choice == "y":
-                        load_msg = "\nLoading...\n"
-                        typewriter_txt(load_msg)
-                        time.sleep(2)
-                        show_instructions()
-                        time.sleep(15) # Enter a realistic number in seconds that a user can read the instructions then return back to menu to start playing
-                        return_msg = "Returning back to main menu...\n"
-                        typewriter_txt(return_msg)
-                        break
-                    # if they choose no,then skip the instructions
-                    elif choice == "no" or choice == "n":
-                        skip_msg = "\nSkipping instructions...\n"
-                        typewriter_txt(skip_msg)
-                        time.sleep(2)
-                        break
-                    else: 
-                        print("Enter a valid input.")
-                # Handle EOFerror 
-                except (KeyboardInterrupt, EOFError):
-                    print("\nInput interrupted. Exiting program.")
-                    return
-            
-            # After showing instructions or skipping, ask if they want to start the game
             while True:
                 print_header()
-                try:
-                    # Prompt the user to start the game or exit
-                    start_choice = input("Type 'start' to begin the game or 'exit' to quit: ").strip().lower()
-                    # If they choose start, return True and print the starting message
-                    if start_choice == "start":
-                        print("\nStarting the game...\n")
-                        time.sleep(2)
-                        return True
-                    # If they choose exit, print the exit message and return False
-                    elif start_choice == "exit":
-                        print("\nExiting the game. Goodbye!\n")
-                        return False
-                    else:
-                        print("Enter a valid input.")
-                # Handle EOFerror again - ts pmo
-                except (KeyboardInterrupt, EOFError):
-                    print("\nInput interrupted. Exiting program.")
-                    return False
-        # Call the print_header function to display the header
-        print_header()
+                print("MAIN MENU".center(80, "-"))
+                print("1. See Instructions")
+                print("2. Start Game")
+                print("3. Exit")
+                choice = input("\nEnter your choice (1-3): ").strip()
+                if choice == "1":
+                    show_instructions()
+                elif choice == "2":
+                    print("\nStarting the game...\n")
+                    time.sleep(1)
+                    return True
+                elif choice == "3":
+                    print("\nExiting the game. Goodbye!\n")
+                    sys.exit()
+                else:
+                    print("Enter a valid input (1-3).")
+                    time.sleep(1)
+
         main_Menu_logic()
 
-def checkWinner(plyrs):
-    for idx in range(len(plyrs)):
-        if winner:
-            return True, plyrs[idx]
-    return False, None
-
 # ===== MAIN PROGRAM =====
+def clear_screen():
+    os.system('cls')
+
 validInputPlayerCount = False
 intro.main_Menu()
 
 while not validInputPlayerCount:
+    clear_screen()
+    print("=" * 80)
+    print("PLAYER SETUP".center(80))
+    print("=" * 80)
     playerCount = input("How many players will be playing? (2-4): ")
     try:
         playerCount = int(playerCount)
     except:
         print("Invalid player count, try again!")
+        time.sleep(1)
     else:
         if playerCount > 4 or playerCount < 2:
             print("Invalid player count, try again!")
+            time.sleep(1)
         else:
             validInputPlayerCount = True
 
@@ -202,15 +171,22 @@ player = [None] * playerCount
 order = list(range(playerCount))
 playerAssignments = "ABCD"
 
+clear_screen()
+print("=" * 80)
+print("PLAYER NAMES".center(80))
+print("=" * 80)
 for idx in range(playerCount):
-    player[idx] = input("What is the name of player %d?: " % (idx + 1))
+    player[idx] = input(f"Enter the name of player {idx + 1}: ")
 
 random.shuffle(order)
-print("The order of play will be:")
+clear_screen()
+print("=" * 80)
+print("ORDER OF PLAY".center(80))
+print("=" * 80)
 for idx in range(playerCount):
-    print("player %s: %s" % (playerAssignments[idx], player[order[idx]]))
+    print(f"Player {playerAssignments[idx]}: {player[order[idx]]}")
+input("\nPress Enter to begin the game...")
 
-input("Click enter to play")
 turn = 0
 gameComplete = False
 
@@ -220,7 +196,13 @@ worldHeight = 10
 winner = False
 
 while not gameComplete:
+    clear_screen()
+    print("=" * 80)
+    print(f"TURN {turn + 1}".center(80))
+    print("=" * 80)
     personsTurn = turn % playerCount
     playerInUse = player[personsTurn]
-    print("It's", playerInUse + "'s turn.")
+    print(f"It's {playerInUse}'s turn.\n")
+    # ...game logic for the player's turn goes here...
+    input("Press Enter to end your turn...")
     turn += 1
