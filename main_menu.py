@@ -1,8 +1,13 @@
 ######################################
 # File Name: main_menu.py
 # Author(s): Aswesh Sritharakumar
-# Date: 
-# Description: 
+# Description: A main menu program that is the first user interface (UI) for the player when they enter the game
+# History:
+# 2025-06-04 Created the header for the game 
+# 2025-06-05 Added a concept for the instructions menu and created a start game or exit game input
+# 2025-06-06 Found how to do a typewriter effect, which makes it seem more professional
+# 2025-06-08 Created a simple launching game prompt
+# 2025-06-10 FINALLY figured out how to clear the screen after an input is given from the user, this makes it look professional, and I will not change it cuz it looks cool
 ######################################
 
 
