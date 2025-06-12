@@ -362,7 +362,3 @@ def clearingFileThree():
     else:
         saveThreeWrite.close()
 
-#MAIN
-playerObj = saveTwoReadFunct()
-
-savingFileTwo(playerObj)
