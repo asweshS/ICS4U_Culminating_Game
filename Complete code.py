@@ -136,7 +136,7 @@ class intro:
                     while True:
                         clear_screen()
                         print("=" * 80)
-                        print("PLAYER TYPE".center(80))
+                        print("WELCOME PLAYER!".center(80))
                         print("=" * 80)
                         print("1. New Player")
                         print("2. Returning Player")
