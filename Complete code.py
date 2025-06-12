@@ -109,7 +109,11 @@ class intro:
             print("Instructions on How to Play Conquest!".center(header_width))
             print("-" * header_width)
             print()
-            instructions = ["1. -", "2. -", "3. -"] # Place holder for actual instructions
+            instructions = [
+                "1. -",
+                "2. -",
+                "3. -"
+            ]
             for line in instructions:
                 print(line)
             print()
@@ -128,7 +132,22 @@ class intro:
                 elif choice == "2":
                     print("\nStarting the game...\n")
                     time.sleep(1)
-                    return True
+                    # Ask if new or returning player
+                    while True:
+                        clear_screen()
+                        print("=" * 80)
+                        print("PLAYER TYPE".center(80))
+                        print("=" * 80)
+                        print("1. New Player")
+                        print("2. Returning Player")
+                        player_type = input("Are you a new or returning player? (1-2): ").strip()
+                        if player_type == "1":
+                            return "new"
+                        elif player_type == "2":
+                            return "returning"
+                        else:
+                            print("Enter a valid input (1-2).")
+                            time.sleep(1)
                 elif choice == "3":
                     print("\nExiting the game. Goodbye!\n")
                     sys.exit()
@@ -136,14 +155,43 @@ class intro:
                     print("Enter a valid input (1-3).")
                     time.sleep(1)
 
-        main_Menu_logic()
+        # main_Menu_logic now returns "new" or "returning"
+        return main_Menu_logic()
 
 # ===== MAIN PROGRAM =====
 def clear_screen():
     os.system('cls')
 
 validInputPlayerCount = False
-intro.main_Menu()
+player_type = intro.main_Menu()
+
+if player_type == "returning":
+    clear_screen()
+    print("=" * 80)
+    print("LOAD SAVED GAME".center(80))
+    print("=" * 80)
+    print("1. Conquest Saved File 1")
+    print("2. Conquest Saved File 2")
+    print("3. Conquest Saved File 3")
+    while True:
+        choice = input("Choose a save file to load (1-3): ").strip()
+        if choice == "1":
+            print(f"\nLoading save file {choice}...\n")
+            time.sleep(1)
+            # Add code here to actually load the game state
+            # from the selected save file.  For now, just exit.
+            sys.exit()
+        elif choice == "2":
+            print(f"\nLoading save file {choice}...\n")
+            time.sleep(1)
+            sys.exit()
+        elif choice == "3":
+            print(f"\nLoading save file {choice}...\n")
+            time.sleep(1)
+            sys.exit()
+        else:
+            print("Invalid choice. Please enter a number between 1 and 3.")
+            time.sleep(1)
 
 while not validInputPlayerCount:
     clear_screen()
