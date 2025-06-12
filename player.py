@@ -362,3 +362,39 @@ def clearingFileThree():
     else:
         saveThreeWrite.close()
 
+
+def whichFilesHaveData():
+    whichOneList = []
+    fileOne = open("savedGameOne.txt", "r")
+    fileOneLines = fileOne.readlines()
+    countFileOne = 0
+    for line in fileOneLines:
+        countFileOne+=1
+    if countFileOne>1:
+        whichOneList.append(True)
+    else:
+        whichOneList.append(False)
+        
+    fileTwo = open("savedGameTwo.txt", "r")
+    fileTwoLines = fileTwo.readlines()
+    countFileTwo = 0
+    for line in fileTwoLines:
+        countFileTwo+=1
+    if countFileTwo>1:
+        whichOneList.append(True)
+    else:
+        whichOneList.append(False)
+    
+    fileThree = open("savedGameThree.txt", "r")
+    fileThreeLines = fileThree.readlines()
+    countFileThree = 0
+    for line in fileThreeLines:
+        countFileThree+=1
+        
+    if countFileThree>1:
+        whichOneList.append(True)
+    else:
+        whichOneList.append(False)
+    return whichOneList
+
+#MAIN
