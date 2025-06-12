@@ -67,15 +67,18 @@ def makingFirstSaveOnOne(numberOfPlayers,namesOfPlayers,moneyOfPlayers,troopsOfP
     except:
         print("File not found.")
     else:
-        for i in range(numberOfPlayers):        
+        playerObjFirstSaveOnOne = []
+        for i in range(numberOfPlayers):
+            playerObjFirstSaveOnOne.append(Player(namesOfPlayers[i],troopsOfPlayers[i]\
+                             ,moneyOfPlayers[i],territoriesOfPlayers[i]))
             saveOneWrite.write(str(namesOfPlayers[i])+" ")
-            saveOneWrite.write(str(troopsOfPlayers[i].troops)+" ")
-            saveOneWrite.write(str(moneyOfPlayers[i].money)+" ")
-            saveOneWrite.write(str(territoriesOfPlayers[i].territories)+"\n")
+            saveOneWrite.write(str(troopsOfPlayers[i])+" ")
+            saveOneWrite.write(str(moneyOfPlayers[i])+" ")
+            saveOneWrite.write(str(territoriesOfPlayers[i])+"\n")
             
         
         saveOneWrite.close()
-
+        return playerObjFirstSaveOnOne
 
                     
 def saveOneReadFunct():
@@ -156,15 +159,18 @@ def makingFirstSaveOnTwo(numberOfPlayers,namesOfPlayers,moneyOfPlayers,troopsOfP
     except:
         print("File not found.")
     else:
-        for i in range(numberOfPlayers):        
+        playerObjFirstSaveOnTwo = []
+        for i in range(numberOfPlayers):
+            playerObjFirstSaveOnTwo.append(Player(namesOfPlayers[i],troopsOfPlayers[i]\
+                             ,moneyOfPlayers[i],territoriesOfPlayers[i]))
             saveTwoWrite.write(str(namesOfPlayers[i])+" ")
-            saveTwoWrite.write(str(troopsOfPlayers[i].troops)+" ")
-            saveTwoWrite.write(str(moneyOfPlayers[i].money)+" ")
-            saveTwoWrite.write(str(territoriesOfPlayers[i].territories)+"\n")
+            saveTwoWrite.write(str(troopsOfPlayers[i])+" ")
+            saveTwoWrite.write(str(moneyOfPlayers[i])+" ")
+            saveTwoWrite.write(str(territoriesOfPlayers[i])+"\n")
             
         
         saveTwoWrite.close()
-
+        return playerObjFirstSaveOnTwo
 
                     
 def saveTwoReadFunct():
@@ -243,15 +249,18 @@ def makingFirstSaveOnThree(numberOfPlayers,namesOfPlayers,moneyOfPlayers,troopsO
     except:
         print("File not found.")
     else:
-        for i in range(numberOfPlayers):        
+        playerObjFirstSaveOnThree = []
+        for i in range(numberOfPlayers):
+            playerObjFirstSaveOnThree.append(Player(namesOfPlayers[i],troopsOfPlayers[i]\
+                                    ,moneyOfPlayers[i],territoriesOfPlayers[i]))
             saveThreeWrite.write(str(namesOfPlayers[i])+" ")
-            saveThreeWrite.write(str(troopsOfPlayers[i].troops)+" ")
-            saveThreeWrite.write(str(moneyOfPlayers[i].money)+" ")
-            saveThreeWrite.write(str(territoriesOfPlayers[i].territories)+"\n")
+            saveThreeWrite.write(str(troopsOfPlayers[i])+" ")
+            saveThreeWrite.write(str(moneyOfPlayers[i])+" ")
+            saveThreeWrite.write(str(territoriesOfPlayers[i])+"\n")
             
         
         saveThreeWrite.close()
-
+        return playerObjFirstSaveOnThree
 
                     
 def saveThreeReadFunct():
@@ -323,8 +332,7 @@ def clearingFileThree():
     else:
         saveThreeWrite.close()
 
-#MAIN 
-playerObj = saveOneReadFunct()
-playerObj[0].invest()
-playerObj[0].income()
-savingFileOne(playerObj)
+#MAIN
+playerObj = saveTwoReadFunct()
+
+savingFileTwo(playerObj)
