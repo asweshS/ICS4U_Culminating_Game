@@ -13,6 +13,13 @@
 # HISTORY
 #   2025.06.02- created player class with attributes and methods for a basic resources game
 #   2025.06.09- created basic save mechanics
+#   2025.06.12- created clear file functions
+
+
+#NOTE- all instances of playerObj or any variation with that in it is a
+#       list of objects with each object being an instance of the player class
+
+
 
 
 class Player:
@@ -289,7 +296,8 @@ def saveThreeReadFunct():
     return (playerObjRead)
 
 
-#WRITNG TO FILE 
+#WRITNG TO FILE
+#must put list of each object of player into parameters
 def savingFileThree(playerObjWrite):
     try:
         saveThreeWrite = open("savedGameThree.txt", "w")
