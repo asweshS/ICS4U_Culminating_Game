@@ -130,6 +130,15 @@ def savingFileOne(playerObjWrite):
         
         saveOneWrite.close()
 
+#Clearing file/reseting save
+def clearingFileOne():
+    try:
+        saveOneWrite = open("savedGameOne.txt", "w")
+    except:
+        print("File not found.")
+    else:
+        saveOneWrite.close()
+
 
 
 
@@ -210,7 +219,14 @@ def savingFileTwo(playerObjWrite):
         
         saveTwoWrite.close()
 
-
+#Clearing file/reseting save
+def clearingFileTwo():
+    try:
+        saveTwoWrite = open("savedGameTwo.txt", "w")
+    except:
+        print("File not found.")
+    else:
+        saveTwoWrite.close()
 
 
 #three
@@ -290,7 +306,14 @@ def savingFileThree(playerObjWrite):
         
         saveThreeWrite.close()
 
-
+#Clearing file/reseting save
+def clearingFileThree():
+    try:
+        saveThreeWrite = open("savedGameThree.txt", "w")
+    except:
+        print("File not found.")
+    else:
+        saveThreeWrite.close()
 
 #MAIN 
 playerObj = saveOneReadFunct()
