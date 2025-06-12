@@ -1,55 +1,64 @@
-# --- PLAYER CLASS DEFINITION ---
+# Player class and save/load system for a territory strategy game
+# All file operations support three separate save slots
+
 class Player:
-    # Class-level variable shared by all Player instances
+    # Class variable shared across all instances for tracking investments
     investment = 0
 
-    # Constructor: initializes player attributes
     def __init__(self, name, troops=100, money=0, territories=[]):
+        # Initialize player attributes
         self.name = name
         self.troops = int(troops)
         self.money = int(money)
-        self.territories = [t for t in territories]  # Copy list to avoid shared reference
+
+        # Create a fresh list of territories to avoid mutable default argument issues
+        self.territories = []
+        for i in range(len(territories)):
+            self.territories.append(territories[i])
+
+        # Base daily income = 1000 + 100 per territory
         self.daily_income = 1000 + (len(self.territories) * 100)
 
-    # Updates the player's money by adding daily income
     def income(self):
+        # Add daily income to player's money, including any investment bonus
         self.daily_income = 1000 + (len(self.territories) * 100) + self.investment
         self.money += self.daily_income
 
-    # Increases player's investment which boosts future income
     def invest(self):
+        # Increase future daily income through investments
         self.investment += 500
 
-    # Buys troops by spending money (100 per troop)
     def buy_troops(self, amountOfTroops):
+        # Spend money to buy troops (100 money per troop)
         self.troops += amountOfTroops
         self.money -= 100 * amountOfTroops
 
-    # String representation for printing player info
     def __str__(self):
+        # Return a nicely formatted summary of player status
         printOutStatement = []
         printOutStatement.append(f"Player {self.name} has {self.money} money, {self.troops} soldiers and controls territories:")
-        for territory in self.territories:
-            printOutStatement.append(str(territory) + " ")
+        for i in range(len(self.territories)):
+            printOutStatement.append(str(self.territories[i]) + " ")
         return "".join(printOutStatement)
 
-# -------------------------------
-# -------- SAVE SLOT ONE --------
-# -------------------------------
+#--------------------------SAVE SLOT ONE FUNCTIONS--------------------------
 
-# Create first save for slot one using individual lists
 def makingFirstSaveOnOne(numberOfPlayers, namesOfPlayers, moneyOfPlayers, troopsOfPlayers, territoriesOfPlayers):
+    # Create Player objects and write them to save file 1
     try:
         saveOneWrite = open("savedGameOne.txt", "w")
     except:
         print("File not found.")
     else:
+        playerObjFirstSaveOnOne = []
         for i in range(numberOfPlayers):
-            saveOneWrite.write(f"{namesOfPlayers[i]} {troopsOfPlayers[i].troops} {moneyOfPlayers[i].money} {territoriesOfPlayers[i].territories}\n")
+            playerObjFirstSaveOnOne.append(Player(namesOfPlayers[i], troopsOfPlayers[i], moneyOfPlayers[i], territoriesOfPlayers[i]))
+            saveOneWrite.write(f"{namesOfPlayers[i]} {troopsOfPlayers[i]} {moneyOfPlayers[i]} {territoriesOfPlayers[i]}\n")
         saveOneWrite.close()
+        return playerObjFirstSaveOnOne
 
-# Load save slot one and reconstruct Player objects
 def saveOneReadFunct():
+    # Read player data from save file 1 and recreate Player objects
     try:
         saveOneRead = open("savedGameOne.txt", "r")
     except:
@@ -66,30 +75,31 @@ def saveOneReadFunct():
 
         for i in range(len(players)):
             players[i] = players[i].split()
-            nameForThisPlayer = players[i][0]
-            troopsForThisPlayer = players[i][1]
-            moneyForThisPlayer = players[i][2]
-            teritoriesForThisPlayer = players[i][3:]
-
-            playerObjRead.append(Player(nameForThisPlayer, troopsForThisPlayer, moneyForThisPlayer, teritoriesForThisPlayer))
+            name = players[i][0]
+            troops = players[i][1]
+            money = players[i][2]
+            territories = players[i][3:]  # Remaining elements are territories
+            playerObjRead.append(Player(name, troops, money, territories))
             print(playerObjRead[i])
         saveOneRead.close()
+        return playerObjRead
 
-    return playerObjRead
-
-# Save all player objects to file for slot one
 def savingFileOne(playerObjWrite):
+    # Save current Player object data to save file 1
     try:
         saveOneWrite = open("savedGameOne.txt", "w")
     except:
         print("File not found.")
     else:
-        for player in playerObjWrite:
-            saveOneWrite.write(f"{player.name} {player.troops} {player.money} {' '.join(player.territories)}\n")
+        for i in range(len(playerObjWrite)):
+            saveOneWrite.write(f"{playerObjWrite[i].name} {playerObjWrite[i].troops} {playerObjWrite[i].money} ")
+            for territory in playerObjWrite[i].territories:
+                saveOneWrite.write(f"{territory} ")
+            saveOneWrite.write("\n")
         saveOneWrite.close()
 
-# Clear save slot one
 def clearingFileOne():
+    # Clears save file 1 by opening and closing it in write mode
     try:
         saveOneWrite = open("savedGameOne.txt", "w")
     except:
@@ -97,21 +107,21 @@ def clearingFileOne():
     else:
         saveOneWrite.close()
 
+#--------------------------SAVE SLOT TWO FUNCTIONS--------------------------
+# (Same structure as save slot one)
 
-# -------------------------------
-# -------- SAVE SLOT TWO --------
-# -------------------------------
-
-# Same logic as slot one but for slot two
 def makingFirstSaveOnTwo(numberOfPlayers, namesOfPlayers, moneyOfPlayers, troopsOfPlayers, territoriesOfPlayers):
     try:
         saveTwoWrite = open("savedGameTwo.txt", "w")
     except:
         print("File not found.")
     else:
+        playerObjFirstSaveOnTwo = []
         for i in range(numberOfPlayers):
-            saveTwoWrite.write(f"{namesOfPlayers[i]} {troopsOfPlayers[i].troops} {moneyOfPlayers[i].money} {territoriesOfPlayers[i].territories}\n")
+            playerObjFirstSaveOnTwo.append(Player(namesOfPlayers[i], troopsOfPlayers[i], moneyOfPlayers[i], territoriesOfPlayers[i]))
+            saveTwoWrite.write(f"{namesOfPlayers[i]} {troopsOfPlayers[i]} {moneyOfPlayers[i]} {territoriesOfPlayers[i]}\n")
         saveTwoWrite.close()
+        return playerObjFirstSaveOnTwo
 
 def saveTwoReadFunct():
     try:
@@ -124,22 +134,19 @@ def saveTwoReadFunct():
         playerObjRead = []
 
         for line in lines:
-            players.append(line.strip())
+            players.append(line.strip().split())
 
         print("there are " + str(len(players)) + " players")
 
         for i in range(len(players)):
-            players[i] = players[i].split()
             name = players[i][0]
             troops = players[i][1]
             money = players[i][2]
             territories = players[i][3:]
-
             playerObjRead.append(Player(name, troops, money, territories))
             print(playerObjRead[i])
         saveTwoRead.close()
-
-    return playerObjRead
+        return playerObjRead
 
 def savingFileTwo(playerObjWrite):
     try:
@@ -148,7 +155,10 @@ def savingFileTwo(playerObjWrite):
         print("File not found.")
     else:
         for player in playerObjWrite:
-            saveTwoWrite.write(f"{player.name} {player.troops} {player.money} {' '.join(player.territories)}\n")
+            saveTwoWrite.write(f"{player.name} {player.troops} {player.money} ")
+            for territory in player.territories:
+                saveTwoWrite.write(f"{territory} ")
+            saveTwoWrite.write("\n")
         saveTwoWrite.close()
 
 def clearingFileTwo():
@@ -159,21 +169,21 @@ def clearingFileTwo():
     else:
         saveTwoWrite.close()
 
+#--------------------------SAVE SLOT THREE FUNCTIONS--------------------------
+# (Same structure as the above two)
 
-# -------------------------------
-# ------- SAVE SLOT THREE -------
-# -------------------------------
-
-# Identical structure as slot two
 def makingFirstSaveOnThree(numberOfPlayers, namesOfPlayers, moneyOfPlayers, troopsOfPlayers, territoriesOfPlayers):
     try:
         saveThreeWrite = open("savedGameThree.txt", "w")
     except:
         print("File not found.")
     else:
+        playerObjFirstSaveOnThree = []
         for i in range(numberOfPlayers):
-            saveThreeWrite.write(f"{namesOfPlayers[i]} {troopsOfPlayers[i].troops} {moneyOfPlayers[i].money} {territoriesOfPlayers[i].territories}\n")
+            playerObjFirstSaveOnThree.append(Player(namesOfPlayers[i], troopsOfPlayers[i], moneyOfPlayers[i], territoriesOfPlayers[i]))
+            saveThreeWrite.write(f"{namesOfPlayers[i]} {troopsOfPlayers[i]} {moneyOfPlayers[i]} {territoriesOfPlayers[i]}\n")
         saveThreeWrite.close()
+        return playerObjFirstSaveOnThree
 
 def saveThreeReadFunct():
     try:
@@ -186,22 +196,19 @@ def saveThreeReadFunct():
         playerObjRead = []
 
         for line in lines:
-            players.append(line.strip())
+            players.append(line.strip().split())
 
         print("there are " + str(len(players)) + " players")
 
         for i in range(len(players)):
-            players[i] = players[i].split()
             name = players[i][0]
             troops = players[i][1]
             money = players[i][2]
             territories = players[i][3:]
-
             playerObjRead.append(Player(name, troops, money, territories))
             print(playerObjRead[i])
         saveThreeRead.close()
-
-    return playerObjRead
+        return playerObjRead
 
 def savingFileThree(playerObjWrite):
     try:
@@ -210,7 +217,10 @@ def savingFileThree(playerObjWrite):
         print("File not found.")
     else:
         for player in playerObjWrite:
-            saveThreeWrite.write(f"{player.name} {player.troops} {player.money} {' '.join(player.territories)}\n")
+            saveThreeWrite.write(f"{player.name} {player.troops} {player.money} ")
+            for territory in player.territories:
+                saveThreeWrite.write(f"{territory} ")
+            saveThreeWrite.write("\n")
         saveThreeWrite.close()
 
 def clearingFileThree():
@@ -221,13 +231,25 @@ def clearingFileThree():
     else:
         saveThreeWrite.close()
 
+#--------------------------CHECK WHICH FILES HAVE SAVES--------------------------
 
-# -------------------------------
-# -------- MAIN TESTING ---------
-# -------------------------------
+def whichFilesHaveData():
+    # Checks which of the three save files contain more than one line (i.e., actual player data)
+    whichOneList = []
 
-# Load from slot one, invest and apply income to first player, and save
-playerObj = saveOneReadFunct()
-playerObj[0].invest()
-playerObj[0].income()
-savingFileOne(playerObj)
+    # Check file one
+    with open("savedGameOne.txt", "r") as fileOne:
+        lines = fileOne.readlines()
+        whichOneList.append(len(lines) > 1)
+
+    # Check file two
+    with open("savedGameTwo.txt", "r") as fileTwo:
+        lines = fileTwo.readlines()
+        whichOneList.append(len(lines) > 1)
+
+    # Check file three
+    with open("savedGameThree.txt", "r") as fileThree:
+        lines = fileThree.readlines()
+        whichOneList.append(len(lines) > 1)
+
+    return whichOneList
