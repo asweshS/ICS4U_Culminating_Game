@@ -1,77 +1,12 @@
 import random
+class Map:
+    def __init__(self, textmap):
+        self.map = self.get_world_from_text_map(textmap)
 
-class Territories:
-    territoryCord = [[7,2], [23,2], [37,2], [12,7], [23,9], [35,9], [8,15], [14,14], [24,14],[8,20], [14,20], [34,19]]
-    
-    def territory_claim(gameMap, x, y, oldChar, newChar):
-        mapWidth = len(gameMap)
-        mapHeight = len(gameMap[0])
-
-        if oldChar is None:
-            oldChar = gameMap[x][y]
-
-        if gameMap[x][y] != oldChar:
-            return
-        gameMap[x][y] = newChar
-        if x > 0: # left
-            Territories.territory_claim(gameMap, x-1, y, oldChar, newChar)
-
-        if y > 0: # up
-            Territories.territory_claim(gameMap, x, y-1, oldChar, newChar)
-
-        if x < mapWidth-1: # right
-            Territories.territory_claim(gameMap, x+1, y, oldChar, newChar)
-
-        if y < mapHeight-1: # down
-            Territories.territory_claim(gameMap, x, y+1, oldChar, newChar)
-    def is_adjacent(gameMap, xCoor, yCoor):
-        mapWidth = len(gameMap)
-        mapHeight = len(gameMap[0])
-        
-        for idx in range(-2,3):
-            for idx2 in range(-2,3):
-                if 0 <= xCoor+idx < mapWidth and 0 <= yCoor+idx2 < mapHeight:
-                    if gameMap[xCoor+idx][yCoor+idx2] == "-":
-                        return True
-        return False
-    
-    def can_steal_territory(gameMap):
-        mapWidth = len(gameMap)
-        mapHeight = len(gameMap[0])
-        
-        for x in range(mapWidth):
-            for y in range(mapHeight):
-                if gameMap[x][y] == "+":
-                    if Territories.is_adjacent(gameMap, x, y):
-                        return True
-        return False
-    
-    def mapPrint(mapForPrint):
-        for y in range(len(mapForPrint[0])):
-            for x in range(len(mapForPrint)):
-                print(mapForPrint[x][y], end="")
-            print()
-                
-    def territory_steal(gameMap, xHave, yHave, xTake, yTake):
-        taked = gameMap[xHave][yHave]
-        taker = gameMap[xTake][yTake]
-        Territories.territory_claim(gameMap, xTake, yTake, None, taker)
-        Territories.territory_claim(gameMap, xHave, yHave, None, taker)
-    def territory_pre_steal(gameMap, xHave, yHave, xTake, yTake):
-        taked = gameMap[xHave][yHave]
-        taker = gameMap[xTake][yTake]
-        Territories.territory_claim(gameMap, xHave, yHave, None, '+')
-        Territories.territory_claim(gameMap, xTake, yTake, None, '-')
-        canTake = Territories.can_steal_territory(gameMap)
-        Territories.territory_claim(gameMap, xTake, yTake, None, taked)
-        Territories.territory_claim(gameMap, xHave, yHave, None, taker)
-        return canTake
-    
-    def getWorldFromTextMap(textmap):
+    def get_world_from_text_map(self, textmap):
         textmap = textmap.strip().split('\n')
         worldWidth = len(textmap[0])
         worldHeight = len(textmap)
-
         world = []
         for i in range(worldWidth):
             world.append([''] * worldHeight)
@@ -79,8 +14,115 @@ class Territories:
             for y in range(worldHeight):
                 world[x][y] = textmap[y][x]
         return world
-    def isTakeValid(gameMap, char, territoryChose):
-        return (gameMap [Territories.territoryCord[territoryChose-1][0]][Territories.territoryCord[territoryChose-1][1]] == char)
+
+    def print_map(self):
+        for y in range(len(self.map[0])):
+            for x in range(len(self.map)):
+                print(self.map[x][y], end="")
+            print()
+
+
+class Territories:
+    def __init__(self, map_obj, territory_coords):
+        self.map = map_obj.map
+        self.territory_coords = territory_coords
+
+    def territory_claim(self, x, y, oldChar, newChar):
+        mapWidth = len(self.map)
+        mapHeight = len(self.map[0])
+        if oldChar is None:
+            oldChar = self.map[x][y]
+        if self.map[x][y] != oldChar:
+            return
+        self.map[x][y] = newChar
+        if x > 0:
+            self.territory_claim(x - 1, y, oldChar, newChar)
+        if y > 0:
+            self.territory_claim(x, y - 1, oldChar, newChar)
+        if x < mapWidth - 1:
+            self.territory_claim(x + 1, y, oldChar, newChar)
+        if y < mapHeight - 1:
+            self.territory_claim(x, y + 1, oldChar, newChar)
+
+    def is_adjacent(self, xCoor, yCoor):
+        mapWidth = len(self.map)
+        mapHeight = len(self.map[0])
+        for idx in range(-2, 3):
+            for idx2 in range(-2, 3):
+                if 0 <= xCoor + idx < mapWidth and 0 <= yCoor + idx2 < mapHeight:
+                    if self.map[xCoor + idx][yCoor + idx2] == "-":
+                        return True
+        return False
+
+    def can_steal_territory(self):
+        mapWidth = len(self.map)
+        mapHeight = len(self.map[0])
+        for x in range(mapWidth):
+            for y in range(mapHeight):
+                if self.map[x][y] == "+":
+                    if self.is_adjacent(x, y):
+                        return True
+        return False
+
+    def territory_steal(self, xHave, yHave, xTake, yTake):
+        taked = self.map[xHave][yHave]
+        taker = self.map[xTake][yTake]
+        self.territory_claim(xHave, yHave, None, '+')
+        self.territory_claim(xTake, yTake, None, '-')
+        canTake = self.can_steal_territory()
+        self.territory_claim(xTake, yTake, None, taker)
+        self.territory_claim(xHave, yHave, None, taked)
+        return canTake
+
+    def is_take_valid(self, char, territoryChose):
+        x, y = self.territory_coords[territoryChose - 1]
+        return self.map[x][y] == char
+
+    def attacking_turn(self, playerInUse, playerAssignments, plyrTerrClm, persTurn, plyrAssm, plyrAmount):
+        validStealTerritory = False
+        validAttackerTerritory = False
+
+        while not validAttackerTerritory:
+            territoryAttacker = input("Attack from which territory %s (player %s)?: " % (playerInUse, playerAssignments[persTurn]))
+            try:
+                territoryAttacker = int(territoryAttacker)
+            except:
+                print("Invalid input!")
+            else:
+                if not (territoryAttacker in plyrTerrClm[persTurn]):
+                    print("You do not own this territory!")
+                else:
+                    validAttackerTerritory = True
+
+        while not validStealTerritory:
+            territorySteal = input("Attack which territory %s (player %s)?: " % (playerInUse, playerAssignments[persTurn]))
+            try:
+                territorySteal = int(territorySteal)
+            except:
+                print("Invalid input!")
+            else:
+                if self.is_take_valid(plyrAssm[persTurn], territorySteal):
+                    print("You can not take your own territory!")
+                else:
+                    if not self.territory_steal(*self.territory_coords[territoryAttacker - 1], *self.territory_coords[territorySteal - 1]):
+                        print("Can not reach territory!")
+                    else:
+                        validStealTerritory = True
+
+        for idx in range(plyrAmount):
+            if territorySteal in plyrTerrClm[idx]:
+                playerBeingAttackedNumber = idx
+
+        self.territory_claim(*self.territory_coords[territorySteal - 1], None, playerAssignments[persTurn])
+        map_printer = Map("")  # create a dupelicate Map object just for printing
+        map_printer.map = self.map
+        map_printer.print_map()
+        plyrTerrClm[playerBeingAttackedNumber].remove(territorySteal)
+        plyrTerrClm[persTurn].append(territorySteal)
+TERRITORY_COORDS = [
+    [7, 2], [23, 2], [37, 2], [12, 7], [23, 9], [35, 9],
+    [8, 15], [14, 14], [24, 14], [8, 20], [14, 20], [34, 19]
+]
 
 textMap = """
 ███████████████████████████████████████████████
@@ -108,95 +150,71 @@ textMap = """
 ██???????????????████???????████???????████████
 ███████████████████████████████████████████████
 """
-worldMap = Territories.getWorldFromTextMap(textMap)
-#for i in range(len(Territories.territoryCord)):
-    #print(worldMap[Territories.territoryCord[i][0]][Territories.territoryCord[i][1]])
+game_map = Map(textMap)
+territories = Territories(game_map, TERRITORY_COORDS)
 
-validInputPlayerCount = False
-while not validInputPlayerCount:
-    playerCount = input("How many players will be playing? (2-4): ")
+# === PLAYER SETUP ===
+while True:
     try:
-        playerCount = int(playerCount)
+        playerCount = int(input("How many players? (2-4): "))
+        if 2 <= playerCount <= 4:
+            break
+        print("Invalid number.")
     except:
-        print("Invalid player count, try again!")
-    else:
-        if playerCount > 4 or playerCount < 2:
-            print("Invalid player count, try again!")
-        else:
-            validInputPlayerCount = True
+        print("Invalid input.")
 
 TERRITORYAMOUNT = 12
-player = [None] * playerCount
-order = list(range(0, playerCount))
-playerAssignments = "ABCD"
+assignments = "ABCD"
+players = [input("Name for player %s: " % (i+1)) for i in range(playerCount)]
+playerTerritories = [[] for n in range(playerCount)]
+
+random.shuffle(players)
+print("Turn order:")
 for idx in range(playerCount):
-    player[idx] = input("What is the name of player %d?: " % (idx+1))
-    
-random.shuffle(player)
-print("The order of play will be:")
-for idx in range(playerCount):
-    print("player %s: %s" % (playerAssignments[idx], player[order[idx]]))
-          
-input("click enter to play")
-turn = 0
+    print("player %s: %s" % (assignments[idx], players[idx]))
+
+input("Press Enter to begin...")
+
+#pick territories
+pick = 0
 gameComplete = False
 pickTerritory = 0
 allTerritoriesPicked = False
 while not allTerritoriesPicked:
-    pickIsValid = False
-    while not pickIsValid:
-        territoryChosen = input("which territory would %s like to choose (input in format # ex '1')?: " % player[pickTerritory % playerCount])
-        try: 
-            territoryChosen = int(territoryChosen)
-        except: 
-            print("invalid Input")
+    isPickValid = False
+    current = pick % playerCount
+    while not isPickValid:
+        try:
+            choice = int(input("%s (player %s), pick an unclaimed territory (1-12): " % (players[current],assignments[current])) )
+        except:
+            print("Invalid input!")
         else:
-            if territoryChosen > 0 and territoryChosen <= TERRITORYAMOUNT:
-                if Territories.isTakeValid(worldMap, "?", territoryChosen):  
-                    pickIsValid = True
-                else:
-                    print("That territory can not be taken")
-            else: 
-                print("invalid Input")
-            
-    Territories.territory_claim(worldMap, Territories.territoryCord[territoryChosen-1][0], Territories.territoryCord[territoryChosen-1][1], None, playerAssignments[pickTerritory % playerCount])
-    if pickTerritory>10: Territories.mapPrint(worldMap)
-    pickTerritory +=1
+            if 1 <= choice <= 12 and territories.is_take_valid("?", choice):
+                isPickValid = True
+            else:
+                print("Territory %s is not avaliable!" % choice)
+    x, y = TERRITORY_COORDS[choice - 1]
+    territories.territory_claim(x, y, None, assignments[current])
+    playerTerritories[current].append(choice)
+    if pick > 10:
+        game_map.print_map()
+    pick += 1
     allTerritoriesPicked = True
     for i in range(TERRITORYAMOUNT):
-         if Territories.isTakeValid(worldMap, "?", i+1):
+         if territories.is_take_valid("?", i+1):
              allTerritoriesPicked = False
              break
+
+# === MAIN GAME LOOP ===
+turn = 0
 while not gameComplete:
-    validStealTerritory = False
-    validAttackerTerritory = False
-    personsTurn = turn % playerCount
-    playerInUse = player[personsTurn]
-    territoryAttacker = input("which territory would %s like to attack from(input in format # ex '1')?: " % player[personsTurn])
-    try:
-        territoryAttacker = int(territoryAttacker)
-    except:
-        print("invalid input")
-    else:
-        print("hi")
-    #IFHASTERRITORY
-    while not validStealTerritory:
-        territorySteal = input("which territory would %s like to attack(input in format # ex '1')?: " % player[personsTurn])
-        try:
-            territorySteal = int(territorySteal)
-        except:
-            print("invalid input")
-        else:
-            if Territories.isTakeValid(worldMap, playerAssignments[personsTurn], territorySteal):
-                print("you can not take your own territory")
-            else:
-                if not Territories.territory_pre_steal(worldMap, Territories.territoryCord[territoryAttacker-1][0],Territories.territoryCord[territoryAttacker-1][1], Territories.territoryCord[territorySteal-1][0],Territories.territoryCord[territorySteal-1][1]):
-                    print("Can not reach territory")
-                else:
-                    validStealTerritory = True
-                
-        
-    
-    Territories.territory_steal(worldMap, Territories.territoryCord[territoryAttacker-1][0],Territories.territoryCord[territoryAttacker-1][1], Territories.territoryCord[territorySteal-1][0],Territories.territoryCord[territorySteal-1][1])
-    print(playerInUse)
+    current = turn % playerCount
+    print("%s's (player %s) Turn" % ((players[current], assignments[current])))
+
+    ##if decide attack and win 
+    territories.attacking_turn(players[current], assignments, playerTerritories, current, assignments, playerCount)
+    for i in range(playerCount):
+        if len(playerTerritories[i]) == 12:
+            print("%s (Player %s) is the winner!" % (player[i], playerAssignments[i]))
+            gameComplete = True
     turn += 1
