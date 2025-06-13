@@ -10,6 +10,7 @@
 # 2025-06-12 Fixed 'Territory' class, added 'Map' class, and fixed logic and errors in code.
 ######################################
 import random
+import os
 class Map:
     def __init__(self, textmap):
         self.map = self.get_world_from_text_map(textmap)
@@ -27,10 +28,18 @@ class Map:
         return world
 
     def print_map(self):
-        for y in range(len(self.map[0])):
-            for x in range(len(self.map)):
+        def print_row(y):
+            if y >= len(self.map[0]):
+                return
+            def print_col(x):
+                if x >= len(self.map):
+                    print()
+                    return
                 print(self.map[x][y], end="")
-            print()
+                print_col(x + 1)
+            print_col(0)
+            print_row(y + 1)
+        print_row(0)
 
 
 class Territories:
@@ -195,13 +204,20 @@ while not allTerritoriesPicked:
     isPickValid = False
     current = pick % playerCount
     while not isPickValid:
+        # Show the map before each pick
+        game_map.print_map()
         try:
             choice = int(input("%s (player %s), pick an unclaimed territory (1-12): " % (players[current],assignments[current])) )
         except:
             print("Invalid input!")
         else:
             if 1 <= choice <= 12 and territories.is_take_valid("?", choice):
-                isPickValid = True
+                # Ask for confirmation
+                confirm = input("You selected territory %d. Confirm selection? (y/n): " % choice).strip().lower()
+                if confirm == 'y':
+                    isPickValid = True
+                else:
+                    print("Selection cancelled. Please pick again.")
             else:
                 print("Territory %s is not avaliable!" % choice)
     x, y = TERRITORY_COORDS[choice - 1]
@@ -215,6 +231,8 @@ while not allTerritoriesPicked:
          if territories.is_take_valid("?", i+1):
              allTerritoriesPicked = False
              break
+    # Clear the screen for the next player
+    os.system('cls')
 
 # === MAIN GAME LOOP ===
 turn = 0
@@ -226,6 +244,6 @@ while not gameComplete:
     territories.attacking_turn(players[current], assignments, playerTerritories, current, assignments, playerCount)
     for i in range(playerCount):
         if len(playerTerritories[i]) == 12:
-            print("%s (Player %s) is the winner!" % (player[i], playerAssignments[i]))
+            print("%s (Player %s) is the winner!" % (players[i], assignments[i]))
             gameComplete = True
     turn += 1
