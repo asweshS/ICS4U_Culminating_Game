@@ -1,3 +1,14 @@
+######################################
+# File Name: MapAndTerritories.py
+# Author(s): Devan Lucas
+# Description: This program contains the 'Map' and 'Territories' class and game logic for the game.
+# History:
+# 2025-06-04 Created initial player input
+# 2025-06-05 Added the 'Territoty' class
+# 2025-06-09 Added picking territory logic
+# 2025-06-11 Created the game map
+# 2025-06-12 Fixed 'Territory' class, added 'Map' class, and fixed logic and errors in code.
+######################################
 import random
 class Map:
     def __init__(self, textmap):
