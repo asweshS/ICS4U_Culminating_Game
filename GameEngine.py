@@ -1,5 +1,5 @@
 ######################################
-# File Name: MapAndTerritories.py
+# File Name: GameEngine.py
 # Author(s): Devan Lucas
 # Description: This program contains the 'Map' and 'Territories' class and game logic for the game.
 # History:
