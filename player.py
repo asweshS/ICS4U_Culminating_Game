@@ -76,13 +76,21 @@ class Player:
     def buy_troops(self, amountOfTroops):
         self.troops += amountOfTroops
         self.money -= 100 * amountOfTroops
+        if self.money < 0:
+            print(self.name + " does not have enough money to buy troops.")
+            self.troops -= amountOfTroops
+            self.money += 100 * amountOfTroops
+            return False
+        else:   
+            print(f"{self.name} has bought {amountOfTroops} troops.")
+            return True
 
 
 
     def __str__(self):
         printOutStatement = []
         printOutStatement.append(f"Player {self.name} has {self.money} money, {self.troops} \
-soldiers and controls territories:")
+soldiers and controls territories: ")
         
         for i in range(len(self.territories)):
             printOutStatement.append(str(self.territories[i])+ " ")
@@ -146,7 +154,7 @@ def saveOneReadFunct():
             playerObjRead.append( Player(nameForThisPlayer,troopsForThisPlayer,\
                                 moneyForThisPlayer,teritoriesForThisPlayer))
                 
-            print(playerObjRead[i])
+           # print(playerObjRead[i])
             
         saveOneRead.close()
         
@@ -238,7 +246,7 @@ def saveTwoReadFunct():
             playerObjRead.append( Player(nameForThisPlayer,troopsForThisPlayer,\
                                 moneyForThisPlayer,teritoriesForThisPlayer))
                 
-            print(playerObjRead[i])
+ #           print(playerObjRead[i])
             
         saveTwoRead.close()
         
@@ -328,7 +336,7 @@ def saveThreeReadFunct():
             playerObjRead.append( Player(nameForThisPlayer,troopsForThisPlayer,\
                                 moneyForThisPlayer,teritoriesForThisPlayer))
                 
-            print(playerObjRead[i])
+           # print(playerObjRead[i])
             
         saveThreeRead.close()
         
@@ -363,38 +371,19 @@ def clearingFileThree():
         saveThreeWrite.close()
 
 
-def whichFilesHaveData():
-    whichOneList = []
-    fileOne = open("savedGameOne.txt", "r")
-    fileOneLines = fileOne.readlines()
-    countFileOne = 0
-    for line in fileOneLines:
-        countFileOne+=1
-    if countFileOne>1:
-        whichOneList.append(True)
-    else:
-        whichOneList.append(False)
-        
-    fileTwo = open("savedGameTwo.txt", "r")
-    fileTwoLines = fileTwo.readlines()
-    countFileTwo = 0
-    for line in fileTwoLines:
-        countFileTwo+=1
-    if countFileTwo>1:
-        whichOneList.append(True)
-    else:
-        whichOneList.append(False)
-    
-    fileThree = open("savedGameThree.txt", "r")
-    fileThreeLines = fileThree.readlines()
-    countFileThree = 0
-    for line in fileThreeLines:
-        countFileThree+=1
-        
-    if countFileThree>1:
-        whichOneList.append(True)
-    else:
-        whichOneList.append(False)
-    return whichOneList
 
+
+def whichFilesHaveData():
+    fileOne = open("savedGameOne.txt", "r")
+    fileOneLines = fileOne.readlines
+    fileTwo = open("savedGameTwo.txt", "r")
+    fileThree = open("savedGameThree.txt", "r")
+    
+    
 #MAIN
+playerObj = saveTwoReadFunct()
+playerObj[0].invest()
+playerObj[0].income()
+playerObj[0].buy_troops(15)
+print(playerObj[0])
+savingFileTwo(playerObj)
