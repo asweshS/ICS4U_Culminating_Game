@@ -11,7 +11,7 @@
 
 import Force
 #import MainMenu
-#import PartA
+#import GamePlay
 import player
 
 class masterPlayer:
