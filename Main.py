@@ -9,9 +9,8 @@
 # 2025-06-11: added opening save file
 #######################
 
-import Force
-#import MainMenu
-#import GamePlay
+import MainMenu
+import GamePlay
 import player
 
 class masterPlayer:
