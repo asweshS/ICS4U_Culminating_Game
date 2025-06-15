@@ -1,9 +1,3 @@
-######################################
-# File Name: GamePlay.py
-# Author(s): Devan Lucas, Ryan Macleod
-# Description: This program is the main gameplay for the conquest game 
-# 2025-06-14 creation.
-######################################
 import random
 import os
 class Map:
@@ -23,6 +17,7 @@ class Map:
         return world
 
     def print_map(self):
+        os.system('cls')
         def print_row(y):
             if y >= len(self.map[0]):
                 return
@@ -45,11 +40,11 @@ class Force:
     
     # which player this class belongs to
     playNum = 0
-    def __init__(self, unit, terr, playerNum):
+    def __init__(self, unit, terr, playerNum, assgnmnts ):
         self.units = unit
         self.territory = terr
         self.playNum = playerNum
-        print("%s's units: %s" %(assignments[playerNum], self.units))
+        print("%s's units: %s" %(assgnmnts[playerNum], self.units))
 
     # roll dice and see who wins, defense is p2
     def Attack(self, p2, terr, player1, player2):
@@ -160,6 +155,8 @@ class Territories:
             except:
                 print("Invalid input!")
             else:
+                if territorySteal<=1 or territorySteal>12: 
+                    print("Invalid input!") 
                 if self.is_take_valid(plyrAssm[persTurn], territorySteal):
                     print("You can not take your own territory!")
                 else:
@@ -177,7 +174,6 @@ class Territories:
             plyrTerrClm[persTurn].append(territorySteal)
         map_printer = Map("")  # create a dupelicate Map object just for printing
         map_printer.map = self.map
-        map_printer.print_map()
 def gamePlay():
     TERRITORY_COORDS = [
         [7, 2], [23, 2], [37, 2], [12, 7], [23, 9], [35, 9],
@@ -246,6 +242,8 @@ def gamePlay():
         while not isPickValid:
             # Show the map before each pick
             game_map.print_map()
+            for idx in range(playerCount):
+                print("player %s: %s" % (assignments[idx], players[idx]))
             try:
                 choice = int(input("%s (player %s), pick an unclaimed territory (1-12): " % (players[current],assignments[current])) )
             except:
@@ -260,6 +258,7 @@ def gamePlay():
                         print("Selection cancelled. Please pick again.")
                 else:
                     print("Territory %s is not avaliable!" % choice)
+            if not isPickValid: input("Click enter for reinput!")
         x, y = TERRITORY_COORDS[choice - 1]
         territories.territory_claim(x, y, None, assignments[current])
         playerTerritories[current].append(choice)
@@ -271,16 +270,17 @@ def gamePlay():
              if territories.is_take_valid("?", i+1):
                  allTerritoriesPicked = False
                  break
-        # Clear the screen for the next player
-        os.system('cls')
     units = [4]*playerCount ###########################################
     forcePlayer= [None]*playerCount
     for plyr in range (playerCount):   
-        forcePlayer[plyr] = Force(units[plyr], playerTerritories[plyr], plyr)
+        forcePlayer[plyr] = Force(units[plyr], playerTerritories[plyr], plyr, assignments)
 
     # === MAIN GAME LOOP ===
     turn = 0
     while not gameComplete:
+        game_map.print_map()
+        for idx in range(playerCount):
+            print("player %s: %s" % (assignments[idx], players[idx]))
         current = turn % playerCount
         print("%s's (player %s) Turn" % ((players[current], assignments[current])))
 
@@ -290,4 +290,5 @@ def gamePlay():
             if len(playerTerritories[i]) == 12:
                 print("%s (Player %s) is the winner!" % (players[i], assignments[i]))
                 gameComplete = True
+        input("Click enter to advance to %s's turn!" % players[(current+1)%playerCount])
         turn += 1
