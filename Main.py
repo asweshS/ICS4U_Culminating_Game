@@ -64,3 +64,21 @@ def openSave():
 
 openSave()
 player = masterPlayer(1)
+###############################################
+import MainMenu
+import GamePlay
+import sys
+import time
+import random
+import os
+MainMenu.initialization_of_game()
+time.sleep(0.5)
+os.system('cls')
+print("Game Starting, goodluck to all and  have fun!\n")
+for char in "█████████████████████████████████████████████\n":
+                sys.stdout.write(char)
+                sys.stdout.flush()
+                time.sleep(random.randint(1,10)/50)
+os.system('cls')
+time.sleep(1)               
+GamePlay.gamePlay()
