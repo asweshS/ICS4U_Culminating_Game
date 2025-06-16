@@ -376,42 +376,52 @@ def gamePlay(save):
             for i in range(len(playerTerritories[current])):
                 terrPrint += str(playerTerritories[current][i])
                 terrPrint += " " 
-            print("Territories: %s" % terrPrint)
-            print("What will you do on your turn?")
-            print("1. Invest")
-            print("2. Purchase troops")
-            print("3. Attack")
-            decision = input("Enter (1,2, or 3) : ")
-            if decision =="1":
-                player_instance[current].invest()
-                player_instance[current].balance()
-            elif decision =="2":
-                validTroopsBuy = False
-                while not validTroopsBuy:
-                    numberOfTroopsBuy = input("How many troops would you like to buy? ($100 each): ")
-                    try:
-                        numberOfTroopsBuy = int(numberOfTroopsBuy)
-                    except:
-                        print("Invalid input!")
+            validInputTurnChoice = False
+            while not validInputTurnChoice: 
+                validInputTurnChoice = True
+                print("Territories: %s" % terrPrint)
+                print("What will you do on your turn?")
+                print("1. Invest")
+                print("2. Purchase troops")
+                print("3. Attack")
+                decision = input("Enter (1,2, or 3) : ")
+                if decision =="1":
+                    player_instance[current].invest()
+                    player_instance[current].balance()
+                elif decision =="2":
+                    if player_instance[current].money < 100:
+                        print("You do not have enough money to buy troops!")
+                        validTroopsBuy = True
+                        validInputTurnChoice = False
                     else:
-                        if numberOfTroopsBuy < 0:
-                            print("You can not buy negative troops!")
-                        elif numberOfTroopsBuy * 100 > player_instance[current].money:
-                            print("You do not have enough money to buy that many troops!")
+                        validTroopsBuy = False
+                    while not validTroopsBuy:
+                        numberOfTroopsBuy = input("How many troops would you like to buy? ($100 each): ")
+                        try:
+                            numberOfTroopsBuy = int(numberOfTroopsBuy)
+                        except:
+                            print("Invalid input!")
                         else:
-                            validTroopsBuy = True
-                player_instance[current].buy_troops(numberOfTroopsBuy)
-            elif decision == "3":
-                territories.attacking_turn(players, playerTerritories, current, assignments, playerCount, forcePlayer, player_instance)
-            for i in range(playerCount):
-                if len(playerTerritories[i]) == 12:
-                    print("%s (Player %s) is the winner!" % (players[i], assignments[i]))
-                    gameComplete = True
-                    break
+                            if numberOfTroopsBuy < 0:
+                                print("You can not buy negative troops!")
+                            elif numberOfTroopsBuy * 100 > player_instance[current].money:
+                                print("You do not have enough money to buy that many troops!")
+                            else:
+                                validTroopsBuy = True
+                    player_instance[current].buy_troops(numberOfTroopsBuy)
+                elif decision == "3":
+                    territories.attacking_turn(players, playerTerritories, current, assignments, playerCount, forcePlayer, player_instance)
+                elif decision != "3" or decision != "2" or decision != "1": 
+                    validInputTurnChoice = False
+                    print("Invalid input, please try again!\n")
             if (turn+1) % playerCount == 0:
                 print("All players have had a turn, $500 + $100 per territory owned added to each players balance")
                 print("Continuing to round %s" % ((turn+1)//4 + 1))
+                doesQuit = input("Do you want to quit? (y/n): ").strip().lower()
+                if doesQuit == 'y':
+                    print("Which file would you like to save your game to? (or press enter to skip saving)")
+                    #######################################################
+                    break
+                else: print("Game will continue!")
             input("Click enter to advance to %s's turn!" % players[(current+1)%playerCount])
             turn += 1
-
-gamePlay(1)
