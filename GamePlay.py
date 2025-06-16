@@ -214,7 +214,7 @@ class Territories:
             plyrTerrClm[persTurn].append(territorySteal)
         map_printer = Map("")  # create a dupelicate Map object just for printing
         map_printer.map = self.map
-def gamePlay(save):
+def gamePlay():
     TERRITORY_COORDS = [
         [7, 2], [23, 2], [37, 2], [12, 7], [23, 9], [35, 9],
         [8, 15], [14, 14], [24, 14], [8, 20], [14, 20], [34, 19]
@@ -273,7 +273,10 @@ def gamePlay(save):
 
     if saveFile.doesFileHaveData(whichSave):
         firstSave = False
-        print("Loading save %d..." % whichSave)
+        for char in ("Loading save %d..." % whichSave):
+                sys.stdout.write(char)
+                sys.stdout.flush()
+                time.sleep(0.02)
         players = saveFile.loadSave(whichSave)
         playerCount = len(players)
         for idx in range(playerCount):
