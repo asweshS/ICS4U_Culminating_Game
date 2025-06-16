@@ -363,7 +363,8 @@ def gamePlay():
         for idx in range(playerCount):
             tempTerriories = player_instance[idx].territories 
             for i in (tempTerriories):
-                x, y = territories.territory_coords[i]
+                i = int (i)
+                x, y =(territories.territory_coords[i-1])
                 territories.territory_claim(x, y, None, assignments[idx])
     # === MAIN GAME LOOP ===
     turn = 0
@@ -423,7 +424,7 @@ def gamePlay():
 
                 saveFileAtEndOfRound = input("Would you like to save the game and leave? (y/n): ").strip().lower()
                 if saveFileAtEndOfRound == 'y':
-                    saveFile.savingFile(whichSave,player_instance)
+                    saveFile.savingFile(whichSave,player_instance, playerCount)
                     print("Game saved!")
                     break
 
