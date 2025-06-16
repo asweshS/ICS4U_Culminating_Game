@@ -376,3 +376,13 @@ def makingFirstSave(numberOfFile, numberOfPlayers, namesOfPlayers, moneyOfPlayer
     else:
         print("Invalid file number.")
         return None
+
+def savingFile(numberOfFile, playerObjWrite):
+    if numberOfFile == 1:
+        savingFileOne(playerObjWrite)
+    elif numberOfFile == 2:
+        savingFileTwo(playerObjWrite)
+    elif numberOfFile == 3:
+        savingFileThree(playerObjWrite)
+    else:
+        print("Invalid file number.")
