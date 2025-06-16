@@ -1,5 +1,7 @@
 import random
 import os
+import saveFile
+
 class Player:
     investment = 0
 
@@ -28,15 +30,15 @@ class Player:
 
 
     def __str__(self):
-        printOutStatement = []
-        printOutStatement.append(f"Player {self.name} has {self.money} money, {self.troops} \
-soldiers and controls territories: ")
+        #printOutStatement = []
+        #printOutStatement.append(f"Player {self.name} has {self.money} money, {self.troops} \
+#soldiers and controls territories: ")
         
-        for i in range(len(self.territories)):
-            printOutStatement.append(str(self.territories[i])+ " ")
-        printOutStatement = "".join(printOutStatement)
+     #   for i in range(len(self.territories)):
+       #     printOutStatement.append(str(self.territories[i])+ " ")
+       # printOutStatement = "".join(printOutStatement)
             
-        return printOutStatement
+        return self.name
 
 class Map:
     def __init__(self, textmap):
@@ -212,7 +214,7 @@ class Territories:
             plyrTerrClm[persTurn].append(territorySteal)
         map_printer = Map("")  # create a dupelicate Map object just for printing
         map_printer.map = self.map
-def gamePlay():
+def gamePlay(save):
     TERRITORY_COORDS = [
         [7, 2], [23, 2], [37, 2], [12, 7], [23, 9], [35, 9],
         [8, 15], [14, 14], [24, 14], [8, 20], [14, 20], [34, 19]
@@ -247,7 +249,43 @@ def gamePlay():
     game_map = Map(textMap)
     territories = Territories(game_map, TERRITORY_COORDS)
     # === PLAYER SETUP ===
+    assignments = "ABCD"
+    TERRITORYAMOUNT = 12
+    player_instance = [None]*4
+    gameComplete = False
+        
+    print("These are the saves:")
+
+    for i in range(3):
+        if saveFile.doesFileHaveData(i+1):
+            print("Load Save %d" % (i + 1))
+        else:
+            print("Create New Save on %d " % (i + 1))
+
     while True:
+        try:
+            whichSave = int(input("Which save would you like to use? (1-3): "))
+            if 1 <= whichSave <= 3:
+                break
+            print("Invalid number.")
+        except ValueError:
+            print("Invalid input.")
+
+    if saveFile.doesFileHaveData(whichSave):
+        firstSave = False
+        print("Loading save %d..." % whichSave)
+        players = saveFile.loadSave(whichSave)
+        playerCount = len(players)
+        for idx in range(playerCount):
+            print("player %s: %s" % (assignments[idx], players[idx]))
+        input("Press Enter to continue...")
+    else:
+        firstSave = True
+        print("No save data found. Starting a new game.")
+        
+    
+
+    while firstSave:
         try:
             playerCount = int(input("How many players? (2-4): "))
             if 2 <= playerCount <= 4:
@@ -256,66 +294,67 @@ def gamePlay():
         except:
             print("Invalid input.")
 
-    TERRITORYAMOUNT = 12
-    player_instance = [None]*4
-    assignments = "ABCD"
-    players = [input("Name for player %s: " % (i+1)) for i in range(playerCount)]
-    playerTerritories = [[] for n in range(playerCount)]
+
+    if firstSave:
+        players = [input("Name for player %s: " % (i+1)) for i in range(playerCount)]
+        playerTerritories = [[] for n in range(playerCount)]
 
     random.shuffle(players)
+
     print("Turn order:")
     for idx in range(playerCount):
         print("player %s: %s" % (assignments[idx], players[idx]))
     input("Press Enter to begin...")
 
     #pick territories
-    pick = 0
-    gameComplete = False
-    pickTerritory = 0
-    allTerritoriesPicked = False
-    while not allTerritoriesPicked:
-        isPickValid = False
-        current = pick % playerCount
-        while not isPickValid:
-            # Show the map before each pick
-            game_map.print_map()
-            for idx in range(playerCount):
-                print("player %s: %s" % (assignments[idx], players[idx]))
-            try:
-                choice = int(input("%s (player %s), pick an unclaimed territory (1-12): " % (players[current],assignments[current])) )
-            except:
-                print("Invalid input!")
-            else:
-                if 1 <= choice <= 12 and territories.is_take_valid("?", choice):
-                    # Ask for confirmation
-                    confirm = input("You selected territory %d. Confirm selection? (y/n): " % choice).strip().lower()
-                    if confirm == 'y':
-                        isPickValid = True
-                    else:
-                        print("Selection cancelled. Please pick again.")
+    if firstSave:
+        pick = 0
+        pickTerritory = 0
+        allTerritoriesPicked = False
+        while not allTerritoriesPicked:
+            isPickValid = False
+            current = pick % playerCount
+            while not isPickValid:
+                # Show the map before each pick
+                game_map.print_map()
+                for idx in range(playerCount):
+                    print("player %s: %s" % (assignments[idx], players[idx]))
+                try:
+                    choice = int(input("%s (player %s), pick an unclaimed territory (1-12): " % (players[current],assignments[current])) )
+                except:
+                    print("Invalid input!")
                 else:
-                    print("Territory %s is not avaliable!" % choice)
-            if not isPickValid: input("Click enter for reinput!")
-        x, y = TERRITORY_COORDS[choice - 1]
-        territories.territory_claim(x, y, None, assignments[current])
-        playerTerritories[current].append(choice)
-        if pick > 10:
-            game_map.print_map()
-        pick += 1
-        allTerritoriesPicked = True
-        for i in range(TERRITORYAMOUNT):
-             if territories.is_take_valid("?", i+1):
-                 allTerritoriesPicked = False
-                 break
+                    if 1 <= choice <= 12 and territories.is_take_valid("?", choice):
+                        # Ask for confirmation
+                        confirm = input("You selected territory %d. Confirm selection? (y/n): " % choice).strip().lower()
+                        if confirm == 'y':
+                            isPickValid = True
+                        else:
+                            print("Selection cancelled. Please pick again.")
+                    else:
+                        print("Territory %s is not avaliable!" % choice)
+                if not isPickValid: input("Click enter for reinput!")
+            x, y = TERRITORY_COORDS[choice - 1]
+            territories.territory_claim(x, y, None, assignments[current])
+            playerTerritories[current].append(choice)
+            if pick > 10:
+                game_map.print_map()
+            pick += 1
+            allTerritoriesPicked = True
+            for i in range(TERRITORYAMOUNT):
+                if territories.is_take_valid("?", i+1):
+                    allTerritoriesPicked = False
+                    break
     
-    troopsForPlay = [] ###########################################
-    forcePlayer= [None]*playerCount
-    player_instance= [None]*playerCount
-    for plyr in range (playerCount): 
-        troopsForPlay.append(100* len(playerTerritories[plyr])) 
-        print(troopsForPlay[plyr])
-        player_instance[plyr] = Player(players[plyr], troopsForPlay[plyr], 0, playerTerritories[plyr])
-        forcePlayer[plyr] = Force(troopsForPlay[plyr], playerTerritories[plyr], plyr, assignments)
+        troopsForPlay = [] ###########################################
+        forcePlayer= [None]*playerCount
+        #player_instance= [None]*playerCount
+        
+        for plyr in range (playerCount): 
+            troopsForPlay.append(100* len(playerTerritories[plyr])) 
+            print(troopsForPlay[plyr])
+            player_instance[plyr] = Player(players[plyr], troopsForPlay[plyr], 0, playerTerritories[plyr])
+            forcePlayer[plyr] = Force(troopsForPlay[plyr], playerTerritories[plyr], plyr, assignments)
 
     # === MAIN GAME LOOP ===
     turn = 0
@@ -374,3 +413,5 @@ def gamePlay():
                 print("Continuing to round %s" % ((turn+1)//4 + 1))
             input("Click enter to advance to %s's turn!" % players[(current+1)%playerCount])
             turn += 1
+
+gamePlay(1)
