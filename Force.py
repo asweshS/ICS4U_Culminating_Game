@@ -1,8 +1,8 @@
 #######################
 # File: Force.py
 # Description: This will be 
-# the files and classes that 
-# determine how the atttacks and 
+# the file and classe that 
+# determine how the attacks and 
 # combat mechanics will work
 # Algo: 
 # class Force:    
