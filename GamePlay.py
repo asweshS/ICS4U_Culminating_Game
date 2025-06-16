@@ -268,13 +268,18 @@ def gamePlay():
         firstSave = False
         playerTerritories = []
         playerNames = []
+        playerTroops = []
         print("Loading save %d..." % whichSave)
         player_instance = saveFile.loadSave(whichSave)
         playerCount = len(player_instance)
+        forcePlayer = [None] * playerCount
         for idx in range(playerCount):
             print("player %s: %s" % (assignments[idx], player_instance[idx]))
             playerTerritories.append(player_instance[idx].territories)
             playerNames.append(str(player_instance[idx].name))
+            playerTroops.append(str(player_instance[idx].troops))
+            for plyr in range(playerCount):
+                forcePlayer[plyr] = Force(playerTroops[plyr], playerTerritories[plyr], plyr, assignments)
         input("Press Enter to continue...")
         
     else:
@@ -354,7 +359,6 @@ def gamePlay():
             troopsForPlay.append(100* len(playerTerritories[plyr])) 
             print(troopsForPlay[plyr])
             player_instance[plyr] = Player(player_instance[plyr], troopsForPlay[plyr], 0, playerTerritories[plyr])
-            forcePlayer[plyr] = Force(troopsForPlay[plyr], playerTerritories[plyr], plyr, assignments)
 
     # === MAIN GAME LOOP ===
     turn = 0
@@ -420,5 +424,3 @@ def gamePlay():
 
             input("Click enter to advance to %s's turn!" % player_instance[(current+1)%playerCount])
             turn += 1
-
-gamePlay()
