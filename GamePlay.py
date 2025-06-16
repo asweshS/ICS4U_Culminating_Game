@@ -278,8 +278,8 @@ def gamePlay():
             playerTerritories.append(player_instance[idx].territories)
             playerNames.append(str(player_instance[idx].name))
             playerTroops.append(str(player_instance[idx].troops))
-            for plyr in range(playerCount):
-                forcePlayer[plyr] = Force(playerTroops[plyr], playerTerritories[plyr], plyr, assignments)
+        for plyr in range(playerCount):
+            forcePlayer[plyr] = Force(playerTroops[plyr], playerTerritories[plyr], plyr, assignments)
         input("Press Enter to continue...")
         
     else:
@@ -303,7 +303,7 @@ def gamePlay():
         playerTerritories = [[] for n in range(playerCount)]
         player_instance = [None] * playerCount
     
-    random.shuffle(player_instance)
+        random.shuffle(player_instance)
 
     print("Turn order:")
     for idx in range(playerCount):
@@ -352,14 +352,19 @@ def gamePlay():
         for idx in range(playerCount):
             player_instance[idx] = Player(playerNames[idx], 100, 0, playerTerritories[idx])
         
-        troopsForPlay = [] ###########################################
-        forcePlayer= [None]*playerCount
+        troopsForPlay = []
+        forcePlayer = [None]*playerCount
         
         for plyr in range (playerCount): 
             troopsForPlay.append(100* len(playerTerritories[plyr])) 
             print(troopsForPlay[plyr])
             player_instance[plyr] = Player(player_instance[plyr], troopsForPlay[plyr], 0, playerTerritories[plyr])
-
+    if not firstSave:
+        for idx in range(playerCount):
+            tempTerriories = player_instance[idx].territories 
+            for i in (tempTerriories):
+                x, y = territories.territory_coords[i]
+                territories.territory_claim(x, y, None, assignments[idx])
     # === MAIN GAME LOOP ===
     turn = 0
     while not gameComplete:
