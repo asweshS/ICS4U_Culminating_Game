@@ -98,34 +98,34 @@ class intro: # using a class because it just makes it easier (imo) when everyone
 
 def clear_screen():
     os.system('cls')
+def initialization_of_game():
+    player_type = intro.main_Menu()
 
-player_type = intro.main_Menu()
-
-if player_type == "returning":
-    clear_screen()
-    print("=" * 80)
-    print("LOAD SAVED GAME".center(80))
-    print("=" * 80)
-    print()
-    print("1. Conquest Saved File 1")
-    print("2. Conquest Saved File 2")
-    print("3. Conquest Saved File 3")
-    while True:
-        choice = input("\nChoose a save file to load (1-3): ").strip()
-        if choice == "1":
-            print(f"\nLoading save file {choice}...\n")
-            time.sleep(1)
-            # Add code here to actually load the game state
-            # from the selected save file.  For now, just exit.
-            sys.exit()
-        elif choice == "2":
-            print(f"\nLoading save file {choice}...\n")
-            time.sleep(1)
-            sys.exit()
-        elif choice == "3":
-            print(f"\nLoading save file {choice}...\n")
-            time.sleep(1)
-            sys.exit()
-        else:
-            print("Invalid choice. Please enter a number between 1 and 3.")
-            time.sleep(1)
+    if player_type == "returning":
+        clear_screen()
+        print("=" * 80)
+        print("LOAD SAVED GAME".center(80))
+        print("=" * 80)
+        print()
+        print("1. Conquest Saved File 1")
+        print("2. Conquest Saved File 2")
+        print("3. Conquest Saved File 3")
+        while True:
+            choice = input("\nChoose a save file to load (1-3): ").strip()
+            if choice == "1":
+                print(f"\nLoading save file {choice}...\n")
+                time.sleep(1)
+                # Add code here to actually load the game state
+                # from the selected save file.  For now, just exit.
+                sys.exit()
+            elif choice == "2":
+                print(f"\nLoading save file {choice}...\n")
+                time.sleep(1)
+                sys.exit()
+            elif choice == "3":
+                print(f"\nLoading save file {choice}...\n")
+                time.sleep(1)
+                sys.exit()
+            else:
+                print("Invalid choice. Please enter a number between 1 and 3.")
+                time.sleep(1)
