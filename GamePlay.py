@@ -30,7 +30,8 @@ class Player:
 
 
     def __str__(self):
-        return self.name
+        name = self.name
+        return str(name)
 
 class Map:
     def __init__(self, textmap):
@@ -266,13 +267,16 @@ def gamePlay():
     if saveFile.doesFileHaveData(whichSave):
         firstSave = False
         playerTerritories = []
+        playerNames = []
         print("Loading save %d..." % whichSave)
         player_instance = saveFile.loadSave(whichSave)
         playerCount = len(player_instance)
         for idx in range(playerCount):
             print("player %s: %s" % (assignments[idx], player_instance[idx]))
             playerTerritories.append(player_instance[idx].territories)
+            playerNames.append(str(player_instance[idx].name))
         input("Press Enter to continue...")
+        
     else:
         firstSave = True
         print("Starting a new game.")
@@ -287,16 +291,18 @@ def gamePlay():
             print("Invalid number.")
         except:
             print("Invalid input.")
-
+    
 
     if firstSave:
+        playerNames = [input("Name for player %s: " % (i+1)) for i in range(playerCount)]
         playerTerritories = [[] for n in range(playerCount)]
-
+        player_instance = [None] * playerCount
+    
     random.shuffle(player_instance)
 
     print("Turn order:")
     for idx in range(playerCount):
-        print("player %s: %s" % (assignments[idx], player_instance[idx]))
+        print("player %s: %s" % (assignments[idx], playerNames[idx]))
     input("Press Enter to begin...")
 
     #pick territories
@@ -310,9 +316,9 @@ def gamePlay():
                 # Show the map before each pick
                 game_map.print_map()
                 for idx in range(playerCount):
-                    print("player %s: %s" % (assignments[idx], player_instance[idx]))
+                    print("player %s: %s" % (assignments[idx], playerNames[idx]))
                 try:
-                    choice = int(input("%s (player %s), pick an unclaimed territory (1-12): " % (player_instance[current],assignments[current])) )
+                    choice = int(input("%s (player %s), pick an unclaimed territory (1-12): " % (playerNames[current],assignments[current])) )
                 except:
                     print("Invalid input!")
                 else:
@@ -337,10 +343,12 @@ def gamePlay():
                 if territories.is_take_valid("?", i+1):
                     allTerritoriesPicked = False
                     break
-    
+            
+        for idx in range(playerCount):
+            player_instance[idx] = Player(playerNames[idx], 100, 0, playerTerritories[idx])
+        
         troopsForPlay = [] ###########################################
         forcePlayer= [None]*playerCount
-        #player_instance= [None]*playerCount
         
         for plyr in range (playerCount): 
             troopsForPlay.append(100* len(playerTerritories[plyr])) 
