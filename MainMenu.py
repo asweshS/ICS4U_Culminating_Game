@@ -28,7 +28,7 @@ class intro: # using a class because it just makes it easier (imo) when everyone
         time.sleep(1)
         loaded_game = f"Successfully Loaded '{TITLE}'\n"
         typewriter_txt(loaded_game)
-
+        time.sleep(1)
         def print_header():
             os.system('cls')
             header_width = 80
@@ -155,6 +155,3 @@ def clear_screen():
     os.system('cls')
 def initialization_of_game():
     player_type = intro.main_Menu()
-
-                print("Invalid choice. Please enter a number between 1 and 3.")
-                time.sleep(1)
