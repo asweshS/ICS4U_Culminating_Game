@@ -26,38 +26,7 @@ class Player_Save:
 
 
     def __str__(self):
-        #printOutStatement = []
-        #printOutStatement.append(f"Player {self.name} has {self.money} money, {self.troops} \
-#soldiers and controls territories: ")
-        
-     #   for i in range(len(self.territories)):
-       #     printOutStatement.append(str(self.territories[i])+ " ")
-       # printOutStatement = "".join(printOutStatement)
-            
         return self.name
-
-
-
-
-
-def makingFirstSaveOnOne(numberOfPlayers,namesOfPlayers,moneyOfPlayers,troopsOfPlayers,territoriesOfPlayers):
-    try:
-        saveOneWrite = open("savedGameOne.txt", "w")
-    except:
-        print("File not found.")
-    else:
-        playerObjFirstSaveOnOne = []
-        for i in range(numberOfPlayers):
-            playerObjFirstSaveOnOne.append(Player_Save(namesOfPlayers[i],troopsOfPlayers[i]\
-                             ,moneyOfPlayers[i],territoriesOfPlayers[i]))
-            saveOneWrite.write(str(namesOfPlayers[i])+" ")
-            saveOneWrite.write(str(troopsOfPlayers[i])+" ")
-            saveOneWrite.write(str(moneyOfPlayers[i])+" ")
-            saveOneWrite.write(str(territoriesOfPlayers[i])+"\n")
-            
-        
-        saveOneWrite.close()
-        return playerObjFirstSaveOnOne
 
                     
 def saveOneReadFunct():
@@ -132,25 +101,6 @@ def clearingFileOne():
 
 
 #two
-def makingFirstSaveOnTwo(numberOfPlayers,namesOfPlayers,moneyOfPlayers,troopsOfPlayers,territoriesOfPlayers):
-    try:
-        saveTwoWrite = open("savedGameTwo.txt", "w")
-    except:
-        print("File not found.")
-    else:
-        playerObjFirstSaveOnTwo = []
-        for i in range(numberOfPlayers):
-            playerObjFirstSaveOnTwo.append(Player_Save(namesOfPlayers[i],troopsOfPlayers[i]\
-                             ,moneyOfPlayers[i],territoriesOfPlayers[i]))
-            saveTwoWrite.write(str(namesOfPlayers[i])+" ")
-            saveTwoWrite.write(str(troopsOfPlayers[i])+" ")
-            saveTwoWrite.write(str(moneyOfPlayers[i])+" ")
-            saveTwoWrite.write(str(territoriesOfPlayers[i])+"\n")
-            
-        
-        saveTwoWrite.close()
-        return playerObjFirstSaveOnTwo
-
                     
 def saveTwoReadFunct():
     try:
@@ -222,25 +172,6 @@ def clearingFileTwo():
 
 
 #three
-def makingFirstSaveOnThree(numberOfPlayers,namesOfPlayers,moneyOfPlayers,troopsOfPlayers,territoriesOfPlayers):
-    try:
-        saveThreeWrite = open("savedGameThree.txt", "w")
-    except:
-        print("File not found.")
-    else:
-        playerObjFirstSaveOnThree = []
-        for i in range(numberOfPlayers):
-            playerObjFirstSaveOnThree.append(Player_Save(namesOfPlayers[i],troopsOfPlayers[i]\
-                                    ,moneyOfPlayers[i],territoriesOfPlayers[i]))
-            saveThreeWrite.write(str(namesOfPlayers[i])+" ")
-            saveThreeWrite.write(str(troopsOfPlayers[i])+" ")
-            saveThreeWrite.write(str(moneyOfPlayers[i])+" ")
-            saveThreeWrite.write(str(territoriesOfPlayers[i])+"\n")
-            
-        
-        saveThreeWrite.close()
-        return playerObjFirstSaveOnThree
-
                     
 def saveThreeReadFunct():
     try:
@@ -366,16 +297,6 @@ def loadSave(numberOfFile):
         print("Invalid file number.")
         return None
 
-def makingFirstSave(numberOfFile, numberOfPlayers, namesOfPlayers, moneyOfPlayers, troopsOfPlayers, territoriesOfPlayers):
-    if numberOfFile == 1:
-        return makingFirstSaveOnOne(numberOfPlayers, namesOfPlayers, moneyOfPlayers, troopsOfPlayers, territoriesOfPlayers)
-    elif numberOfFile == 2:
-        return makingFirstSaveOnTwo(numberOfPlayers, namesOfPlayers, moneyOfPlayers, troopsOfPlayers, territoriesOfPlayers)
-    elif numberOfFile == 3:
-        return makingFirstSaveOnThree(numberOfPlayers, namesOfPlayers, moneyOfPlayers, troopsOfPlayers, territoriesOfPlayers)
-    else:
-        print("Invalid file number.")
-        return None
 
 def savingFile(numberOfFile, playerObjWrite):
     if numberOfFile == 1:
