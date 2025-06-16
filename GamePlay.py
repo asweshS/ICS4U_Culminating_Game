@@ -1,6 +1,7 @@
 import random
 import os
 import saveFile
+import time 
 
 class Player:
     investment = 0
@@ -30,14 +31,6 @@ class Player:
 
 
     def __str__(self):
-        #printOutStatement = []
-        #printOutStatement.append(f"Player {self.name} has {self.money} money, {self.troops} \
-#soldiers and controls territories: ")
-        
-     #   for i in range(len(self.territories)):
-       #     printOutStatement.append(str(self.territories[i])+ " ")
-       # printOutStatement = "".join(printOutStatement)
-            
         return self.name
 
 class Map:
@@ -195,7 +188,7 @@ class Territories:
             except:
                 print("Invalid input!")
             else:
-                if territorySteal<=1 or territorySteal>12: 
+                if not territorySteal>1 and not territorySteal<=12: 
                     print("Invalid input!") 
                 if self.is_take_valid(plyrAssm[persTurn], territorySteal):
                     print("You can not take your own territory!")
@@ -312,7 +305,6 @@ def gamePlay():
     #pick territories
     if firstSave:
         pick = 0
-        pickTerritory = 0
         allTerritoriesPicked = False
         while not allTerritoriesPicked:
             isPickValid = False
@@ -349,9 +341,8 @@ def gamePlay():
                     allTerritoriesPicked = False
                     break
     
-        troopsForPlay = [] ###########################################
+        troopsForPlay = []
         forcePlayer= [None]*playerCount
-        #player_instance= [None]*playerCount
         
         for plyr in range (playerCount): 
             troopsForPlay.append(100* len(playerTerritories[plyr])) 
@@ -371,17 +362,17 @@ def gamePlay():
         else:
             for idx in range(playerCount):
                 print("player %s: %s" % (assignments[idx], players[idx]))
-            print()
-            print("%s's (player %s) Turn" % ((players[current], assignments[current])))
-            print("Balance: %s" % player_instance[current].money)
-            print("Troops: %s" % player_instance[current].troops)
-            terrPrint = ""
-            for i in range(len(playerTerritories[current])):
-                terrPrint += str(playerTerritories[current][i])
-                terrPrint += " " 
             validInputTurnChoice = False
-            while not validInputTurnChoice: 
-                validInputTurnChoice = True
+            while not validInputTurnChoice:
+                validInputTurnChoice = True 
+                print()
+                print("%s's (player %s) Turn" % ((players[current], assignments[current])))
+                print("Balance: %s" % player_instance[current].money)
+                print("Troops: %s" % player_instance[current].troops)
+                terrPrint = ""
+                for i in range(len(playerTerritories[current])):
+                    terrPrint += str(playerTerritories[current][i])
+                    terrPrint += " "
                 print("Territories: %s" % terrPrint)
                 print("What will you do on your turn?")
                 print("1. Invest")
@@ -411,12 +402,13 @@ def gamePlay():
                                 print("You do not have enough money to buy that many troops!")
                             else:
                                 validTroopsBuy = True
-                    player_instance[current].buy_troops(numberOfTroopsBuy)
+                                player_instance[current].buy_troops(numberOfTroopsBuy)
                 elif decision == "3":
                     territories.attacking_turn(players, playerTerritories, current, assignments, playerCount, forcePlayer, player_instance)
                 elif decision != "3" or decision != "2" or decision != "1": 
                     validInputTurnChoice = False
                     print("Invalid input, please try again!\n")
+                    time.sleep(0.8)
             if (turn+1) % playerCount == 0:
                 print("All players have had a turn, $500 + $100 per territory owned added to each players balance")
                 print("Continuing to round %s" % ((turn+1)//4 + 1))
