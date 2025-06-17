@@ -2,6 +2,7 @@ import random
 import os
 import saveFile
 
+import Force
 class Player:
     investment = 0
 
@@ -65,50 +66,6 @@ class Map:
             print_col(0)
             print_row(y + 1)
         print_row(0)
-
-# force is from the perspective of the attacker
-class Force:
-    units = 0
-    strength = 0
-    territory = []
-    assignments = "ABCD"
-    
-    # which player this class belongs to
-    playNum = 0
-    def __init__(self, unit, terr, playerNum, assgnmnts ):
-        self.units = int(unit)
-        self.territory = terr
-        self.playNum = playerNum
-        print("%s's units: %s" %(assgnmnts[playerNum], self.units))
-
-    # roll dice and see who wins, defense is p2
-    def Attack(self, p2, terr, player1, player2, selfTroops, p2Troops):
-
-        # when attacker doesn't have enough units
-        if (self.units <= 1):
-            print("You cannot attack, you dont have enough units")
-            return
-
-        # attacker dice
-        dice1 = random.randint(1, 6) * selfTroops
-        # defense dice
-        dice2 = random.randint(1, 6) * p2Troops
-
-        # attacker dice is higher
-        if (dice1 > dice2):
-            p2.units -= 100
-            print("%s wins!" % player1)
-            print("%s: %s units left, %s: %s units left)" % (player1, self.units, player2, p2.units))
-            return True
-        # defender dice is higher or dice are even
-        if (dice2 > dice1 or dice1 == dice2):
-            self.units -= 100#(50 - terr.defense) + self.strength
-            print("%s wins!" % player2)
-            print("%s: %s units left, %s: %s units left)" % (player1, self.units, player2, p2.units))
-            return False            
-        # if defender is out of units, then give land to attacker
-        if (p2.units == 0): 
-            return True
 
 class Territories:
     def __init__(self, map_obj, territory_coords):
@@ -358,7 +315,7 @@ def gamePlay():
         
         for plyr in range (playerCount): 
             troopsForPlay.append(100* len(playerTerritories[plyr])) 
-            forcePlayer[plyr] = Force(troopsForPlay[plyr], playerTerritories[plyr], plyr, assignments)
+            forcePlayer[plyr] = Force.Force(troopsForPlay[plyr], playerTerritories[plyr], plyr, assignments)
             player_instance[plyr] = Player(playerNames[plyr], troopsForPlay[plyr], 0, playerTerritories[plyr])
     if not firstSave:
         for idx in range(playerCount):
@@ -399,11 +356,17 @@ def gamePlay():
                     print("What will you do for your %s turn?" % picksForEach[turnChoice])
                     print("1. Invest")
                     print("2. Purchase troops")
-                    print("3. Attack")
-                    decision = input("Enter (1,2, or 3) : ")
+                    print("3. Upgrade territories")
+                    print("4. Attack")
+
+                    decision = input("Enter (1,2, 3, or 4): ")
+
+                # invest
                 if decision =="1":
                     player_instance[current].invest()
                     print("%s has invested $1000!" % player_instance[current].name)
+
+                # buy troops
                 elif decision =="2":
                     validTroopsBuy = False
                     while not validTroopsBuy:
@@ -420,7 +383,45 @@ def gamePlay():
                             else:
                                 validTroopsBuy = True
                     player_instance[current].buy_troops(numberOfTroopsBuy)
+                
+                # upgrade territories
                 elif decision == "3":
+                    valid = False
+                    while (valid == False):
+                        try:
+                            terrIdx = int(input("What territory? "))
+                        except: 
+                            print("Invalid input, try again")
+                        else:
+                            if (1 < terrIdx < 12):
+                                # check to see if player owns territory
+                                try:
+                                    territories[current].index(terrIdx)
+                                except ValueError:
+                                    print("You do not own this territory! Try again")
+                                else:
+                                    print("valid terr")
+                                    valid = True
+                                
+                            else: 
+                                print("Enter a number between 1 and 12 and then try again")
+
+                    # make sure territory is valid
+                    while True:
+                        des = input("Do you want to upgrade army strength or territory defense? (1 or 2): ")
+                        if (des == "1"):
+                            # upgrade units in the 
+                            forcePlayer[terrIdx - 1].buyStrength(player_instance[current])
+                            print(forcePlayer.strength)
+                            break
+                        if (des == "2"):
+                            forcePlayer[terrIdx - 1].buyDefense(player_instance[current])
+                            break
+                        else: 
+                            print("Invalid input, try again")
+
+                # attack
+                elif decision == "4":
                     territories.attacking_turn(player_instance, playerTerritories, current, assignments, playerCount, forcePlayer, player_instance)
                 for i in range(playerCount):
                     if len(playerTerritories[i]) == 12:
