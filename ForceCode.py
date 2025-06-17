@@ -50,20 +50,19 @@ class Force:
     
     # which player this class belongs to
     playNum = 0
-    def __init__(self, unit, terr, playerNum, assgnmnts ):
+    def __init__(self, unit, terr, playerNum, assgnmnts, strength = 0, defense = 0):
         self.units = int(unit)
         self.territory = terr
         self.playNum = playerNum
-        self.strength = 0
-        self.defense = 0
-        print("%s's units: %s" %(assgnmnts[playerNum], self.units))
+        self.strength = strength
+        self.defense = defense
 
     # roll dice and see who wins, defense is p2
     def Attack(self, p2, player1, player2, selfTroops, p2Troops):
 
         # when attacker doesn't have enough units
         if (self.units <1):
-            print("You cannot attack, you dont have enough units")
+            print("You cannot attack, you dont have enough troops")
             return
 
         # attacker dice
@@ -105,7 +104,7 @@ class Force:
             if p2.units < 0:
                 p2.units = 0
             print("%s wins!" % player2)
-            print("%s: %s units left, %s: %s units left)" % (player1, self.units, player2, p2.units))
+            print("%s: %s troops left, %s: %s troops left)" % (player1, self.units, player2, p2.units))
             return False            
         # if defender is out of units, then give land to attacker
         if (p2.units == 0): 
@@ -120,7 +119,7 @@ class Force:
         validInput = False
         while not validInput:
             try:
-                amt = int(input("How many strength levels would you like to buy? (First costs $50 and more are additional $10): " ))
+                amt = int(input("How many strength levels would you like to buy?  ($300 each): " ))
             except:
                 print("Invalid input, try again")
                 return self.buyStrength(playerClass)
@@ -166,7 +165,7 @@ class Force:
         validInput = False
         while not validInput:
             try:
-                amt = int(input("How many defense levels would you like to buy? ($300 each)" ))
+                amt = int(input("How many defense levels would you like to buy? ($300 each): " ))
             except:
                 print("Invalid input, try again")
                 return self.buyDefense(playerClass)
