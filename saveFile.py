@@ -13,10 +13,8 @@ class SaveForce:
         self.units = int(unit)
         self.territory = terr
         self.playNum = playerNum
-        self.strength = 0
-        self.defense = 0
-        print("%s's units: %s" %(assgnmnts[playerNum], self.units))
-
+        self.strength = strength
+        self.defense = defense
     # roll dice and see who wins, defense is p2
     def Attack(self, p2, player1, player2, selfTroops, p2Troops):
 
@@ -187,6 +185,7 @@ class Player_Save:
         self.troops += amountOfTroops
         self.money -= 100 * amountOfTroops
         print(f"{self.name} has bought {amountOfTroops} troops.")
+        self.balance()
 
 
     def __str__(self):
