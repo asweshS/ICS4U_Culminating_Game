@@ -96,8 +96,6 @@ def clearingFileOne():
         saveOneWrite.close()
 
 
-
-
 #two
                     
 def saveTwoReadFunct():
