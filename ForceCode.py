@@ -80,8 +80,8 @@ class Force:
             if difference2 > -10:
                 difference2 = -10
             # if defender is out of units, then give land to attacker
-            self.units -= difference 
-            p2.units -= difference2
+            self.units += difference 
+            p2.units += difference2
             if (self.units < 0):
                 self.units = 0
             if p2.units < 0:
@@ -98,8 +98,8 @@ class Force:
             if difference2 > -10:
                 difference2 = -10
             # if defender is out of units, then give land to attacker
-            self.units -= difference 
-            p2.units -= difference2
+            self.units += difference 
+            p2.units += difference2
             if (self.units < 0):
                 self.units = 0
             if p2.units < 0:
@@ -166,7 +166,7 @@ class Force:
         validInput = False
         while not validInput:
             try:
-                amt = int(input("How many defense levels would you like to buy? (First costs $50 and more are additional $10): " ))
+                amt = int(input("How many defense levels would you like to buy? ($300 each)" ))
             except:
                 print("Invalid input, try again")
                 return self.buyDefense(playerClass)
@@ -204,41 +204,3 @@ class Force:
         else: 
             print("Invalid input, try again")
             return self.buyDefense(playerClass)
-        
-
-'''
-        # upgrade defense or strength of territory
-            elif decision == "3":
-                valid = False
-                while (valid == False):
-                    try:
-                        terrIdx = int(input("What territory? "))
-                    except: 
-                        print("Invalid input, try again")
-                    else:
-                        if (1 < terrIdx < 12):
-                            # check to see if player owns territory
-                            try:
-                                territories[current].index(terrIdx)
-                            except ValueError:
-                                print("You do not own this territory! Try again")
-                            else:
-                                print("valid terr")
-                                valid = True
-                            
-                        else: 
-                            print("Enter a number between 1 and 12 and then try again")
-
-                while True:
-                    des = input("Do you want to upgrade army strength or territory defense? (1 or 2): ")
-                    if (des == "1"):
-                        # upgrade units in the 
-                        forcePlayer[terrIdx - 1].buyStrength(player_instance[current])
-                        print(forcePlayer.strength)
-                        break
-                    if (des == "2"):
-                        forcePlayer[terrIdx - 1].buyDefense(player_instance[current])
-                        break
-                    else: 
-                        print("Invalid input, try again")
-                        '''
