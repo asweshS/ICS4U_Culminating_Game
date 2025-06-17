@@ -35,7 +35,7 @@ class Player:
     def invest(self):
         self.money+=1000
 
-    def buy_troops(self, amountOfTroops, forcePlay):
+    def buy_troops(self, amountOfTroops):
         self.troops += amountOfTroops
         self.money -= 100 * amountOfTroops
         print(f"{self.name} has bought {amountOfTroops} troops!")
@@ -412,7 +412,7 @@ def gamePlay():
                     print("3. Upgrade Strength/Defense")
                     print("4. Attack")
 
-                    decision = input("Enter (1 ,2, 3, or 4): ")
+                    decision = input("Enter (1, 2, 3, or 4): ")
 
                     # invest
                     if decision =="1":
