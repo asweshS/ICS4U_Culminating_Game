@@ -423,19 +423,21 @@ def gamePlay():
                     elif decision =="2":
                         validTroopsBuy = False
                         while not validTroopsBuy:
-                            numberOfTroopsBuy = input("How many troops would you like to buy? ($100 each): ")
+                            numberOfTroopsBuy = input("How many troops would you like to buy? ($100 each, c to cancel): ")
+                            if (numberOfTroopsBuy == "c"):
+                                break
                             try:
                                 numberOfTroopsBuy = int(numberOfTroopsBuy)
                             except:
                                 print("Invalid input!")
                             else:
-                                if numberOfTroopsBuy < 0:
+                                if numberOfTroopsBuy <= 0:
                                     print("You can not buy negative troops!")
                                 elif numberOfTroopsBuy * 100 > player_instance[current].money:
                                     print("You do not have enough money to buy that many troops!")
                                 else:
+                                    player_instance[current].buy_troops(numberOfTroopsBuy)
                                     validTroopsBuy = True
-                        player_instance[current].buy_troops(numberOfTroopsBuy, forcePlayer[current])
                     
                     # upgrade territories
                     elif decision == "3":
