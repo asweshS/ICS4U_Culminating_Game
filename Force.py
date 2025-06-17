@@ -1,7 +1,7 @@
 #######################
 # File: Force.py
 # Description: This will be 
-# the file and classe that 
+# the file and class that 
 # determine how the attacks and 
 # combat mechanics will work
 # Algo: 
@@ -41,24 +41,23 @@
 #######################
 import random
 
-# force is from the perspective of the attacker
 class Force:
     units = 0
     strength = 0
-    territoryIdx = 0
-    playerOwn = 0
     defense = 0
+    territory = []
+    assignments = "ABCD"
     
     # which player this class belongs to
     playNum = 0
-    def __init__(self, idx, unit=100, playerNum=None):
-        self.playerOwn = playerNum
+    def __init__(self, unit, terr, playerNum, assgnmnts ):
         self.units = unit
-        self.territoryIdx = idx
-        #print("units: ", self.units)
+        self.territory = terr
+        self.playNum = playerNum
+        print("%s's units: %s" %(assgnmnts[playerNum], self.units))
 
     # roll dice and see who wins, defense is p2
-    def Attack(self, p2):
+    def Attack(self, p2, player1, player2, selfTroops, p2Troops):
 
         # when attacker doesn't have enough units
         if (self.units <= 1):
@@ -66,24 +65,117 @@ class Force:
             return
 
         # attacker dice
-        dice1 = random.randint(1, 6)
+        dice1 = random.randint(1, 6) * selfTroops
         # defense dice
-        dice2 = random.randint(1, 6)
+        dice2 = random.randint(1, 6) * p2Troops
 
         # attacker dice is higher
         if (dice1 > dice2):
-            self.units -= random.randint(25, 50) - p2.defense + self.strength
-            p2.units -= random.randint(25, 50) - p2.defense + self.strength
-            
-            print("player 1 wins (p1: %s units left, p2: %s units left)" % (self.units, p2.units))
+            p2.units -= (100 - self.defense + self.strength)
+            print("%s wins!" % player1)
+            print("%s: %s units left, %s: %s units left)" % (player1, self.units, player2, p2.units))
             return True
-
         # defender dice is higher or dice are even
         if (dice2 > dice1 or dice1 == dice2):
+            self.units -= (100 + self.defense - self.strength) 
+            print("%s wins!" % player2)
+            print("%s: %s units left, %s: %s units left)" % (player1, self.units, player2, p2.units))
+            return False            
+        # if defender is out of units, then give land to attacker
+        if (p2.units == 0): 
+            return True
+    def buyStrength(self, playerClass):
+        baseCost = 50
+        INCREMENT = 5
+        print("Strength level: %s" % self.strength)
+        amt = int(input("What strength level do you want to buy?"))
+        
+        # add increasing 
+        totalCost = (baseCost * amt) + (INCREMENT * amt)
+        des = input("Increase strength costs %s, are you sure you want to buy? (y or n)" % totalCost)
+        if (des == 'y'):
+            self.strength += amt
+            playerClass.money -= totalCost
+        if (des == 'n'): 
+            des1=""
+            while (des1 != "y" or des1 != 'n'):
+                des1 = input("Cancelled, do you want to buy units still? (y or n)")
+                if (des1 == 'y'):
+                    return self.buyStrength(playerClass)
+                if (des1 == 'n'):
+                    return
+            
+        else: 
+            print("Invalid input, try again")
+            return self.buyStrength(playerClass)
+        
+    def buyDefense(self, playerClass):
+        baseCost = 50
+        INCREMENT = 5
+        print("Defense level: %s" % self.defense)
 
-            # winner still loses troops, depending on strength of other force
-            p2.units -= random.randint(0, 20) + self.strength - p2.defense
+        # amt that player wishes to have
+        amt = int(input("How many defence levels would you like to buy?")) + self.defense
+        
+        # add increasing 
+        totalCost = ((baseCost * self.defense)) + (INCREMENT * amt)
+        des = input("Increase defenese costs %s, are you sure you want to buy? (y or n)" % totalCost)
+        if (des == 'y'):
+            # if player doesn't have enough money
+            if (playerClass.money - totalCost >= 0):
+                print("You don't have enough money!")
+                return self.buyDefense(playerClass)
+            else:
+                self.defense += amt
+                playerClass.money -= totalCost
+                return
+        if (des == 'n'): 
+            des1=""
+            while (des1 != "y" or des1 != 'n'):
+                des1 = input("Cancelled, do you want to buy units still? (y or n)")
+                if (des1 == 'y'):
+                    return self.buyDefense(playerClass)
+                if (des1 == 'n'):
+                    return
+            
+        else: 
+            print("Invalid input, try again")
+            return self.buyDefense(playerClass)
+        
 
-            self.units -= random.randint(25, 50) + p2.defense - self.strength
-            print("player 2 wins (p1: %s units left, p2: %s units left)" % (self.units, p2.units))
-            return False
+'''
+        # upgrade defense or strength of territory
+            elif decision == "3":
+                valid = False
+                while (valid == False):
+                    try:
+                        terrIdx = int(input("What territory? "))
+                    except: 
+                        print("Invalid input, try again")
+                    else:
+                        if (1 < terrIdx < 12):
+                            # check to see if player owns territory
+                            try:
+                                territories[current].index(terrIdx)
+                            except ValueError:
+                                print("You do not own this territory! Try again")
+                            else:
+                                print("valid terr")
+                                valid = True
+                            
+                        else: 
+                            print("Enter a number between 1 and 12 and then try again")
+
+                while True:
+                    des = input("Do you want to upgrade army strength or territory defense? (1 or 2): ")
+                    if (des == "1"):
+                        # upgrade units in the 
+                        forcePlayer[terrIdx - 1].buyStrength(player_instance[current])
+                        print(forcePlayer.strength)
+                        break
+                    if (des == "2"):
+                        forcePlayer[terrIdx - 1].buyDefense(player_instance[current])
+                        break
+                    else: 
+                        print("Invalid input, try again")
+                        '''
