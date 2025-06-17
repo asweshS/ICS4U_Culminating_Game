@@ -187,7 +187,6 @@ class Player_Save:
         self.troops += amountOfTroops
         self.money -= 100 * amountOfTroops
         print(f"{self.name} has bought {amountOfTroops} troops.")
-        self.balance()
 
 
     def __str__(self):
