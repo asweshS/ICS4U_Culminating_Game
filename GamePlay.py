@@ -1,3 +1,4 @@
+
 ######################################
 # File Name: GamePlay.py
 # Author(s): Devan Lucas and Andrew Urquhart
@@ -39,7 +40,7 @@ class Player:
 
     def buy_troops(self, amountOfTroops, forcePlay):
         self.troops += amountOfTroops
-        self.money -= 100 * amountOfTroops
+        self.money -= 10 * amountOfTroops
         print(f"{self.name} has bought {amountOfTroops} troops!")
 
 
@@ -258,6 +259,9 @@ def gamePlay():
                             break
                         else:
                             print("Invalid number.") 
+            elif shouldDelete == 'n':
+                print("No saves deleted.")
+                validSave = True
         else: 
             validSave = True 
     if wasThree:
@@ -425,7 +429,7 @@ def gamePlay():
                     elif decision =="2":
                         validTroopsBuy = False
                         while not validTroopsBuy:
-                            numberOfTroopsBuy = input("How many troops would you like to buy? ($100 each): ")
+                            numberOfTroopsBuy = input("How many troops would you like to buy? ($10 each): ")
                             try:
                                 numberOfTroopsBuy = int(numberOfTroopsBuy)
                             except:
