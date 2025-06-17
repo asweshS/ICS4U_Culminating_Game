@@ -73,13 +73,19 @@ class Force:
 
         # attacker dice is higher
         if (dice1 > dice2):
-            p2.units -= (random.randint(70,100)- self.strength)
+            difference = self.defense-p2.strength
+            difference2 = p2.defense - self.strength
+            if difference >-10:
+                difference = -10
+            if difference2 > -10:
+                difference2 = -10
             # if defender is out of units, then give land to attacker
-            if (p2.units <= 0):
-                p2.units = 0
-            self.units -= (random.randint(1,50)- p2.defense)
+            self.units -= difference 
+            p2.units -= difference2
             if (self.units < 0):
                 self.units = 0
+            if p2.units < 0:
+                p2.units = 0
             print("%s wins!" % player1)
             print("%s: %s troops left, %s: %s troops left)" % (player1, self.units, player2, p2.units))
             return True
