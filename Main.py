@@ -14,6 +14,7 @@ import sys
 import time
 import random
 import os
+import ForceCode
 def typewriterTxt(msg, timeTake):
             for char in msg:
                 sys.stdout.write(char)
@@ -25,5 +26,5 @@ time.sleep(1)
 print("Game Starting, goodluck to all and have fun!\n")
 typewriterTxt("█████████████████████████████████████████████\n", 2)
 os.system('cls')
-time.sleep(1)               
+time.sleep(1)  
 GamePlay.gamePlay()
