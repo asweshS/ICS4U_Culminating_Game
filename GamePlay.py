@@ -1,3 +1,15 @@
+######################################
+# File Name: GamePlay.py
+# Author(s): Devan Lucas and Andrew Urquhart
+# Description: This program contains the GameEngine and Player files into one program
+# and makes them usable with the game.
+# History:
+# 2025-06-04 Created initial player input
+# 2025-06-05 Added the 'Territoty' class
+# 2025-06-09 Added picking territory logic
+# 2025-06-11 Created the game map
+# 2025-06-12 Fixed 'Territory' class, added 'Map' class, and fixed logic and errors in code.
+######################################
 import random
 import os
 import saveFile
