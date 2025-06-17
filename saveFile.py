@@ -16,6 +16,8 @@ class Player_Save:
 
     def invest(self):
         self.money+=1000
+    def balance(self):
+        print(f"New balance ${self.money}")
     def buy_troops(self, amountOfTroops):
         self.troops += amountOfTroops
         self.money -= 100 * amountOfTroops
@@ -70,13 +72,13 @@ def saveOneReadFunct():
 
 
 #WRITNG TO FILE 
-def savingFileOne(playerObjWrite, numOfPlayers):
+def savingFileOne(playerObjWrite):
     try:
         saveOneWrite = open("savedGameOne.txt", "w")
     except:
         print("File not found.")
     else:
-        for i in range(numOfPlayers):        
+        for i in range(len(playerObjWrite)):        
             saveOneWrite.write(str(playerObjWrite[i].name)+" ")
             saveOneWrite.write(str(playerObjWrite[i].troops)+" ")
             saveOneWrite.write(str(playerObjWrite[i].money)+" ")
@@ -94,6 +96,8 @@ def clearingFileOne():
         print("File not found.")
     else:
         saveOneWrite.close()
+
+
 
 
 #two
@@ -141,13 +145,13 @@ def saveTwoReadFunct():
 
 
 #WRITNG TO FILE 
-def savingFileTwo(playerObjWrite, numOfPlayers):
+def savingFileTwo(playerObjWrite):
     try:
         saveTwoWrite = open("savedGameTwo.txt", "w")
     except:
         print("File not found.")
     else:
-        for i in range(numOfPlayers):        
+        for i in range(len(playerObjWrite)):        
             saveTwoWrite.write(str(playerObjWrite[i].name)+" ")
             saveTwoWrite.write(str(playerObjWrite[i].troops)+" ")
             saveTwoWrite.write(str(playerObjWrite[i].money)+" ")
@@ -213,13 +217,13 @@ def saveThreeReadFunct():
 
 #WRITNG TO FILE
 #must put list of each object of player into parameters
-def savingFileThree(playerObjWrite, numOfPlayers):
+def savingFileThree(playerObjWrite):
     try:
         saveThreeWrite = open("savedGameThree.txt", "w")
     except:
         print("File not found.")
     else:
-        for i in range(numOfPlayers):        
+        for i in range(len(playerObjWrite)):        
             saveThreeWrite.write(str(playerObjWrite[i].name)+" ")
             saveThreeWrite.write(str(playerObjWrite[i].troops)+" ")
             saveThreeWrite.write(str(playerObjWrite[i].money)+" ")
@@ -242,43 +246,34 @@ def clearingFileThree():
 
 
 def doesFileOneHaveData():
-    try:
-        fileOne = open("savedGameOne.txt", "r")
-    except: return False
-    else:
-        fileOneLines = fileOne.readlines()
-        if len(fileOneLines) > 0:
-            fileOne.close()
-            return True
-        else:   
-            fileOne.close()
-            return False
+    fileOne = open("savedGameOne.txt", "r")
+    fileOneLines = fileOne.readlines()
+    if len(fileOneLines) > 0:
+        fileOne.close()
+        return True
+    else:   
+        fileOne.close()
+        return False
     
 def doesFileTwoHaveData():
-    try:
-        fileTwo = open("savedGameTwo.txt", "r")
-    except: return False
-    else:
-        fileTwoLines = fileTwo.readlines()
-        if len(fileTwoLines) > 0:
-            fileTwo.close()
-            return True
-        else:   
-            fileTwo.close()
-            return False
+    fileTwo = open("savedGameTwo.txt", "r")
+    fileTwoLines = fileTwo.readlines()
+    if len(fileTwoLines) > 0:
+        fileTwo.close()
+        return True
+    else:   
+        fileTwo.close()
+        return False
 
 def doesFileThreeHaveData():
-    try:
-        fileThree = open("savedGameThree.txt", "r")
-    except: return False
-    else:
-        fileThreeLines = fileThree.readlines()
-        if len(fileThreeLines) > 0:
-            fileThree.close()
-            return True
-        else:   
-            fileThree.close()
-            return False
+    fileThree = open("savedGameThree.txt", "r")
+    fileThreeLines = fileThree.readlines()
+    if len(fileThreeLines) > 0:
+        fileThree.close()
+        return True
+    else:   
+        fileThree.close()
+        return False
 
 def doesFileHaveData(numberOfFile):
     if numberOfFile == 1:
@@ -303,12 +298,12 @@ def loadSave(numberOfFile):
         return None
 
 
-def savingFile(numberOfFile, playerObjWrite, numOfPlayers):
+def savingFile(numberOfFile, playerObjWrite):
     if numberOfFile == 1:
-        savingFileOne(playerObjWrite, numOfPlayers)
+        savingFileOne(playerObjWrite)
     elif numberOfFile == 2:
-        savingFileTwo(playerObjWrite, numOfPlayers)
+        savingFileTwo(playerObjWrite)
     elif numberOfFile == 3:
-        savingFileThree(playerObjWrite, numOfPlayers)
+        savingFileThree(playerObjWrite)
     else:
         print("Invalid file number.")
