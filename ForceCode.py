@@ -73,8 +73,8 @@ class Force:
 
         # attacker dice is higher
         if (dice1 > dice2):
-            difference = self.defense-p2.strength
-            difference2 = p2.defense - self.strength
+            difference = (random.randint(5,10)*self.defense) -  (random.randint(5,10) * p2.strength)
+            difference2 = (random.randint(10,20)*p2.defense) -  (random.randint(10,20) * self.strength)
             if difference >-10:
                 difference = -10
             if difference2 > -10:
@@ -91,12 +91,18 @@ class Force:
             return True
         # defender dice is higher or dice are even
         if (dice2 > dice1 or dice1 == dice2):
-            self.units -= (random.randint(70,100)- p2.strength)
+            difference = (random.randint(10,20)*self.defense) -  (random.randint(10,20) * p2.strength)
+            difference2 = (random.randint(5,10)*p2.defense) -  (random.randint(5,10) * self.strength)
+            if difference >-10:
+                difference = -10
+            if difference2 > -10:
+                difference2 = -10
             # if defender is out of units, then give land to attacker
-            if (self.units <= 0):
+            self.units -= difference 
+            p2.units -= difference2
+            if (self.units < 0):
                 self.units = 0
-            p2.units -= (random.randint(1,50)- self.defense)
-            if (p2.units < 0):
+            if p2.units < 0:
                 p2.units = 0
             print("%s wins!" % player2)
             print("%s: %s units left, %s: %s units left)" % (player1, self.units, player2, p2.units))
@@ -105,8 +111,8 @@ class Force:
         if (p2.units == 0): 
             return True
     def buyStrength(self, playerClass):
-        baseCost = 50
-        INCREMENT = 10
+        baseCost = 300
+        INCREMENT = 300
         print("Strength level: %s" % self.strength)
         if playerClass.money == 0:
             print("You don't have any money!")
@@ -151,8 +157,8 @@ class Force:
             return self.buyStrength(playerClass)
             
     def buyDefense(self, playerClass):
-        baseCost = 50
-        INCREMENT = 10
+        baseCost = 300
+        INCREMENT = 300
         print("Defense level: %s" % self.defense)
         if playerClass.money == 0:
             print("You don't have any money!")
