@@ -206,12 +206,48 @@ def gamePlay():
     TERRITORYAMOUNT = 12
     player_instance = [None]*4
     gameComplete = False
-        
-    print("These are the saves:")
-
+    validSave = False
+    while not validSave:    
+        print("These are the saves:")
+        numberToLoad = 0 
+        for i in range(3):
+            if saveFile.doesFileHaveData(i+1):
+                print("Load Save %d" % (i + 1))
+                numberToLoad += 1
+            else:
+                print("Create New Save on %d " % (i + 1))
+        if numberToLoad == 3:
+            shouldDelete = input("Would you like to delete a save? (y/n): ").strip().lower()
+            if shouldDelete == 'y':
+                while True:
+                    try:
+                        deleteSave = int(input("Which save would you like to delete? (1-3): "))
+                    except:
+                        print("Invalid input.")
+                    else:
+                        if deleteSave == 1 :
+                            saveFile.clearingFileOne
+                            print("Save %d cleared." % deleteSave)
+                            validSave = True
+                            break
+                        elif deleteSave == 2:
+                            saveFile.clearingFileTwo()
+                            print("Save %d cleared." % deleteSave)
+                            validSave = True
+                            break
+                        elif deleteSave == 3:
+                            saveFile.clearingFileThree()
+                            print("Save %d cleared." % deleteSave)
+                            validSave = True
+                            break
+                        else:
+                            print("Invalid number.")    
+    print("These are the updated saves:")
+    numberToLoad = 0 
     for i in range(3):
         if saveFile.doesFileHaveData(i+1):
             print("Load Save %d" % (i + 1))
+            numberToLoad += 1
         else:
             print("Create New Save on %d " % (i + 1))
 
