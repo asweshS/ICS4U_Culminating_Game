@@ -16,8 +16,6 @@ class Player_Save:
 
     def invest(self):
         self.money+=1000
-    def balance(self):
-        print(f"New balance ${self.money}")
     def buy_troops(self, amountOfTroops):
         self.troops += amountOfTroops
         self.money -= 100 * amountOfTroops
