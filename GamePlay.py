@@ -19,7 +19,7 @@ import ForceCode
 class Player:
     investment = 0
 
-    def __init__(self, name,troops = 100, money =0,territories=[]):
+    def __init__(self, name,troops, money,territories=[]):
         
         self.name = name
         self.troops = int(troops)
@@ -240,7 +240,7 @@ def gamePlay():
                         print("Invalid input.")
                     else:
                         if deleteSave == 1 :
-                            saveFile.clearingFileOne
+                            saveFile.clearingFileOne()
                             print("Save %d cleared." % deleteSave)
                             validSave = True
                             break
@@ -283,16 +283,13 @@ def gamePlay():
         playerNames = []
         playerTroops = []
         print("Loading save %d..." % whichSave)
-        player_instance = saveFile.loadSave(whichSave)
+        forcePlayer, player_instance = saveFile.loadSave(whichSave)
         playerCount = len(player_instance)
-        forcePlayer = [None] * playerCount
         for idx in range(playerCount):
             print("player %s: %s" % (assignments[idx], player_instance[idx]))
             playerTerritories.append(player_instance[idx].territories)
             playerNames.append(str(player_instance[idx].name))
             playerTroops.append(str(player_instance[idx].troops))
-        for plyr in range(playerCount):
-            forcePlayer[plyr] = ForceCode.Force(playerTroops[plyr], playerTerritories[plyr], plyr, assignments)
         input("Press Enter to continue...")
         
     else:
@@ -412,7 +409,7 @@ def gamePlay():
                     print("What will you do for your %s turn?" % picksForEach[turnChoice])
                     print("1. Invest")
                     print("2. Purchase troops")
-                    print("3. Upgrade territories")
+                    print("3. Upgrade Strength/Defense")
                     print("4. Attack")
 
                     decision = input("Enter (1 ,2, 3, or 4): ")
@@ -467,11 +464,13 @@ def gamePlay():
                         break
             if (turn+1) % playerCount == 0:
                 print("All players have had a turn, $500 + $100 per territory owned added to each players balance")
+                for idx in range(playerCount):
+                    player_instance[idx].income()
                 print("Continuing to round %s" % ((turn+1)//4 + 1))
 
                 saveFileAtEndOfRound = input("Would you like to save the game and leave? (y/n): ").strip().lower()
                 if saveFileAtEndOfRound == 'y':
-                    saveFile.savingFile(whichSave,player_instance, playerCount)
+                    saveFile.savingFile(whichSave,player_instance, forcePlayer)
                     print("Game saved!")
                     break
 
