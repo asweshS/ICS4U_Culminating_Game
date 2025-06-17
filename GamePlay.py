@@ -207,6 +207,7 @@ def gamePlay():
     player_instance = [None]*4
     gameComplete = False
     validSave = False
+    wasThree = False
     while not validSave:    
         print("These are the saves:")
         numberToLoad = 0 
@@ -217,6 +218,7 @@ def gamePlay():
             else:
                 print("Create New Save on %d " % (i + 1))
         if numberToLoad == 3:
+            wasThree = True
             shouldDelete = input("Would you like to delete a save? (y/n): ").strip().lower()
             if shouldDelete == 'y':
                 while True:
@@ -241,15 +243,18 @@ def gamePlay():
                             validSave = True
                             break
                         else:
-                            print("Invalid number.")    
-    print("These are the updated saves:")
-    numberToLoad = 0 
-    for i in range(3):
-        if saveFile.doesFileHaveData(i+1):
-            print("Load Save %d" % (i + 1))
-            numberToLoad += 1
-        else:
-            print("Create New Save on %d " % (i + 1))
+                            print("Invalid number.") 
+        else: 
+            validSave = True 
+    if wasThree:
+        print("These are the updated saves:")
+        numberToLoad = 0 
+        for i in range(3):
+            if saveFile.doesFileHaveData(i+1):
+                print("Load Save %d" % (i + 1))
+                numberToLoad += 1
+            else:
+                print("Create New Save on %d " % (i + 1))
 
     while True:
         try:
