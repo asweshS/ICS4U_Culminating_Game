@@ -46,7 +46,7 @@ class intro: # using a class because it just makes it easier (imo) when everyone
             print("-" * header_width)
             print()
             instructions = [
-                  "OBJECTIVE", #More actions
+                  "OBJECTIVE", 
                 "-" * 40, 
                 "| Conquer all 12 territories on the map before your opponents do. The first player to control all territories win!",
                 "\n",
