@@ -483,4 +483,3 @@ def gamePlay():
 
             input("Click enter to advance to %s's turn!" % player_instance[(current+1)%playerCount].name)
             turn += 1
-gamePlay()
