@@ -1,43 +1,344 @@
+# Name: Andrew Urquhart, Devan Luca
+# Course: ICS4U
+# File: saveFile.py
+# Description:
+#   This file contains the implementation of a save/load system for a game.
+#   It allows players to save their game state to text files and load it back later.
+#   The system supports three separate save slots, each with its own read/write/clear set of functions.
+#
+# INPUTS:
+#   - Player data including name, troops, money, territories, strength, and defense 
+#   - Save file numbers (1, 2, or 3) to determine which save slot to read/write/clear
+#   - Player actions such as buying strength or defense, attacking other players
+#
+# OUTPUTS:
+#   - Game state saved to text files in a structured format
+# ALGORITHM:
+"""
+   CLASS SaveForce
+    VARIABLES:
+        units
+        strength
+        defense
+        territory
+        assignments
+        playNum
 
-######################################
-# File Name: GamePlay.py
-# Author(s): Devan Lucas and Andrew Urquhart
-# Description: This program contains the GameEngine and Player files into one program
-# and makes them usable with the game.
-# History:
-# 2025-06-13 Creation
-# 2025-06-14 added usability with other files
-# 2025-06-15 Bug fixes
-# 2025-06-16 Bug Fixes
-# 2025-06-17 Took out Force class and changed logic
-######################################
+    METHOD __init__(unit, terr, playerNum, assgnmnts, strength=0, defense=0)
+        SET instance variables accordingly
+
+    METHOD Attack(p2, player1_name, player2_name, selfTroops, p2Troops)
+        IF self has less than 1 unit
+            PRINT "Not enough units to attack"
+            RETURN
+
+        ROLL dice1 = random 1–6 * selfTroops
+        ROLL dice2 = random 1–6 * p2Troops
+
+        IF attacker dice > defender dice THEN
+            CALCULATE troop changes with defense and strength
+            UPDATE both players' units
+            PRINT result
+            RETURN True
+        ELSE
+            CALCULATE troop changes with defense and strength
+            UPDATE both players' units
+            PRINT result
+            RETURN False
+        ENDIF
+
+        IF defender units = 0 THEN
+            RETURN True (attacker wins)
+        ENDIF
+
+    METHOD buyStrength(player)
+        IF player has no money
+            PRINT warning
+            RETURN
+
+        ASK how many strength levels to buy
+        CALCULATE cost
+        CONFIRM with user
+        IF confirmed AND player has enough money
+            ADD to strength
+            DEDUCT money
+        ELSE
+            OFFER to retry
+        ENDIF
+
+    METHOD buyDefense(player)
+        SAME LOGIC AS buyStrength, but for defense
+    
+    CLASS Player_Save
+    VARIABLES:
+        name
+        troops
+        money
+        territories
+        investment
+
+    METHOD __init__(name, troops, money, territories)
+        SET instance variables
+
+    METHOD income()
+        CALCULATE income = 500 + (100 * number of territories)
+        ADD income to money
+
+    METHOD invest()
+        ADD 1000 to money
+
+    METHOD balance()
+        PRINT current money
+
+    METHOD buy_troops(amount)
+        CALCULATE cost = amount * 100
+        IF player has enough money
+            ADD troops
+            DEDUCT money
+            PRINT success
+        ELSE
+            PRINT "Not enough money"
+        ENDIF
+
+    METHOD __str__()
+        RETURN name
+
+    REPEATED FUNCTIONS FOR EACH SAVE FILE:
+    FUNCTION saveOneReadFunct()
+        TRY to open savedGameOne.txt    
+        READ lines into players list
+        FOR each line in players
+            SPLIT line into attributes
+            CREATE SaveForce and Player_Save objects
+            APPEND to respective lists
+        RETURN forceObjRead, playerObjRead
+    FUNCTION savingFileOne(playerObjWrite, forceObj)
+        TRY to open savedGameOne.txt for writing
+        FOR each player in playerObjWrite
+            WRITE attributes to file
+        CLOSE file
+    FUNCTION clearingFileOne()
+        TRY to open savedGameOne.txt for writing (clearing it)
+        CLOSE file  
+    FUNCTION doesFileOneHaveData()
+        TRY to open savedGameOne.txt
+        IF file has lines, return True
+        ELSE return False   
+    FUNCTION loadSave(numberOfFile)
+        IF numberOfFile == 1 THEN
+            RETURN saveOneReadFunct()
+        ELSE IF numberOfFile == 2 THEN
+            RETURN saveTwoReadFunct()
+        ELSE IF numberOfFile == 3 THEN
+            RETURN saveThreeReadFunct()
+        ELSE
+            PRINT "Invalid file number"
+            RETURN None
+    FUNCTION savingFile(numberOfFile, playerObjWrite, forceObj)
+        IF numberOfFile == 1 THEN
+            savingFileOne(playerObjWrite, forceObj)
+        ELSE IF numberOfFile == 2 THEN
+            savingFileTwo(playerObjWrite, forceObj)
+        ELSE IF numberOfFile == 3 THEN
+            savingFileThree(playerObjWrite, forceObj)
+        ELSE
+            PRINT "Invalid file number"
+# END ALGORITHM
+"""
+#
+# HISTORY:
+#   2025.06.09 - Developed basic save/load system for game data using text files
+#   2025.06.10 - continued development of Player class with methods for income, investment, and troop management
+#   2025.06.11 - worked on bugs in saving logic and added functionality for multiple save files
+#   2025.06.13 - continued to work on bugs in save/load functionality, added methods for reading and writing player data 
+#   2025.06.15 - Added methods for buying strength and defense, and managing player income
+#   2025.06.16 - Implemented clear save functionality and checks for existing data in save files
+#   2025.06.17 - Finalized save/load functionality, added comments and documentation
+# Note:
+#   - The system supports three separate save slots, each with its own read/write/clear set of functions.
+#   - All player management is handled through lists of Player objects passed between functions.import random
+
 import random
-import os
-import saveFile
-import sys
-import time
-import ForceCode
-class Player:
+class SaveForce:
+    troops = 0
+    strength = 0
+    defense = 0
+    territory = []
+    assignments = "ABCD"
+    
+    # which player this class belongs to
+    playNum = 0
+    def __init__(self, troop, terr, playerNum, assgnmnts, strength = 0, defense = 0):
+        self.troops = int(troop)
+        self.troops = terr
+        self.troops = playerNum
+        self.troops = int(strength)
+        self.troops = int(defense)
+
+    # roll dice and see who wins, defense is p2
+    def Attack(self, p2, player1, player2, selfTroops, p2Troops):
+
+        # when attacker doesn't have enough units
+        if (self.troops <1):
+            print("You cannot attack, you dont have enough troops")
+            return
+
+        # attacker dice
+        dice1 = random.randint(1, 6) * selfTroops
+        # defense dice
+        dice2 = random.randint(1, 6) * p2Troops
+
+        # attacker dice is higher
+        if (dice1 > dice2):
+            difference = (random.randint(5,10)*self.defense) -  (random.randint(5,10) * p2.strength)
+            difference2 = (random.randint(10,20)*p2.defense) -  (random.randint(10,20) * self.strength)
+            if difference >-10:
+                difference = -10
+            if difference2 > -10:
+                difference2 = -10
+            # if defender is out of units, then give land to attacker
+            self.troops += difference 
+            p2.troops += difference2
+            if (self.troops < 0):
+                self.troops = 0
+            if p2.troops < 0:
+                p2.troops = 0
+            print("%s wins!" % player1)
+            print("%s: %s troops left, %s: %s troops left)" % (player1, self.troops, player2, p2.troops))
+            return True
+        # defender dice is higher or dice are even
+        if (dice2 > dice1 or dice1 == dice2):
+            difference = (random.randint(10,20)*self.defense) -  (random.randint(10,20) * p2.strength)
+            difference2 = (random.randint(5,10)*p2.defense) -  (random.randint(5,10) * self.strength)
+            if difference >-10:
+                difference = -10
+            if difference2 > -10:
+                difference2 = -10
+            # if defender is out of units, then give land to attacker
+            self.troops += difference 
+            p2.troops += difference2
+            if (self.troops < 0):
+                self.troops = 0
+            if p2.troops < 0:
+                p2.troops = 0
+            print("%s wins!" % player2)
+            print("%s: %s troops left, %s: %s troops left)" % (player1, self.troops, player2, p2.troops))
+            return False            
+        # if defender is out of units, then give land to attacker
+        if (p2.troops == 0): 
+            return True
+    def buyStrength(self, playerClass):
+        baseCost = 300
+        INCREMENT = 300
+        print("Strength level: %s" % self.strength)
+        if playerClass.money == 0:
+            print("You don't have any money!")
+            return
+        validInput = False
+        while not validInput:
+            try:
+                amt = int(input("How many strength levels would you like to buy?  ($300 each): " ))
+            except:
+                print("Invalid input, try again")
+                return self.buyStrength(playerClass)
+            else:
+                if amt < 0:
+                    print("You cannot buy negative strength levels!")
+                    return self.buyStrength(playerClass)
+                elif amt == 0:
+                    print("Buying no strength levels!")
+                    return
+                else:
+                    validInput = True
+        # add increasing 
+        totalCost = (baseCost) + (INCREMENT * amt)- INCREMENT
+        des = input("Increase strength costs %s, are you sure you want to buy? (y or n): " % totalCost)
+        if (des == 'y'):
+            # if player doesn't have enough money
+            if (playerClass.money - totalCost <= 0):
+                print("You don't have enough money!")
+                return self.buyStrength(playerClass)
+            self.strength += amt
+            playerClass.money -= totalCost
+        elif (des == 'n'): 
+            des1=""
+            while (des1 != "y" or des1 != 'n'):
+                des1 = input("Cancelled, do you want to buy troops still? (y or n): ")
+                if (des1 == 'y'):
+                    return self.buyStrength(playerClass)
+                if (des1 == 'n'):
+                    return 
+                
+        else: 
+            print("Invalid input, try again")
+            return self.buyStrength(playerClass)
+            
+    def buyDefense(self, playerClass):
+        baseCost = 300
+        INCREMENT = 300
+        print("Defense level: %s" % self.defense)
+        if playerClass.money == 0:
+            print("You don't have any money!")
+            return
+        validInput = False
+        while not validInput:
+            try:
+                amt = int(input("How many defense levels would you like to buy? ($300 each): " ))
+            except:
+                print("Invalid input, try again")
+                return self.buyDefense(playerClass)
+            else:
+                if amt < 0:
+                    print("You cannot buy negative defense levels!")
+                    return self.buyDefense(playerClass)
+                elif amt == 0:
+                    print("Buying no defense levels!")
+                    return
+                else:
+                    validInput = True
+        
+        # add increasing 
+        totalCost = (baseCost) + (INCREMENT * amt)- INCREMENT
+        des = input("Increase defenese costs %s, are you sure you want to buy? (y or n): " % totalCost)
+        if (des == 'y'):
+            # if player doesn't have enough money
+            if (playerClass.money - totalCost <= 0):
+                print("You don't have enough money!")
+                return self.buyDefense(playerClass)
+            else:
+                self.defense += amt
+                playerClass.money -= totalCost
+                return
+        elif (des == 'n'): 
+            des1=""
+            while (des1 != "y" or des1 != 'n'):
+                des1 = input("Cancelled, do you want to buy troops still? (y or n): ")
+                if (des1 == 'y'):
+                    return self.buyDefense(playerClass)
+                if (des1 == 'n'):
+                    return
+            
+        else: 
+            print("Invalid input, try again")
+            return self.buyDefense(playerClass)
+class Player_Save:
     investment = 0
 
-    def __init__(self, name,troops, money,territories=[]):
-        
+    def __init__(self, name,troops = 100, money =0,territories=[]):
+
         self.name = name
         self.troops = int(troops)
         self.money = int(money)
         self.territories = []
         for i in range(len(territories)):
             self.territories.append(territories[i])
-            
-    def income(self):
-        self.daily_income = 500 + (len(self.territories) * 100)
-        self.money += self.daily_income
 
     def invest(self):
         investment = random.randint(600, 1200)
         self.money+=investment
         return investment
 
+        print(f"New balance ${self.money}")
     def buy_troops(self, amountOfTroops, forcePlay):
         self.troops += amountOfTroops
         self.money -= 10 * amountOfTroops
@@ -45,441 +346,309 @@ class Player:
 
 
     def __str__(self):
-        name = self.name
-        return str(name)
+        return self.name
 
-class Map:
-    def __init__(self, textmap):
-        self.map = self.get_world_from_text_map(textmap)
 
-    def get_world_from_text_map(self, textmap):
-        textmap = textmap.strip().split('\n')
-        worldWidth = len(textmap[0])
-        worldHeight = len(textmap)
-        world = []
-        for i in range(worldWidth):
-            world.append([''] * worldHeight)
-        for x in range(worldWidth):
-            for y in range(worldHeight):
-                world[x][y] = textmap[y][x]
-        return world
-
-    def print_map(self):
-        os.system('cls')
-        def print_row(y):
-            if y >= len(self.map[0]):
-                return
-            def print_col(x):
-                if x >= len(self.map):
-                    print()
-                    return
-                print(self.map[x][y], end="")
-                print_col(x + 1)
-            print_col(0)
-            print_row(y + 1)
-        print_row(0)
-
-class Territories:
-    def __init__(self, map_obj, territory_coords):
-        self.map = map_obj.map
-        self.territory_coords = territory_coords
-
-    def territory_claim(self, x, y, oldChar, newChar):
-        mapWidth = len(self.map)
-        mapHeight = len(self.map[0])
-        if oldChar is None:
-            oldChar = self.map[x][y]
-        if self.map[x][y] != oldChar:
-            return
-        self.map[x][y] = newChar
-        if x > 0:
-            self.territory_claim(x - 1, y, oldChar, newChar)
-        if y > 0:
-            self.territory_claim(x, y - 1, oldChar, newChar)
-        if x < mapWidth - 1:
-            self.territory_claim(x + 1, y, oldChar, newChar)
-        if y < mapHeight - 1:
-            self.territory_claim(x, y + 1, oldChar, newChar)
-
-    def is_adjacent(self, xCoor, yCoor):
-        mapWidth = len(self.map)
-        mapHeight = len(self.map[0])
-        for idx in range(-2, 3):
-            for idx2 in range(-2, 3):
-                if 0 <= xCoor + idx < mapWidth and 0 <= yCoor + idx2 < mapHeight:
-                    if self.map[xCoor + idx][yCoor + idx2] == "-":
-                        return True
-        return False
-
-    def can_steal_territory(self):
-        mapWidth = len(self.map)
-        mapHeight = len(self.map[0])
-        for x in range(mapWidth):
-            for y in range(mapHeight):
-                if self.map[x][y] == "+":
-                    if self.is_adjacent(x, y):
-                        return True
-        return False
-
-    def territory_steal(self, xHave, yHave, xTake, yTake):
-        taked = self.map[xHave][yHave]
-        taker = self.map[xTake][yTake]
-        self.territory_claim(xHave, yHave, None, '+')
-        self.territory_claim(xTake, yTake, None, '-')
-        canTake = self.can_steal_territory()
-        self.territory_claim(xTake, yTake, None, taker)
-        self.territory_claim(xHave, yHave, None, taked)
-        return canTake
-
-    def is_take_valid(self, char, territoryChose):
-        x, y = self.territory_coords[territoryChose - 1]
-        return self.map[x][y] == char
-
-    def attacking_turn(self, playerList, plyrTerrClm, persTurn, plyrAssm, plyrAmount, frcPlyr, playerClassInstance):
-        playerInUse = playerList[persTurn] 
-        validStealTerritory = False
-        validAttackerTerritory = False
-
-        while not validAttackerTerritory:
-            territoryAttacker = input("Attack from which territory %s (player %s)?: " % (playerInUse, plyrAssm[persTurn]))
-            try:
-                territoryAttacker = int(territoryAttacker)
-            except:
-                print("Invalid input!")
-            else:
-                if not (territoryAttacker in plyrTerrClm[persTurn]):
-                    print("You do not own this territory!")
-                else:
-                    validAttackerTerritory = True
-
-        while not validStealTerritory:
-            territorySteal = input("Attack which territory %s (player %s) *(Input 'c' to cancel attack)?: " % (playerInUse, plyrAssm[persTurn]))
-            if territorySteal.lower() == 'c':
-                print("Attack cancelled.")
-                return
-            try:
-                territorySteal = int(territorySteal)
-            except:
-                print("Invalid input!")
-            else:
-                if territorySteal<1 or territorySteal>12: 
-                    print("Invalid input!") 
-                if self.is_take_valid(plyrAssm[persTurn], territorySteal):
-                    print("You can not take your own territory!")
-                else:
-                    if not self.territory_steal(*self.territory_coords[territoryAttacker - 1], *self.territory_coords[territorySteal - 1]):
-                        print("Can not reach territory!")
-                    else:
-                        validStealTerritory = True
-
-        for idx in range(plyrAmount):
-            if territorySteal in plyrTerrClm[idx]:
-                playerBeingAttackedNumber = idx
-        if frcPlyr[persTurn].Attack(frcPlyr[playerBeingAttackedNumber],playerInUse, playerList[playerBeingAttackedNumber], playerClassInstance[persTurn].troops, playerClassInstance[playerBeingAttackedNumber].troops):
-            self.territory_claim(*self.territory_coords[territorySteal - 1], None, plyrAssm[persTurn])
-            plyrTerrClm[playerBeingAttackedNumber].remove(territorySteal)
-            plyrTerrClm[persTurn].append(territorySteal)
-        map_printer = Map("")  # create a dupelicate Map object just for printing
-        map_printer.map = self.map
-def gamePlay():
-    TERRITORY_COORDS = [
-        [7, 2], [23, 2], [37, 2], [12, 7], [23, 9], [35, 9],
-        [8, 15], [14, 14], [24, 14], [8, 20], [14, 20], [34, 19]
-    ]
-
-    textMap = """
-███████████████████████████████████████████████
-█████???????????███????███████████???????██████
-████??????1???????█??????????██?????????????███
-███???????????????█?????2?????██?????3?????████
-██????█████████████????????????█?????????██████
-████████??????????██████████████?????██████████
-█████???????????????█??????????██??███???██████
-████?????????4??????█????5?????█████??????█████
-██████████??????????█????????███???????████████
-█████████████████████????????█?????????????████
-████??████??????????██████████████????6?????███
-████????███?????????█????????????██??????????██
-█████????███????8???█??????9??????████████???██
-██████?????█????????█????????????██?????███??██
-██████??7??█????????█???????????██?????████████
-█████??????██████████??????██????█??????███████
-████??????██???????██???????█████████????██████
-████??????█?????????█????????████████??????████
-███████████????11???██????███████████??????████
-███???????█?????????███████??█??????█???????███
-███???????███????????????????██????????????████
-███???10????██████????????????█???12????????███
-██???????????????████???????████???????████████
-███████████████████████████████████████████████
-    """
-    game_map = Map(textMap)
-    picksForEach = ["1st", "2nd"]
-    territories = Territories(game_map, TERRITORY_COORDS)
-    # === PLAYER SETUP ===
-    assignments = "ABCD"
-    TERRITORYAMOUNT = 12
-    player_instance = [None]*4
-    gameComplete = False
-    validSave = False
-    wasThree = False
-    while not validSave:    
-        print("These are the saves:")
-        numberToLoad = 0 
-        for i in range(3):
-            if saveFile.doesFileHaveData(i+1):
-                print("Load Save %d" % (i + 1))
-                numberToLoad += 1
-            else:
-                print("Create New Save on %d " % (i + 1))
-        if numberToLoad == 3:
-            wasThree = True
-            shouldDelete = input("Would you like to delete a save? (y/n): ").strip().lower()
-            if shouldDelete == 'y':
-                while True:
-                    try:
-                        deleteSave = int(input("Which save would you like to delete? (1-3): "))
-                    except:
-                        print("Invalid input.")
-                    else:
-                        if deleteSave == 1 :
-                            saveFile.clearingFileOne()
-                            print("Save %d cleared." % deleteSave)
-                            validSave = True
-                            break
-                        elif deleteSave == 2:
-                            saveFile.clearingFileTwo()
-                            print("Save %d cleared." % deleteSave)
-                            validSave = True
-                            break
-                        elif deleteSave == 3:
-                            saveFile.clearingFileThree()
-                            print("Save %d cleared." % deleteSave)
-                            validSave = True
-                            break
-                        else:
-                            print("Invalid number.") 
-            elif shouldDelete == 'n':
-                print("No saves deleted.")
-                validSave = True
-        else: 
-            validSave = True 
-    if wasThree:
-        print("These are the updated saves:")
-        numberToLoad = 0 
-        for i in range(3):
-            if saveFile.doesFileHaveData(i+1):
-                print("Load Save %d" % (i + 1))
-                numberToLoad += 1
-            else:
-                print("Create New Save on %d " % (i + 1))
-
-    while True:
-        try:
-            whichSave = int(input("Which save would you like to use? (1-3): "))
-            if 1 <= whichSave <= 3:
-                break
-            print("Invalid number.")
-        except ValueError:
-            print("Invalid input.")
-
-    if saveFile.doesFileHaveData(whichSave):
-        firstSave = False
-        playerTerritories = []
-        playerNames = []
-        playerTroops = []
-        print("Loading save %d..." % whichSave)
-        forcePlayer, player_instance = saveFile.loadSave(whichSave)
-#######################################################
-        playerCount = len(player_instance)
-        for idx in range(playerCount):
-            print("player %s: %s" % (assignments[idx], player_instance[idx]))
-            playerTerritories.append(player_instance[idx].territories)
-            playerNames.append(str(player_instance[idx].name))
-            playerTroops.append(str(player_instance[idx].troops))
-        input("Press Enter to continue...")
-        
+def saveOneReadFunct():
+    try:
+        saveOneRead = open("savedGameOne.txt", "r")
+    except:
+        print("File not found.")
     else:
-        firstSave = True
-        print("Starting a new game on save %d..." % whichSave)
-        time.sleep(1)
-        os.system('cls')
-    
 
-    while firstSave:
-        try:
-            playerCount = int(input("How many players? (2-4): "))
-            if 2 <= playerCount <= 4:
-                break
-            print("Invalid number.")
-        except:
-            print("Invalid input.")
-    
+        #READING FROM FILE/ LOADING SAVE
+        lines = saveOneRead.readlines()
+        players =[]
+        playerObjRead = []
+        forceObjRead = []
 
-    if firstSave:
-        playerNames = [input("Name for player %s: " % (i+1)) for i in range(playerCount)]
-        playerTerritories = [[] for n in range(playerCount)]
-        player_instance = [None] * playerCount
-    
-        random.shuffle(player_instance)
+        for line in lines:
+            players.append(line)
 
-    print("Turn order:")
-    for idx in range(playerCount):
-        print("player %s: %s" % (assignments[idx], playerNames[idx]))
-    input("Press Enter to begin...")
+        print("there are " +str(len(players)) + " players")#number of players
 
-    #pick territories
-    if firstSave:
-        pick = 0
-        allTerritoriesPicked = False
-        while not allTerritoriesPicked:
-            isPickValid = False
-            current = pick % playerCount
-            while not isPickValid:
-                # Show the map before each pick
-                game_map.print_map()
-                for idx in range(playerCount):
-                    print("player %s: %s" % (assignments[idx], playerNames[idx]))
-                try:
-                    choice = int(input("%s (player %s), pick an unclaimed territory (1-12): " % (playerNames[current],assignments[current])) )
-                except:
-                    print("Invalid input!")
-                else:
-                    if 1 <= choice <= 12 and territories.is_take_valid("?", choice):
-                        # Ask for confirmation
-                        confirm = input("You selected territory %d. Confirm selection? (y/n): " % choice).strip().lower()
-                        if confirm == 'y':
-                            isPickValid = True
-                        else:
-                            print("Selection cancelled. Please pick again.")
-                    else:
-                        print("Territory %s is not avaliable!" % choice)
-                if not isPickValid: input("Click enter for reinput!")
-            x, y = TERRITORY_COORDS[choice - 1]
-            territories.territory_claim(x, y, None, assignments[current])
-            playerTerritories[current].append(choice)
-            if pick > 10:
-                game_map.print_map()
-            pick += 1
-            allTerritoriesPicked = True
-            for i in range(TERRITORYAMOUNT):
-                if territories.is_take_valid("?", i+1):
-                    allTerritoriesPicked = False
-                    break
-                        
-        
-        troopsForPlay = []
-        forcePlayer = [None]*playerCount
-        
-        for plyr in range (playerCount): 
-            troopsForPlay.append(100* len(playerTerritories[plyr])) 
-            forcePlayer[plyr] = ForceCode.Force(troopsForPlay[plyr], playerTerritories[plyr], plyr, assignments)
-            player_instance[plyr] = Player(playerNames[plyr], troopsForPlay[plyr], 0, playerTerritories[plyr])
-    if not firstSave:
-        for idx in range(playerCount):
-            tempTerriories = player_instance[idx].territories 
-            idx3=0
-            for i in (tempTerriories):
-                i = int (i)
-                tempTerriories[idx3] = i
-                idx3 += 1
-                x, y =(territories.territory_coords[i-1])
-                territories.territory_claim(x, y, None, assignments[idx])
-    # === MAIN GAME LOOP ===
-    turn = 0
-    while not gameComplete:
-        current = turn % playerCount
-        if not turn<4:
-            player_instance[current].income()
-        game_map.print_map()
-        if len(playerTerritories[current]) == 0:
-            print("You do not own any territories!")
-        else:
-            for idx in range(playerCount):
-                print("player %s: %s" % (assignments[idx], (player_instance[idx].name)))
-            print()
-            print("%s's (player %s) Turn" % ((player_instance[current].name, assignments[current])))
-            for turnChoice in range(2):
-                print(f"Money: ${player_instance[current].money}")
-                print(f"Troop count: {player_instance[current].troops}")
-                print(f"Strength: {forcePlayer[current].strength}")
-                print(f"Defense: {forcePlayer[current].defense}")
-                terrPrint = ""
-                for i in range(len(playerTerritories[current])):
-                    terrPrint += str(playerTerritories[current][i])
-                    terrPrint += " " 
-                print("Territories: %s" % terrPrint)
-                print()
-                validInputTurnChoice = False
-                while not validInputTurnChoice:
-                    validInputTurnChoice = True 
-                    print("What will you do for your %s turn?" % picksForEach[turnChoice])
-                    print("1. Invest")
-                    print("2. Purchase troops")
-                    print("3. Upgrade Strength/Defense")
-                    print("4. Attack")
+        for i in range(len(players)):
+            players[i] = players[i].split()
 
-                    decision = input("Enter (1 ,2, 3, or 4): ")
+            strenthForThisPlayer = players[i][0]
+            defenseForThisPlayer = players[i][1]
+            nameForThisPlayer = players[i][2]
 
-                    # invest
-                    if decision =="1":
-                        investment = player_instance[current].invest()
-                        print("%s has invested $%s!" % (player_instance[current].name, investment ))
+            troopsForThisPlayer = players[i][3]
 
-                    # buy troops
-                    elif decision =="2":
-                        validTroopsBuy = False
-                        while not validTroopsBuy:
-                            numberOfTroopsBuy = input("How many troops would you like to buy? ($10 each): ")
-                            try:
-                                numberOfTroopsBuy = int(numberOfTroopsBuy)
-                            except:
-                                print("Invalid input!")
-                            else:
-                                if numberOfTroopsBuy < 0:
-                                    print("You can not buy negative troops!")
-                                elif numberOfTroopsBuy * 10 > player_instance[current].money:
-                                    print("You do not have enough money to buy that many troops!")
-                                else:
-                                    validTroopsBuy = True
-                        player_instance[current].buy_troops(numberOfTroopsBuy, forcePlayer[current])
-                    
-                    # upgrade territories
-                    elif decision == "3":
-                        while True:
-                            des = input("Do you want to upgrade army strength or territory defense? (1 or 2)?: ")
-                            if (des == "1"):
-                                # upgrade units in the 
-                                forcePlayer[current].buyStrength(player_instance[current])
-                                break
-                            if (des == "2"):
-                                forcePlayer[current].buyDefense(player_instance[current])
-                                break
-                            else: 
-                                print("Invalid input, try again")
+            moneyForThisPlayer = players[i][4]
 
-                    # attack
-                    elif decision == "4":
-                        territories.attacking_turn(player_instance, playerTerritories, current, assignments, playerCount, forcePlayer, player_instance)
-                    else: 
-                        print("Invalid input, try again\n\n")
-                        validInputTurnChoice = False
-                for i in range(playerCount):
-                    if len(playerTerritories[i]) == 12:
-                        print("%s (Player %s) is the winner!" % (player_instance[i].name, assignments[i]))
-                        gameComplete = True
-                        break
-            if (turn+1) % playerCount == 0:
-                print("All players have had a turn, $500 + $100 per territory owned added to each players balance")
-                for idx in range(playerCount):
-                    player_instance[idx].income()
-                print("Continuing to round %s" % ((turn+1)//4 + 1))
+            teritoriesForThisPlayer = []
 
-                saveFileAtEndOfRound = input("Would you like to save the game and leave? (y/n): ").strip().lower()
-                if saveFileAtEndOfRound == 'y':
-                    saveFile.savingFile(whichSave,player_instance, forcePlayer)
-                    print("Game saved!")
-                    break
+            for index in range(len(players[i])-5):
+                teritoriesForThisPlayer.append(players[i][index+5])
 
-            input("Click enter to advance to %s's turn!" % player_instance[(current+1)%playerCount].name)
-            turn += 1
+
+            forceObjRead.append(SaveForce(strenthForThisPlayer, teritoriesForThisPlayer, i, players[i][2], strenthForThisPlayer, defenseForThisPlayer))                 
+            playerObjRead.append( Player_Save(nameForThisPlayer,troopsForThisPlayer,\
+                                moneyForThisPlayer,teritoriesForThisPlayer))
+
+
+
+        saveOneRead.close()
+
+    return forceObjRead, playerObjRead
+
+
+#WRITNG TO FILE 
+def savingFileOne(playerObjWrite, forceObj):
+    try:
+        saveOneWrite = open("savedGameOne.txt", "w")
+    except:
+        print("File not found.")
+    else:
+        for i in range(len(playerObjWrite)):     
+            saveOneWrite.write(str(forceObj[i].strength)+" ")
+            saveOneWrite.write(str(forceObj[i].defense)+" ")   
+            saveOneWrite.write(str(playerObjWrite[i].name)+" ")
+            saveOneWrite.write(str(playerObjWrite[i].troops)+" ")
+            saveOneWrite.write(str(playerObjWrite[i].money)+" ")
+            for index in range(len(playerObjWrite[i].territories)):
+                saveOneWrite.write(str(playerObjWrite[i].territories[index])+ " ")
+            saveOneWrite.write("\n")
+
+        saveOneWrite.close()
+
+#Clearing file/reseting save
+def clearingFileOne():
+    try:
+        saveOneWrite = open("savedGameOne.txt", "w")
+    except:
+        print("File not found.")
+    else:
+        saveOneWrite.close()
+
+
+
+
+#two
+
+def saveTwoReadFunct():
+    try:
+        saveTwoRead = open("savedGameTwo.txt", "r")
+    except:
+        print("File not found.")
+    else:
+
+        #READING FROM FILE/ LOADING SAVE
+        lines = saveTwoRead.readlines()
+        players =[]
+        playerObjRead = []
+        forceObjRead = []
+
+        for line in lines:
+            players.append(line)
+
+        print("there are " +str(len(players)) + " players")#number of players
+
+        for i in range(len(players)):
+            players[i] = players[i].split()
+
+            strenthForThisPlayer = players[i][0]
+            defenseForThisPlayer = players[i][1]
+            nameForThisPlayer = players[i][2]
+
+            troopsForThisPlayer = players[i][3]
+
+            moneyForThisPlayer = players[i][4]
+
+            teritoriesForThisPlayer = []
+
+            for index in range(len(players[i])-5):
+                teritoriesForThisPlayer.append(players[i][index+5])
+
+
+            forceObjRead.append(SaveForce(strenthForThisPlayer, teritoriesForThisPlayer, i, players[i][2], strenthForThisPlayer, defenseForThisPlayer))                 
+            playerObjRead.append( Player_Save(nameForThisPlayer,troopsForThisPlayer,\
+                                moneyForThisPlayer,teritoriesForThisPlayer))
+
+        saveTwoRead.close()
+
+    return forceObjRead, playerObjRead
+
+
+#WRITNG TO FILE 
+def savingFileTwo(playerObjWrite, forceObj):
+    try:
+        saveTwoWrite = open("savedGameTwo.txt", "w")
+    except:
+        print("File not found.")
+    else:
+        for i in range(len(playerObjWrite)):   
+            saveTwoWrite.write(str(forceObj[i].strength)+" ")
+            saveTwoWrite.write(str(forceObj[i].defense)+" ")       
+            saveTwoWrite.write(str(playerObjWrite[i].name)+" ")
+            saveTwoWrite.write(str(playerObjWrite[i].troops)+" ")
+            saveTwoWrite.write(str(playerObjWrite[i].money)+" ")
+            for index in range(len(playerObjWrite[i].territories)):
+                saveTwoWrite.write(str(playerObjWrite[i].territories[index])+ " ")
+            saveTwoWrite.write("\n")
+
+        saveTwoWrite.close()
+
+#Clearing file/reseting save
+def clearingFileTwo():
+    try:
+        saveTwoWrite = open("savedGameTwo.txt", "w")
+    except:
+        print("File not found.")
+    else:
+        saveTwoWrite.close()
+
+
+#three
+
+def saveThreeReadFunct():
+    try:
+        saveThreeRead = open("savedGameThree.txt", "r")
+    except:
+        print("File not found.")
+    else:
+
+        #READING FROM FILE/ LOADING SAVE
+        lines = saveThreeRead.readlines()
+        players =[]
+        playerObjRead = []
+        forceObjRead = []
+
+        for line in lines:
+            players.append(line)
+
+        print("there are " +str(len(players)) + " players")#number of players
+
+        for i in range(len(players)):
+            players[i] = players[i].split()
+
+            strenthForThisPlayer = players[i][0]
+            defenseForThisPlayer = players[i][1]
+            nameForThisPlayer = players[i][2]
+
+            troopsForThisPlayer = players[i][3]
+
+            moneyForThisPlayer = players[i][4]
+
+            teritoriesForThisPlayer = []
+
+            for index in range(len(players[i])-5):
+                teritoriesForThisPlayer.append(players[i][index+5])
+
+
+            forceObjRead.append(SaveForce(troopsForThisPlayer, teritoriesForThisPlayer, i, players[i][2], strenthForThisPlayer, defenseForThisPlayer))                 
+            playerObjRead.append( Player_Save(nameForThisPlayer,troopsForThisPlayer,\
+                                moneyForThisPlayer,teritoriesForThisPlayer))
+
+        saveThreeRead.close()
+
+    return forceObjRead, playerObjRead
+
+
+#WRITNG TO FILE
+#must put list of each object of player into parameters
+def savingFileThree(playerObjWrite, forceObj):
+    try:
+        saveThreeWrite = open("savedGameThree.txt", "w")
+    except:
+        print("File not found.")
+    else:
+        for i in range(len(playerObjWrite)):
+            saveThreeWrite.write(str(forceObj[i].strength)+" ")
+            saveThreeWrite.write(str(forceObj[i].defense)+" ")  
+            saveThreeWrite.write(str(playerObjWrite[i].name)+" ")
+            saveThreeWrite.write(str(playerObjWrite[i].troops)+" ")
+            saveThreeWrite.write(str(playerObjWrite[i].money)+" ")
+            for index in range(len(playerObjWrite[i].territories)):
+                saveThreeWrite.write(str(playerObjWrite[i].territories[index])+ " ")
+            saveThreeWrite.write("\n")
+
+        saveThreeWrite.close()
+
+#Clearing file/reseting save
+def clearingFileThree():
+    try:
+        saveThreeWrite = open("savedGameThree.txt", "w")
+    except:
+        print("File not found.")
+    else:
+        saveThreeWrite.close()
+
+
+
+
+def doesFileOneHaveData():
+    try:
+        # Attempt to open the file to check if it exists
+        fileOne = open("savedGameOne.txt", "r")
+    except: return False  # If the file does not exist, return False
+    else:
+        fileOneLines = fileOne.readlines()
+        if len(fileOneLines) > 0:
+            fileOne.close()
+            return True
+        else:   
+            fileOne.close()
+            return False
+
+def doesFileTwoHaveData():
+    try:
+        # Attempt to open the file to check if it exists
+        fileTwo = open("savedGameTwo.txt", "r")
+    except: return False  # If the file does not exist, return False
+    else:
+        fileTwoLines = fileTwo.readlines()
+        if len(fileTwoLines) > 0:
+            fileTwo.close()
+            return True
+        else:   
+            fileTwo.close()
+            return False
+
+def doesFileThreeHaveData():
+    try:
+        fileThree = open("savedGameThree.txt", "r")
+    except: return False  # If the file does not exist, return False
+    else:
+        fileThreeLines = fileThree.readlines()
+        if len(fileThreeLines) > 0:
+            fileThree.close()
+            return True
+        else:   
+            fileThree.close()
+            return False
+
+def doesFileHaveData(numberOfFile):
+    if numberOfFile == 1:
+        return doesFileOneHaveData()
+    elif numberOfFile == 2:
+        return doesFileTwoHaveData()
+    elif numberOfFile == 3:
+        return doesFileThreeHaveData()
+    else:
+        print("Invalid file number.")
+        return False
+
+def loadSave(numberOfFile):
+    if numberOfFile == 1:
+        return saveOneReadFunct()
+    elif numberOfFile == 2:
+        return saveTwoReadFunct()
+    elif numberOfFile == 3:
+        return saveThreeReadFunct()
+    else:
+        print("Invalid file number.")
+        return None
+
+
+def savingFile(numberOfFile, playerObjWrite, forceObj):
+    if numberOfFile == 1:
+        savingFileOne(playerObjWrite, forceObj)
+    elif numberOfFile == 2:
+        savingFileTwo(playerObjWrite, forceObj)
+    elif numberOfFile == 3:
+        savingFileThree(playerObjWrite, forceObj)
+    else:
+        print("Invalid file number.")
