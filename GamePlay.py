@@ -290,6 +290,7 @@ def gamePlay():
         playerTroops = []
         print("Loading save %d..." % whichSave)
         forcePlayer, player_instance = saveFile.loadSave(whichSave)
+#######################################################
         playerCount = len(player_instance)
         for idx in range(playerCount):
             print("player %s: %s" % (assignments[idx], player_instance[idx]))
@@ -422,8 +423,8 @@ def gamePlay():
 
                     # invest
                     if decision =="1":
-                        investments = player_instance[current].invest()
-                        print("%s has invested $%s!" % (player_instance[current].name, investments ))
+                        investment = player_instance[current].invest()
+                        print("%s has invested $%s!" % (player_instance[current].name, investment ))
 
                     # buy troops
                     elif decision =="2":
@@ -482,4 +483,3 @@ def gamePlay():
 
             input("Click enter to advance to %s's turn!" % player_instance[(current+1)%playerCount].name)
             turn += 1
-gamePlay()
