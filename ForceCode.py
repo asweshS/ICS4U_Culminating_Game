@@ -31,7 +31,51 @@
 #            print("Defender wins, P1: x of toops left. P2: x troops left)
 #            attackerWins = False
 #            return attackerWins
-
+#    def buyStrength(self, playerClass)
+#        baseCost = 300
+#        Increment = 300
+#        PRINT(self Strength)
+#        if money = 0
+#            PRINT("You don't have any money")
+#            RETRY function
+#           while input isnt valid
+#                amount = ASK for integer
+#           if amount  < 0
+#               PRINT("You can't buy negative strength!")
+#           if amount = 0
+#                PRINT("Buying 0 troops")
+#        totalCost = baseCost + (Increment * amount) - Increment
+#        des = ASK(" Are you sure you want to buy *AMT* strength?")
+#        if des = 'y'
+#            playerMoney =- totalCost
+#            self.strength += amt
+#        if des = 'n'
+#            ASK("Do you want to try again")
+#            if ASK = 'y'
+#                RETRY function
+#
+#    def buyDefense(self, playerClass)
+#        baseCost = 300
+#        Increment = 300
+#        PRINT(self defense)
+#        if money = 0
+#            PRINT("You don't have any money")
+#            RETRY function
+#           while input isnt valid
+#                amount = ASK for integer
+#           if amount  < 0
+#               PRINT("You can't buy negative defense!")
+#           if amount = 0
+#                PRINT("Buying 0 troops")
+#        totalCost = baseCost + (Increment * amount) - Increment
+#        des = ASK(" Are you sure you want to buy *AMT* defense?")
+#        if des = 'y'
+#            playerMoney =- totalCost
+#            self.defense += amt
+#        if des = 'n'
+#            ASK("Do you want to try again")
+#            if ASK = 'y'
+#                RETRY function
 # History:
 # 2025-06-04: Added simple attack function
 # 2025-06-05: Taking territory action
