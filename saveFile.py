@@ -158,7 +158,7 @@
 #   - The system supports three separate save slots, each with its own read/write/clear set of functions.
 #   - All player management is handled through lists of Player objects passed between functions.import random
 
-import randomMore actions
+import random
 
 class SaveForce:
     units = 0
