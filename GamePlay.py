@@ -419,7 +419,7 @@ def gamePlay():
                     print("3. Upgrade Strength/Defense")
                     print("4. Attack")
 
-                    decision = input("Enter (1 ,2, 3, or 4): ")
+                    decision = input("Enter (1, 2, 3, or 4): ")
 
                     # invest
                     if decision =="1":
