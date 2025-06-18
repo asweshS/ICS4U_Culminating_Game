@@ -159,32 +159,28 @@
 #   - All player management is handled through lists of Player objects passed between functions.import random
 
 import random
-
 class SaveForce:
-    units = 0
+    troops = 0
     strength = 0
     defense = 0
     territory = []
     assignments = "ABCD"
-
+    
     # which player this class belongs to
     playNum = 0
-    def __init__(self, unit, terr, playerNum, assgnmnts, strength=0, defense=0):
-        self.units = int(unit)
-        self.territory = terr
-        self.playNum = playerNum
-        self.strength = 0
-        self.defense = 0
-        print("%s's units: %s" %(assgnmnts[playerNum], self.units))
+    def __init__(self, troop, terr, playerNum, assgnmnts, strength = 0, defense = 0):
+        self.troops = int(troop)
+        self.troops = terr
+        self.troops = playerNum
+        self.troops = int(strength)
+        self.troops = int(defense)
 
-        self.strength = strength
-        self.defense = defense
     # roll dice and see who wins, defense is p2
     def Attack(self, p2, player1, player2, selfTroops, p2Troops):
 
         # when attacker doesn't have enough units
-        if (self.units <1):
-            print("You cannot attack, you dont have enough units")
+        if (self.troops <1):
+            print("You cannot attack, you dont have enough troops")
             return
 
         # attacker dice
@@ -201,14 +197,14 @@ class SaveForce:
             if difference2 > -10:
                 difference2 = -10
             # if defender is out of units, then give land to attacker
-            self.units += difference 
-            p2.units += difference2
-            if (self.units < 0):
-                self.units = 0
-            if p2.units < 0:
-                p2.units = 0
+            self.troops += difference 
+            p2.troops += difference2
+            if (self.troops < 0):
+                self.troops = 0
+            if p2.troops < 0:
+                p2.troops = 0
             print("%s wins!" % player1)
-            print("%s: %s troops left, %s: %s troops left)" % (player1, self.units, player2, p2.units))
+            print("%s: %s troops left, %s: %s troops left)" % (player1, self.troops, player2, p2.troops))
             return True
         # defender dice is higher or dice are even
         if (dice2 > dice1 or dice1 == dice2):
@@ -219,17 +215,17 @@ class SaveForce:
             if difference2 > -10:
                 difference2 = -10
             # if defender is out of units, then give land to attacker
-            self.units += difference 
-            p2.units += difference2
-            if (self.units < 0):
-                self.units = 0
-            if p2.units < 0:
-                p2.units = 0
+            self.troops += difference 
+            p2.troops += difference2
+            if (self.troops < 0):
+                self.troops = 0
+            if p2.troops < 0:
+                p2.troops = 0
             print("%s wins!" % player2)
-            print("%s: %s units left, %s: %s units left)" % (player1, self.units, player2, p2.units))
+            print("%s: %s troops left, %s: %s troops left)" % (player1, self.troops, player2, p2.troops))
             return False            
         # if defender is out of units, then give land to attacker
-        if (p2.units == 0): 
+        if (p2.troops == 0): 
             return True
     def buyStrength(self, playerClass):
         baseCost = 300
@@ -241,7 +237,7 @@ class SaveForce:
         validInput = False
         while not validInput:
             try:
-                amt = int(input("How many strength levels would you like to buy? (First costs $50 and more are additional $10): " ))
+                amt = int(input("How many strength levels would you like to buy?  ($300 each): " ))
             except:
                 print("Invalid input, try again")
                 return self.buyStrength(playerClass)
@@ -267,16 +263,16 @@ class SaveForce:
         elif (des == 'n'): 
             des1=""
             while (des1 != "y" or des1 != 'n'):
-                des1 = input("Cancelled, do you want to buy units still? (y or n): ")
+                des1 = input("Cancelled, do you want to buy troops still? (y or n): ")
                 if (des1 == 'y'):
                     return self.buyStrength(playerClass)
                 if (des1 == 'n'):
                     return 
-
+                
         else: 
             print("Invalid input, try again")
             return self.buyStrength(playerClass)
-
+            
     def buyDefense(self, playerClass):
         baseCost = 300
         INCREMENT = 300
@@ -287,7 +283,7 @@ class SaveForce:
         validInput = False
         while not validInput:
             try:
-                amt = int(input("How many defense levels would you like to buy? ($300 each)" ))
+                amt = int(input("How many defense levels would you like to buy? ($300 each): " ))
             except:
                 print("Invalid input, try again")
                 return self.buyDefense(playerClass)
@@ -300,7 +296,7 @@ class SaveForce:
                     return
                 else:
                     validInput = True
-
+        
         # add increasing 
         totalCost = (baseCost) + (INCREMENT * amt)- INCREMENT
         des = input("Increase defenese costs %s, are you sure you want to buy? (y or n): " % totalCost)
@@ -316,12 +312,12 @@ class SaveForce:
         elif (des == 'n'): 
             des1=""
             while (des1 != "y" or des1 != 'n'):
-                des1 = input("Cancelled, do you want to buy units still? (y or n): ")
+                des1 = input("Cancelled, do you want to buy troops still? (y or n): ")
                 if (des1 == 'y'):
                     return self.buyDefense(playerClass)
                 if (des1 == 'n'):
                     return
-
+            
         else: 
             print("Invalid input, try again")
             return self.buyDefense(playerClass)
@@ -337,19 +333,16 @@ class Player_Save:
         for i in range(len(territories)):
             self.territories.append(territories[i])
 
-    def income(self):
-        self.daily_income = 500 + (len(self.territories) * 100)
-        self.money += self.daily_income
-
     def invest(self):
-        self.money+=1000
-    def balance(self):
+        investment = random.randint(600, 1200)
+        self.money+=investment
+        return investment
+
         print(f"New balance ${self.money}")
-    def buy_troops(self, amountOfTroops):
+    def buy_troops(self, amountOfTroops, forcePlay):
         self.troops += amountOfTroops
-        self.money -= 100 * amountOfTroops
-        print(f"{self.name} has bought {amountOfTroops} troops.")
-        self.balance()
+        self.money -= 10 * amountOfTroops
+        print(f"{self.name} has bought {amountOfTroops} troops!")
 
 
     def __str__(self):
