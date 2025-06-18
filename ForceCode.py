@@ -144,7 +144,7 @@ class Force:
         elif (des == 'n'): 
             des1=""
             while (des1 != "y" or des1 != 'n'):
-                des1 = input("Cancelled, do you want to buy units still? (y or n): ")
+                des1 = input("Cancelled, do you want to buy still? (y or n): ")
                 if (des1 == 'y'):
                     return self.buyStrength(playerClass)
                 if (des1 == 'n'):
@@ -193,7 +193,7 @@ class Force:
         elif (des == 'n'): 
             des1=""
             while (des1 != "y" or des1 != 'n'):
-                des1 = input("Cancelled, do you want to buy units still? (y or n): ")
+                des1 = input("Cancelled, do you want to buy still? (y or n): ")
                 if (des1 == 'y'):
                     return self.buyDefense(playerClass)
                 if (des1 == 'n'):
