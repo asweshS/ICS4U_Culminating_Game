@@ -21,7 +21,7 @@ def typewriterTxt(msg, timeTake):
                 sys.stdout.write(char)
                 sys.stdout.flush()
                 time.sleep(random.randint(0,10)/100*timeTake)
-Main_Menu.initialization_of_game()
+MainMenu.initialization_of_game()
 os.system('cls')
 time.sleep(1)
 print("Game Starting, goodluck to all and have fun!\n")
