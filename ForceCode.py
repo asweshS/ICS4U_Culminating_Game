@@ -38,11 +38,12 @@
 # 2025-06-07: Added territory class to put in territory array
 # 2025-06-09: Made defense and strength stats
 # 2025-06-13: added territory index marker and fixed bugs
+# 2025-06-16: added purchasing of strength and defense levels
 #######################
 import random
 
 class Force:
-    troops = 0
+    units = 0
     strength = 0
     defense = 0
     territory = []
@@ -50,8 +51,8 @@ class Force:
     
     # which player this class belongs to
     playNum = 0
-    def __init__(self, troop, terr, playerNum, assgnmnts, strength = 0, defense = 0):
-        self.troops = int(troop)
+    def __init__(self, unit, terr, playerNum, assgnmnts, strength = 0, defense = 0):
+        self.units = int(unit)
         self.territory = terr
         self.playNum = playerNum
         self.strength = int(strength)
@@ -61,7 +62,7 @@ class Force:
     def Attack(self, p2, player1, player2, selfTroops, p2Troops):
 
         # when attacker doesn't have enough units
-        if (self.troops <1):
+        if (self.units <1):
             print("You cannot attack, you dont have enough troops")
             return
 
@@ -79,14 +80,14 @@ class Force:
             if difference2 > -10:
                 difference2 = -10
             # if defender is out of units, then give land to attacker
-            self.troops += difference 
-            p2.troops += difference2
-            if (self.troops < 0):
-                self.troops = 0
-            if p2.troops < 0:
-                p2.troops = 0
+            self.units += difference 
+            p2.units += difference2
+            if (self.units < 0):
+                self.units = 0
+            if p2.units < 0:
+                p2.units = 0
             print("%s wins!" % player1)
-            print("%s: %s troops left, %s: %s troops left)" % (player1, self.troops, player2, p2.troops))
+            print("%s: %s troops left, %s: %s troops left)" % (player1, self.units, player2, p2.units))
             return True
         # defender dice is higher or dice are even
         if (dice2 > dice1 or dice1 == dice2):
@@ -97,18 +98,19 @@ class Force:
             if difference2 > -10:
                 difference2 = -10
             # if defender is out of units, then give land to attacker
-            self.troops += difference 
-            p2.troops += difference2
-            if (self.troops < 0):
-                self.troops = 0
-            if p2.troops < 0:
-                p2.troops = 0
+            self.units += difference 
+            p2.units += difference2
+            if (self.units < 0):
+                self.units = 0
+            if p2.units < 0:
+                p2.units = 0
             print("%s wins!" % player2)
             print("%s: %s troops left, %s: %s troops left)" % (player1, self.units, player2, p2.units))
             return False            
         # if defender is out of units, then give land to attacker
-        if (p2.troops == 0): 
+        if (p2.units == 0): 
             return True
+    
     def buyStrength(self, playerClass):
         baseCost = 300
         INCREMENT = 300
@@ -119,7 +121,7 @@ class Force:
         validInput = False
         while not validInput:
             try:
-                amt = int(input("How many strength levels would you like to buy?  ($300 each): " ))
+                amt = int(input("How many strength levels would you like to buy? ($300 each): " ))
             except:
                 print("Invalid input, try again")
                 return self.buyStrength(playerClass)
@@ -132,6 +134,7 @@ class Force:
                     return
                 else:
                     validInput = True
+        
         # add increasing 
         totalCost = (baseCost) + (INCREMENT * amt)- INCREMENT
         des = input("Increase strength costs %s, are you sure you want to buy? (y or n): " % totalCost)
@@ -140,8 +143,13 @@ class Force:
             if (playerClass.money - totalCost <= 0):
                 print("You don't have enough money!")
                 return self.buyStrength(playerClass)
-            self.strength += amt
-            playerClass.money -= totalCost
+            
+            # if can afford, buy level
+            else:
+                self.strength += amt
+                playerClass.money -= totalCost
+                print(self.strength)
+                return
         elif (des == 'n'): 
             des1=""
             while (des1 != "y" or des1 != 'n'):
@@ -149,12 +157,11 @@ class Force:
                 if (des1 == 'y'):
                     return self.buyStrength(playerClass)
                 if (des1 == 'n'):
-                    return 
-                
+                    return
         else: 
             print("Invalid input, try again")
             return self.buyStrength(playerClass)
-            
+        
     def buyDefense(self, playerClass):
         baseCost = 300
         INCREMENT = 300
@@ -187,9 +194,12 @@ class Force:
             if (playerClass.money - totalCost <= 0):
                 print("You don't have enough money!")
                 return self.buyDefense(playerClass)
+            
+            # if can afford, buy level
             else:
                 self.defense += amt
                 playerClass.money -= totalCost
+                print(self.defense)
                 return
         elif (des == 'n'): 
             des1=""
