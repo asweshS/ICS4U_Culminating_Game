@@ -419,7 +419,7 @@ def gamePlay():
                     print("3. Upgrade Strength/Defense")
                     print("4. Attack")
 
-                    decision = input("Enter (1, 2, 3, or 4): ")
+                    decision = input("Enter (1 ,2, 3, or 4): ")
 
                     # invest
                     if decision =="1":
@@ -468,7 +468,7 @@ def gamePlay():
                     if len(playerTerritories[i]) == 12:
                         print("%s (Player %s) is the winner!" % (player_instance[i].name, assignments[i]))
                         gameComplete = True
-                        break
+                        quit()
             if (turn+1) % playerCount == 0:
                 print("All players have had a turn, $500 + $100 per territory owned added to each players balance")
                 for idx in range(playerCount):
@@ -483,4 +483,3 @@ def gamePlay():
 
             input("Click enter to advance to %s's turn!" % player_instance[(current+1)%playerCount].name)
             turn += 1
-gamePlay()
