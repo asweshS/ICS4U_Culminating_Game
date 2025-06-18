@@ -437,7 +437,7 @@ def gamePlay():
                             else:
                                 if numberOfTroopsBuy < 0:
                                     print("You can not buy negative troops!")
-                                elif numberOfTroopsBuy * 100 > player_instance[current].money:
+                                elif numberOfTroopsBuy * 10 > player_instance[current].money:
                                     print("You do not have enough money to buy that many troops!")
                                 else:
                                     validTroopsBuy = True
@@ -482,3 +482,4 @@ def gamePlay():
 
             input("Click enter to advance to %s's turn!" % player_instance[(current+1)%playerCount].name)
             turn += 1
+gamePlay()
