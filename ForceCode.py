@@ -54,8 +54,8 @@ class Force:
         self.units = int(unit)
         self.territory = terr
         self.playNum = playerNum
-        self.strength = strength
-        self.defense = defense
+        self.strength = int(strength)
+        self.defense = int(defense)
 
     # roll dice and see who wins, defense is p2
     def Attack(self, p2, player1, player2, selfTroops, p2Troops):
