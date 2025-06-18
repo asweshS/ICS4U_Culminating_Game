@@ -9,7 +9,7 @@
 # 2025-06-11: added opening save file
 # 2025-06-15: added more visuals
 #######################
-import Main_Menu
+import MainMenu
 import gameplay
 import sys
 import time
