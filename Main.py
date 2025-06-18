@@ -10,7 +10,7 @@
 # 2025-06-15: added more visuals
 #######################
 import MainMenu
-import gameplay
+import GamePlay
 import sys
 import time
 import random
@@ -28,4 +28,4 @@ print("Game Starting, goodluck to all and have fun!\n")
 typewriterTxt("█████████████████████████████████████████████\n", 2)
 os.system('cls')
 time.sleep(1)  
-gameplay.gamePlay()
+GamePlay.gamePlay()
