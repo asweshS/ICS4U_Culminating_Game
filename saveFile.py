@@ -1,3 +1,163 @@
+# Name: Andrew Urquhart, Devan Luca
+# Course: ICS4U
+# File: saveFile.py
+# Description:
+#   This file contains the implementation of a save/load system for a game.
+#   It allows players to save their game state to text files and load it back later.
+#   The system supports three separate save slots, each with its own read/write/clear set of functions.
+#
+# INPUTS:
+#   - Player data including name, troops, money, territories, strength, and defense 
+#   - Save file numbers (1, 2, or 3) to determine which save slot to read/write/clear
+#   - Player actions such as buying strength or defense, attacking other players
+#
+# OUTPUTS:
+#   - Game state saved to text files in a structured format
+# ALGORITHM:
+"""
+   CLASS SaveForce
+    VARIABLES:
+        units
+        strength
+        defense
+        territory
+        assignments
+        playNum
+
+    METHOD __init__(unit, terr, playerNum, assgnmnts, strength=0, defense=0)
+        SET instance variables accordingly
+
+    METHOD Attack(p2, player1_name, player2_name, selfTroops, p2Troops)
+        IF self has less than 1 unit
+            PRINT "Not enough units to attack"
+            RETURN
+
+        ROLL dice1 = random 1–6 * selfTroops
+        ROLL dice2 = random 1–6 * p2Troops
+
+        IF attacker dice > defender dice THEN
+            CALCULATE troop changes with defense and strength
+            UPDATE both players' units
+            PRINT result
+            RETURN True
+        ELSE
+            CALCULATE troop changes with defense and strength
+            UPDATE both players' units
+            PRINT result
+            RETURN False
+        ENDIF
+
+        IF defender units = 0 THEN
+            RETURN True (attacker wins)
+        ENDIF
+
+    METHOD buyStrength(player)
+        IF player has no money
+            PRINT warning
+            RETURN
+
+        ASK how many strength levels to buy
+        CALCULATE cost
+        CONFIRM with user
+        IF confirmed AND player has enough money
+            ADD to strength
+            DEDUCT money
+        ELSE
+            OFFER to retry
+        ENDIF
+
+    METHOD buyDefense(player)
+        SAME LOGIC AS buyStrength, but for defense
+    
+    CLASS Player_Save
+    VARIABLES:
+        name
+        troops
+        money
+        territories
+        investment
+
+    METHOD __init__(name, troops, money, territories)
+        SET instance variables
+
+    METHOD income()
+        CALCULATE income = 500 + (100 * number of territories)
+        ADD income to money
+
+    METHOD invest()
+        ADD 1000 to money
+
+    METHOD balance()
+        PRINT current money
+
+    METHOD buy_troops(amount)
+        CALCULATE cost = amount * 100
+        IF player has enough money
+            ADD troops
+            DEDUCT money
+            PRINT success
+        ELSE
+            PRINT "Not enough money"
+        ENDIF
+
+    METHOD __str__()
+        RETURN name
+
+    REPEATED FUNCTIONS FOR EACH SAVE FILE:
+    FUNCTION saveOneReadFunct()
+        TRY to open savedGameOne.txt    
+        READ lines into players list
+        FOR each line in players
+            SPLIT line into attributes
+            CREATE SaveForce and Player_Save objects
+            APPEND to respective lists
+        RETURN forceObjRead, playerObjRead
+    FUNCTION savingFileOne(playerObjWrite, forceObj)
+        TRY to open savedGameOne.txt for writing
+        FOR each player in playerObjWrite
+            WRITE attributes to file
+        CLOSE file
+    FUNCTION clearingFileOne()
+        TRY to open savedGameOne.txt for writing (clearing it)
+        CLOSE file  
+    FUNCTION doesFileOneHaveData()
+        TRY to open savedGameOne.txt
+        IF file has lines, return True
+        ELSE return False   
+    FUNCTION loadSave(numberOfFile)
+        IF numberOfFile == 1 THEN
+            RETURN saveOneReadFunct()
+        ELSE IF numberOfFile == 2 THEN
+            RETURN saveTwoReadFunct()
+        ELSE IF numberOfFile == 3 THEN
+            RETURN saveThreeReadFunct()
+        ELSE
+            PRINT "Invalid file number"
+            RETURN None
+    FUNCTION savingFile(numberOfFile, playerObjWrite, forceObj)
+        IF numberOfFile == 1 THEN
+            savingFileOne(playerObjWrite, forceObj)
+        ELSE IF numberOfFile == 2 THEN
+            savingFileTwo(playerObjWrite, forceObj)
+        ELSE IF numberOfFile == 3 THEN
+            savingFileThree(playerObjWrite, forceObj)
+        ELSE
+            PRINT "Invalid file number"
+# END ALGORITHM
+"""
+#
+# HISTORY:
+#   2025.06.09 - Developed basic save/load system for game data using text files
+#   2025.06.10 - continued development of Player class with methods for income, investment, and troop management
+#   2025.06.11 - worked on bugs in saving logic and added functionality for multiple save files
+#   2025.06.13 - continued to work on bugs in save/load functionality, added methods for reading and writing player data 
+#   2025.06.15 - Added methods for buying strength and defense, and managing player income
+#   2025.06.16 - Implemented clear save functionality and checks for existing data in save files
+#   2025.06.17 - Finalized save/load functionality, added comments and documentation
+# Note:
+#   - The system supports three separate save slots, each with its own read/write/clear set of functions.
+#   - All player management is handled through lists of Player objects passed between functions.import random
+
 import random
 
 class SaveForce:
