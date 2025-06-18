@@ -46,7 +46,7 @@ class intro: # using a class because it just makes it easier (imo) when everyone
             print("-" * header_width)
             print()
             instructions = [
-                  "OBJECTIVE", 
+                  "OBJECTIVE", #More actions
                 "-" * 40, 
                 "| Conquer all 12 territories on the map before your opponents do. The first player to control all territories win!",
                 "\n",
@@ -110,6 +110,11 @@ class intro: # using a class because it just makes it easier (imo) when everyone
                 "",
                 "Rounds: ",
                 "| A round is completed when all players have taken a turn.",
+                "\n",
+                "Strength and defense",
+                "-" * 40,
+                "| You can buy defense and strength levels that make your attacks more powerful,",
+                "| or make your defense more effective.",
                 "\n",
                 "CONTROLS",
                 "-" * 40,
