@@ -334,9 +334,18 @@ class Player_Save:
             self.territories.append(territories[i])
 
     def invest(self):
-        investment = random.randint(600, 1200)
-        self.money+=investment
-        return investment
+        investment = 0
+        moneyDupe = self.money
+        while True:
+            if moneyDupe>= 10000:
+                moneyToAdd = random.randint((investment+100), (investment+400))
+                if moneyToAdd<=200:
+                    moneyToAdd = 200
+                self.money += moneyToAdd
+                return moneyToAdd
+            else:
+                moneyDupe +=20
+                investment += 1
 
         print(f"New balance ${self.money}")
     def buy_troops(self, amountOfTroops, forcePlay):
