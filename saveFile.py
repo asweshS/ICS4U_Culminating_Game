@@ -170,10 +170,10 @@ class SaveForce:
     playNum = 0
     def __init__(self, troop, terr, playerNum, assgnmnts, strength = 0, defense = 0):
         self.troops = int(troop)
-        self.troops = terr
-        self.troops = playerNum
-        self.troops = int(strength)
-        self.troops = int(defense)
+        self.territory = terr
+        self.playNum = playerNum
+        self.strength = int(strength)
+        self.defense = int(defense)
 
     # roll dice and see who wins, defense is p2
     def Attack(self, p2, player1, player2, selfTroops, p2Troops):
@@ -344,6 +344,10 @@ class Player_Save:
         self.money -= 10 * amountOfTroops
         print(f"{self.name} has bought {amountOfTroops} troops!")
 
+    def income(self):
+        self.daily_income = 500 + (len(self.territories) * 100)
+        self.money += self.daily_income
+        print(f"{self.name} has earned ${self.daily_income} from their territories.")
 
     def __str__(self):
         return self.name
@@ -384,7 +388,7 @@ def saveOneReadFunct():
                 teritoriesForThisPlayer.append(players[i][index+5])
 
 
-            forceObjRead.append(SaveForce(strenthForThisPlayer, teritoriesForThisPlayer, i, players[i][2], strenthForThisPlayer, defenseForThisPlayer))                 
+            forceObjRead.append(SaveForce(troopsForThisPlayer, teritoriesForThisPlayer, i, players[i][2], strenthForThisPlayer, defenseForThisPlayer))                 
             playerObjRead.append( Player_Save(nameForThisPlayer,troopsForThisPlayer,\
                                 moneyForThisPlayer,teritoriesForThisPlayer))
 
@@ -463,7 +467,7 @@ def saveTwoReadFunct():
                 teritoriesForThisPlayer.append(players[i][index+5])
 
 
-            forceObjRead.append(SaveForce(strenthForThisPlayer, teritoriesForThisPlayer, i, players[i][2], strenthForThisPlayer, defenseForThisPlayer))                 
+            forceObjRead.append(SaveForce(troopsForThisPlayer, teritoriesForThisPlayer, i, players[i][2], strenthForThisPlayer, defenseForThisPlayer))                 
             playerObjRead.append( Player_Save(nameForThisPlayer,troopsForThisPlayer,\
                                 moneyForThisPlayer,teritoriesForThisPlayer))
 
