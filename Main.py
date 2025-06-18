@@ -9,8 +9,8 @@
 # 2025-06-11: added opening save file
 # 2025-06-15: added more visuals
 #######################
-import MainMenu
-import GamePlay
+import Main_Menu
+import gameplay
 import sys
 import time
 import random
@@ -21,11 +21,11 @@ def typewriterTxt(msg, timeTake):
                 sys.stdout.write(char)
                 sys.stdout.flush()
                 time.sleep(random.randint(0,10)/100*timeTake)
-MainMenu.initialization_of_game()
+Main_Menu.initialization_of_game()
 os.system('cls')
 time.sleep(1)
 print("Game Starting, goodluck to all and have fun!\n")
 typewriterTxt("█████████████████████████████████████████████\n", 2)
 os.system('cls')
 time.sleep(1)  
-GamePlay.gamePlay()
+gameplay.gamePlay()
