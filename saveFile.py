@@ -158,7 +158,7 @@
 #   - The system supports three separate save slots, each with its own read/write/clear set of functions.
 #   - All player management is handled through lists of Player objects passed between functions.import random
 
-import random
+import randomMore actions
 
 class SaveForce:
     units = 0
@@ -166,13 +166,17 @@ class SaveForce:
     defense = 0
     territory = []
     assignments = "ABCD"
-    
+
     # which player this class belongs to
     playNum = 0
     def __init__(self, unit, terr, playerNum, assgnmnts, strength=0, defense=0):
         self.units = int(unit)
         self.territory = terr
         self.playNum = playerNum
+        self.strength = 0
+        self.defense = 0
+        print("%s's units: %s" %(assgnmnts[playerNum], self.units))
+
         self.strength = strength
         self.defense = defense
     # roll dice and see who wins, defense is p2
@@ -268,11 +272,11 @@ class SaveForce:
                     return self.buyStrength(playerClass)
                 if (des1 == 'n'):
                     return 
-                
+
         else: 
             print("Invalid input, try again")
             return self.buyStrength(playerClass)
-            
+
     def buyDefense(self, playerClass):
         baseCost = 300
         INCREMENT = 300
@@ -296,7 +300,7 @@ class SaveForce:
                     return
                 else:
                     validInput = True
-        
+
         # add increasing 
         totalCost = (baseCost) + (INCREMENT * amt)- INCREMENT
         des = input("Increase defenese costs %s, are you sure you want to buy? (y or n): " % totalCost)
@@ -317,7 +321,7 @@ class SaveForce:
                     return self.buyDefense(playerClass)
                 if (des1 == 'n'):
                     return
-            
+
         else: 
             print("Invalid input, try again")
             return self.buyDefense(playerClass)
@@ -325,14 +329,14 @@ class Player_Save:
     investment = 0
 
     def __init__(self, name,troops = 100, money =0,territories=[]):
-        
+
         self.name = name
         self.troops = int(troops)
         self.money = int(money)
         self.territories = []
         for i in range(len(territories)):
             self.territories.append(territories[i])
-            
+
     def income(self):
         self.daily_income = 500 + (len(self.territories) * 100)
         self.money += self.daily_income
@@ -351,7 +355,7 @@ class Player_Save:
     def __str__(self):
         return self.name
 
-                    
+
 def saveOneReadFunct():
     try:
         saveOneRead = open("savedGameOne.txt", "r")
@@ -367,34 +371,34 @@ def saveOneReadFunct():
 
         for line in lines:
             players.append(line)
-            
+
         print("there are " +str(len(players)) + " players")#number of players
-        
+
         for i in range(len(players)):
             players[i] = players[i].split()
 
             strenthForThisPlayer = players[i][0]
             defenseForThisPlayer = players[i][1]
             nameForThisPlayer = players[i][2]
-            
+
             troopsForThisPlayer = players[i][3]
-            
+
             moneyForThisPlayer = players[i][4]
-            
+
             teritoriesForThisPlayer = []
-            
+
             for index in range(len(players[i])-5):
                 teritoriesForThisPlayer.append(players[i][index+5])
-                                    
+
 
             forceObjRead.append(SaveForce(strenthForThisPlayer, teritoriesForThisPlayer, i, players[i][2], strenthForThisPlayer, defenseForThisPlayer))                 
             playerObjRead.append( Player_Save(nameForThisPlayer,troopsForThisPlayer,\
                                 moneyForThisPlayer,teritoriesForThisPlayer))
-                
-           
-            
+
+
+
         saveOneRead.close()
-        
+
     return forceObjRead, playerObjRead
 
 
@@ -414,7 +418,7 @@ def savingFileOne(playerObjWrite, forceObj):
             for index in range(len(playerObjWrite[i].territories)):
                 saveOneWrite.write(str(playerObjWrite[i].territories[index])+ " ")
             saveOneWrite.write("\n")
-        
+
         saveOneWrite.close()
 
 #Clearing file/reseting save
@@ -430,7 +434,7 @@ def clearingFileOne():
 
 
 #two
-                    
+
 def saveTwoReadFunct():
     try:
         saveTwoRead = open("savedGameTwo.txt", "r")
@@ -446,32 +450,32 @@ def saveTwoReadFunct():
 
         for line in lines:
             players.append(line)
-            
+
         print("there are " +str(len(players)) + " players")#number of players
-        
+
         for i in range(len(players)):
             players[i] = players[i].split()
 
             strenthForThisPlayer = players[i][0]
             defenseForThisPlayer = players[i][1]
             nameForThisPlayer = players[i][2]
-            
+
             troopsForThisPlayer = players[i][3]
-            
+
             moneyForThisPlayer = players[i][4]
-            
+
             teritoriesForThisPlayer = []
-            
+
             for index in range(len(players[i])-5):
                 teritoriesForThisPlayer.append(players[i][index+5])
-                                    
+
 
             forceObjRead.append(SaveForce(strenthForThisPlayer, teritoriesForThisPlayer, i, players[i][2], strenthForThisPlayer, defenseForThisPlayer))                 
             playerObjRead.append( Player_Save(nameForThisPlayer,troopsForThisPlayer,\
                                 moneyForThisPlayer,teritoriesForThisPlayer))
-            
+
         saveTwoRead.close()
-        
+
     return forceObjRead, playerObjRead
 
 
@@ -491,7 +495,7 @@ def savingFileTwo(playerObjWrite, forceObj):
             for index in range(len(playerObjWrite[i].territories)):
                 saveTwoWrite.write(str(playerObjWrite[i].territories[index])+ " ")
             saveTwoWrite.write("\n")
-        
+
         saveTwoWrite.close()
 
 #Clearing file/reseting save
@@ -505,7 +509,7 @@ def clearingFileTwo():
 
 
 #three
-                    
+
 def saveThreeReadFunct():
     try:
         saveThreeRead = open("savedGameThree.txt", "r")
@@ -521,32 +525,32 @@ def saveThreeReadFunct():
 
         for line in lines:
             players.append(line)
-            
+
         print("there are " +str(len(players)) + " players")#number of players
-        
+
         for i in range(len(players)):
             players[i] = players[i].split()
 
             strenthForThisPlayer = players[i][0]
             defenseForThisPlayer = players[i][1]
             nameForThisPlayer = players[i][2]
-            
+
             troopsForThisPlayer = players[i][3]
-            
+
             moneyForThisPlayer = players[i][4]
-            
+
             teritoriesForThisPlayer = []
-            
+
             for index in range(len(players[i])-5):
                 teritoriesForThisPlayer.append(players[i][index+5])
-                                    
+
 
             forceObjRead.append(SaveForce(troopsForThisPlayer, teritoriesForThisPlayer, i, players[i][2], strenthForThisPlayer, defenseForThisPlayer))                 
             playerObjRead.append( Player_Save(nameForThisPlayer,troopsForThisPlayer,\
                                 moneyForThisPlayer,teritoriesForThisPlayer))
-            
+
         saveThreeRead.close()
-        
+
     return forceObjRead, playerObjRead
 
 
@@ -567,7 +571,7 @@ def savingFileThree(playerObjWrite, forceObj):
             for index in range(len(playerObjWrite[i].territories)):
                 saveThreeWrite.write(str(playerObjWrite[i].territories[index])+ " ")
             saveThreeWrite.write("\n")
-        
+
         saveThreeWrite.close()
 
 #Clearing file/reseting save
@@ -595,7 +599,7 @@ def doesFileOneHaveData():
         else:   
             fileOne.close()
             return False
-        
+
 def doesFileTwoHaveData():
     try:
         # Attempt to open the file to check if it exists
