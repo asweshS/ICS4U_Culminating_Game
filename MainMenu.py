@@ -78,7 +78,7 @@ class intro: # using a class because it just makes it easier (imo) when everyone
                 "",
                 "3. Choose an Action: ",
                 "   1. Invest: ",
-                "       | Adds $1000 to your money balance.",
+                "       | Adds money to your balance, depending on your current money balance",
                 "   2. Purchase Troops: ",
                 "       | Buy as many troops as you wish at $100 per troop, provided you have enough money.",
                 "       | Enter the number of troops to buy.",
