@@ -404,8 +404,8 @@ def gamePlay():
                 input("Click enter to continue!")
                 time.sleep(0.5)
                 turn+=1
-                current = turn % playerCount
             else: break
+        current = turn % playerCount
         if not turn<4:
             player_instance[current].income()
         game_map.print_map()
