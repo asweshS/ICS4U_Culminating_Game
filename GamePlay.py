@@ -397,13 +397,15 @@ def gamePlay():
     # === MAIN GAME LOOP ===
     turn = 0
     while not gameComplete:
-        current = turn % playerCount
-        if len(playerTerritories[current]) == 0:
-            print("%s's is out, skipping turn!" % player_instance[current].name)
-            input("Click enter to continue!")
-            time.sleep(0.5)
-            turn+=1
+        while True:
             current = turn % playerCount
+            if len(playerTerritories[current]) == 0:
+                print("%s's is out, skipping turn!" % player_instance[current].name)
+                input("Click enter to continue!")
+                time.sleep(0.5)
+                turn+=1
+                current = turn % playerCount
+            else: break
         if not turn<4:
             player_instance[current].income()
         game_map.print_map()
