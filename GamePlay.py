@@ -173,6 +173,7 @@ class Territories:
             else:
                 if territorySteal<1 or territorySteal>12: 
                     print("Invalid input!") 
+                    return
                 if self.is_take_valid(plyrAssm[persTurn], territorySteal):
                     print("You can not take your own territory!")
                 else:
@@ -404,6 +405,18 @@ def gamePlay():
                 input("Click enter to continue!")
                 time.sleep(0.5)
                 turn+=1
+                if (turn) % playerCount == 0:
+                    print("All players have had a turn, $500 + $100 per territory owned added to each players balance")
+                    for idx in range(playerCount):
+                        player_instance[idx].income()
+                    print("Continuing to round %s" % ((turn+1)//4 + 1))
+
+                    saveFileAtEndOfRound = input("Would you like to save the game and leave? (y/n): ").strip().lower()
+                    if saveFileAtEndOfRound == 'y':
+                        saveFile.savingFile(whichSave,player_instance, forcePlayer)
+                        print("Game saved!")
+                        break
+                
             else: break
         current = turn % playerCount
         if not turn<4:
