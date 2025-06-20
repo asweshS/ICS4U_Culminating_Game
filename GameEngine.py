@@ -12,10 +12,10 @@
 import random
 import os
 class Map:
-    def __init__(self, textmap):
+    def __init__(self, textmap): #makes the map
         self.map = self.get_world_from_text_map(textmap)
 
-    def get_world_from_text_map(self, textmap):
+    def get_world_from_text_map(self, textmap): #coverts map to usable form
         textmap = textmap.strip().split('\n')
         worldWidth = len(textmap[0])
         worldHeight = len(textmap)
@@ -27,7 +27,7 @@ class Map:
                 world[x][y] = textmap[y][x]
         return world
 
-    def print_map(self):
+    def print_map(self): #prints the map
         def print_row(y):
             if y >= len(self.map[0]):
                 return
@@ -43,11 +43,11 @@ class Map:
 
 
 class Territories:
-    def __init__(self, map_obj, territory_coords):
+    def __init__(self, map_obj, territory_coords): #makes a instance if the mop with the coords
         self.map = map_obj.map
         self.territory_coords = territory_coords
 
-    def territory_claim(self, x, y, oldChar, newChar):
+    def territory_claim(self, x, y, oldChar, newChar): #uses recursion to fill a territory 
         mapWidth = len(self.map)
         mapHeight = len(self.map[0])
         if oldChar is None:
@@ -55,6 +55,7 @@ class Territories:
         if self.map[x][y] != oldChar:
             return
         self.map[x][y] = newChar
+        #calls fuction on all sides
         if x > 0:
             self.territory_claim(x - 1, y, oldChar, newChar)
         if y > 0:
@@ -64,7 +65,7 @@ class Territories:
         if y < mapHeight - 1:
             self.territory_claim(x, y + 1, oldChar, newChar)
 
-    def is_adjacent(self, xCoor, yCoor):
+    def is_adjacent(self, xCoor, yCoor): #checks to see if the territories are touching 
         mapWidth = len(self.map)
         mapHeight = len(self.map[0])
         for idx in range(-2, 3):
@@ -74,7 +75,7 @@ class Territories:
                         return True
         return False
 
-    def can_steal_territory(self):
+    def can_steal_territory(self): #checks to see if you can take the territory
         mapWidth = len(self.map)
         mapHeight = len(self.map[0])
         for x in range(mapWidth):
@@ -84,25 +85,25 @@ class Territories:
                         return True
         return False
 
-    def territory_steal(self, xHave, yHave, xTake, yTake):
+    def territory_steal(self, xHave, yHave, xTake, yTake): #decides if you can take the territory
         taked = self.map[xHave][yHave]
         taker = self.map[xTake][yTake]
-        self.territory_claim(xHave, yHave, None, '+')
+        self.territory_claim(xHave, yHave, None, '+') #makes it into plus and minus for the function call
         self.territory_claim(xTake, yTake, None, '-')
         canTake = self.can_steal_territory()
         self.territory_claim(xTake, yTake, None, taker)
         self.territory_claim(xHave, yHave, None, taked)
         return canTake
 
-    def is_take_valid(self, char, territoryChose):
+    def is_take_valid(self, char, territoryChose): #sees if the territory is yours
         x, y = self.territory_coords[territoryChose - 1]
         return self.map[x][y] == char
 
-    def attacking_turn(self, playerInUse, playerAssignments, plyrTerrClm, persTurn, plyrAssm, plyrAmount):
+    def attacking_turn(self, playerInUse, playerAssignments, plyrTerrClm, persTurn, plyrAssm, plyrAmount): #each turn if you decide to attack
         validStealTerritory = False
         validAttackerTerritory = False
 
-        while not validAttackerTerritory:
+        while not validAttackerTerritory: #gets the territory to attack from
             territoryAttacker = input("Attack from which territory %s (player %s)?: " % (playerInUse, playerAssignments[persTurn]))
             try:
                 territoryAttacker = int(territoryAttacker)
@@ -115,6 +116,7 @@ class Territories:
                     validAttackerTerritory = True
 
         while not validStealTerritory:
+            #gets the territory to attack
             territorySteal = input("Attack which territory %s (player %s)?: " % (playerInUse, playerAssignments[persTurn]))
             try:
                 territorySteal = int(territorySteal)
@@ -128,11 +130,11 @@ class Territories:
                         print("Can not reach territory!")
                     else:
                         validStealTerritory = True
-
+        #decides who is being attacked 
         for idx in range(plyrAmount):
             if territorySteal in plyrTerrClm[idx]:
                 playerBeingAttackedNumber = idx
-
+    
         self.territory_claim(*self.territory_coords[territorySteal - 1], None, playerAssignments[persTurn])
         map_printer = Map("")  # create a dupelicate Map object just for printing
         map_printer.map = self.map
@@ -191,7 +193,7 @@ playerTerritories = [[] for n in range(playerCount)]
 random.shuffle(players)
 print("Turn order:")
 for idx in range(playerCount):
-    print("player %s: %s" % (assignments[idx], players[idx]))
+    print("player %s: %s" % (assignments[idx], players[idx])) #prints the players and what letter they get
 
 input("Press Enter to begin...")
 
@@ -200,7 +202,7 @@ pick = 0
 gameComplete = False
 pickTerritory = 0
 allTerritoriesPicked = False
-while not allTerritoriesPicked:
+while not allTerritoriesPicked: #picking territory phase
     isPickValid = False
     current = pick % playerCount
     while not isPickValid:
@@ -211,7 +213,7 @@ while not allTerritoriesPicked:
         except:
             print("Invalid input!")
         else:
-            if 1 <= choice <= 12 and territories.is_take_valid("?", choice):
+            if 1 <= choice <= 12 and territories.is_take_valid("?", choice): #finds out if the territory can be claimed
                 # Ask for confirmation
                 confirm = input("You selected territory %d. Confirm selection? (y/n): " % choice).strip().lower()
                 if confirm == 'y':
@@ -221,7 +223,7 @@ while not allTerritoriesPicked:
             else:
                 print("Territory %s is not avaliable!" % choice)
     x, y = TERRITORY_COORDS[choice - 1]
-    territories.territory_claim(x, y, None, assignments[current])
+    territories.territory_claim(x, y, None, assignments[current]) #claims it
     playerTerritories[current].append(choice)
     if pick > 10:
         game_map.print_map()
