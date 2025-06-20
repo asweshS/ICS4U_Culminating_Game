@@ -85,7 +85,6 @@ class Force:
             if p2.troops < 0:
                 p2.troops = 0
             print("%s wins!" % player1)
-            print("%s: %s troops left, %s: %s troops left)" % (player1, self.troops, player2, p2.troops))
             return True
         # defender dice is higher or dice are even
         if (dice2 > dice1 or dice1 == dice2):
@@ -103,7 +102,6 @@ class Force:
             if p2.troops < 0:
                 p2.troops = 0
             print("%s wins!" % player2)
-            print("%s: %s troops left, %s: %s troops left)" % (player1, self.troops, player2, p2.troops))
             return False            
         # if defender is out of units, then give land to attacker
         if (p2.troops == 0): 
